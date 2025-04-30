@@ -1,0 +1,242 @@
+body{
+    direction: ltr;
+    background-color: #3073c1;
+    overflow-x: hidden;
+  }
+  .header{
+    position: absolute;
+    background-color: snow;
+    width: 100%;
+  }
+  .headerBody{
+    position: relative;
+    width: 62%;
+  }
+  .header-logo{
+    min-width: 62px;
+    min-height: 39px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+  }
+  .dark{
+    background: #111;
+  }
+  .list-font{
+    font-size: 18px;
+  }
+  .uniName{
+    position: relative;
+    font-size: 17px;
+    color: #333;
+    left: 0;
+  }
+  .bgColor-header-btn{
+    background-color: #3073c1;
+    width: 70px;
+    height: 27px;
+    margin-right: 20px;
+    position: relative;
+    cursor: pointer;
+  }
+  .dark-mod{
+    position: absolute;
+    left: 3px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease, color 0.3s ease;
+  
+  }
+  .dark-mod.active{
+    transform: translateX(40px);
+  }
+  .nav-header{
+    position: relative;
+  }
+  .header-icon{
+    position: absolute;
+    right: 90px;
+    top: 35px;
+    gap: 10px;
+  }
+  .icon{
+    color: snow;
+    font-size: 19px;
+    left: 0;
+    max-width: 25px;
+    top: 0;
+  
+  }
+  .icon.user{
+    max-width: 25px;
+    margin-bottom: 30px;
+    max-width: 25px;
+  }
+  .icon.menu{
+    max-width: 20px;
+    margin-top: 3px;
+  }
+  .body{
+    background: #eef3f9;
+    height: 600px;
+  
+  }
+  a{
+    text-decoration: none;
+  }
+  p {
+    white-space: pre-line;
+    text-indent: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  .btn{
+    width: fit-content;
+    color: snow;
+    border-radius: 3px;
+    padding: 2px 15px;
+    cursor: pointer;
+  }
+  .btn-login{
+    position: absolute;
+    right: 185px;
+    bottom: -45px; 
+    background: #3073c1;
+    
+  }
+  .btn-white{
+    color: #3073c1;
+    background-color: white;
+  }
+  .btn-blue{
+    color: white;
+    background-color: #3073c1;
+  }
+  .btn-login a{
+    display: inline-block;
+  }
+  .student-img{
+    right: 280px;
+    top: 270px;
+    max-width: 330px;
+    max-height: 100px;
+  }
+  .khatam-img{
+    top: 280px;
+    right: -60px;
+    /* background-color: #333; */
+    max-width: 500px;
+    max-height: 200px;
+    transform: rotate(90deg);
+    filter: contrast(150%);
+    opacity: 100000;
+  }
+  .khatam-img-body{
+    /* background-color: #333; */
+    max-width: 755px;
+    max-height: 170px;
+    transform: rotate(180deg);
+    filter: contrast(110%);
+    /* opacity: 100000; */
+  }
+  .statistic{
+    padding: 12px 20px;
+    background-color: snow;
+    height: fit-content;
+    border-radius: 2px;
+    top: 130px;
+    right: 30px;
+    margin: 10px;
+    color: #3073c1;
+    font-weight: bold;
+    box-shadow: 20px 10px 30px #3073c1 ;
+  }
+  .userNumber{
+    right: 550px;
+    top: 300px;
+  }
+  .teacherNumber{
+    right: 230px;
+    top: 280px;
+  }
+  .accordNumber{
+    right: 270px;
+    top: 450px;
+  }
+  .session{
+    right: 500px;
+    top: 490px;
+  }
+  
+  
+  /* ‌Body section */
+  
+  .body-sec{
+    background: #eef3f9;
+    height: 1350px;
+  }
+  /* .teacher-img{
+    width: 500px;
+    height: 500px;
+  } */
+  .text-body{
+    right: 0;
+    top: 80px;
+  }
+  .btn-text-body{
+    margin-top: 30px;
+    /* margin-left: 400px; */
+  }
+  .back-img{
+    opacity: 0.2;
+  }
+  .img-box1{
+    width: 180px;
+    height: 210px;
+    background-color: #3073c1;
+    border-radius: 10px;
+  }
+  .img-box2{
+    width: 300px;
+    height: 180px;
+    background-color: #3073c1;
+    border-radius: 10px;
+    opacity: 0.5;
+  }
+  p{
+    line-height: 1.8;
+  }
+  .flash{
+    border-radius: 50%;
+    background: #3073c1;
+    padding: 2px 13px;
+    cursor: pointer;
+  }
+  .teachers-box{
+    width: 150px;
+    background-color:#3073c1 ;
+    height: 280px;
+    border-radius: 10px;
+  }
+  /* .teacher-img-body{
+    width: 100%;
+    height: 100%;
+    background-color:#3073c1 ;
+  } */
+  .teacher-img img{
+    max-width: 100px;
+    align-items: center;
+    max-height: 155px;
+    margin-top: 15px;
+  }
+  .teacher-img{
+    background-color: #222;
+  }
+  .footer{
+    background-color: #eef3f9;
+  }
+  .logosFooter{
+    max-width: 70px;
+    max-height: 77px;
+  }
+  
