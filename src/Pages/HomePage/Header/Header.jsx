@@ -2,10 +2,17 @@ import khatam from '../../img/khatam.png'
 import menu from '../../img/menu icon.png'
 import NavBar from './NavBar'
 import SetStudentImg from './SetStudentImg'
+import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 
 const Header=()=>{
-   
+    const navigate = useNavigate();
+      
+    const handleClick = (e) => {
+        e.preventDefault(); // جلوگیری از رفرش شدن صفحه
+        navigate('/loginPage'); // رفتن به صفحه لاگین
+    };
 
     return(
         <nav className="flex w-full nav-header relative">
@@ -16,7 +23,7 @@ const Header=()=>{
                     <h1 className="text-center text-black text-[27px] mb-[15px] pr-[75px]">!به سیستم آموزشی جامع دانشگاه خاتم خوش آمدید</h1>
                     <p className="text-end text-[19px] px-[100px] pr-[160px] text-gray-900 mr-[15px]">در سیستم نرم افزاری طراحی شده ما شما میتوانید با مشاهده نمونه تدریس اساتید مختلف و آشنایی با روش تدریس هریک مطابق سلیقه خود دوره آن ها را تهیه کنید و سپس میتوانید با مدرس هر دوره ارتباط داشته باشید و سوالات خود را بپرسید</p>
                     <div className="btn btn-login">
-                    <a href="#" className="text-end">ثبتنام یا ورود</a>
+                    <a href="/loginPage"  onClick={handleClick} className="text-end">ثبتنام یا ورود</a>
                     </div>
                 </div>
                 </div>
