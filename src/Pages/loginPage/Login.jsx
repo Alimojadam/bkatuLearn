@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import './Login.css';
 
 
@@ -9,14 +10,21 @@ const Login=()=>{
     const [showPassword, setShowPassword] = useState(false);
 
 
+    const navigate = useNavigate();
+      
+    const handleClick = (e) => {
+        e.preventDefault(); // جلوگیری از رفرش شدن صفحه
+        navigate('/SignUpPage'); // رفتن به صفحه لاگین
+    };
+
     return(
         <div className="loginPage flex justify-center items-center w-[100%] h-[100vh]">
             <div className="title w-[60%] h-[100%] flex flex-col justify-center items-center">
-                <h1 className="text-[70px] font-bold text-[#3073c1]">WELCOME</h1>
-                <p className="w-[50%] text-right text-[17px] text-[#3073c1] mr-[50px]">
+                <h1 className="text-[85px] font-bold text-[#3073c1]">WELCOME</h1>
+                <p className="w-[51%] text-right text-[18px] text-[#3073c1] mr-[5px]">
                    : به اطلاع دانشجویان محترم میرساند <br />
-                    نام کاربری شما همان شماره دانشجویی شما بوده <br />
-                    و رمز عبور هر فرد نیز معادل کدملی وی می باشد
+                    نام کاربری شما همان شماره دانشجویی شما می باشد <br />
+                    و رمز عبور هر شخص موقع ثبتنام ثبت شده است
                 </p>
             </div>
             <div className="login w-[40%] h-[100%] flex justify-center items-center flex-col gap-[20px]">
@@ -36,9 +44,17 @@ const Login=()=>{
                         </button>
                     </div>
 
-                    <a href="#" className="btnLogin pt-[3px] pb-[8px] px-[15px] text-[#3073c1] bg-[snow] text-center mr-[5px]">ورود</a>
+                    <div className="formBtn w-[100%] flex justify-start items-center gap-[5px]">
+                        <div className="btnLogin pt-[4px] pb-[9px] px-[20px] text-[#3073c1] bg-[snow]">
+                            <a href="#" className="">ورود</a>   
+                        </div>
+                        <div className="btnSignUp pt-[5px] pb-[8px] px-[20px] text-[#3073c1] bg-[snow]">
+                            <a href="/SignUpPage" onClick={handleClick} className=" border-b border-[#3073c1]">ایجاد حساب جدید</a>
+                        </div>
+
+                    </div>
                 </div>
-                <a href="#" className="text-[snow] ml-[20px]">نمیتوانید وارد شوید؟</a>
+                <a href="#" className="text-[snow] ml-[37px] border-b border-[snow]">نمیتوانید وارد شوید؟</a>
             </div>
         </div>
     );

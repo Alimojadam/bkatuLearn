@@ -13,8 +13,8 @@
 .btnLogin{
     border-radius: 10px;
 }
-.login a{
-    border-bottom: 1px solid snow;
+.btnSignUp{
+    border-radius: 10px;
 }
 .form i{
     cursor: pointer;
