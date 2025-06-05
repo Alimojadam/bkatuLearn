@@ -14,8 +14,8 @@ const Login=()=>{
     const navigate = useNavigate();
       
     const handleClick = (e) => {
-        e.preventDefault(); // جلوگیری از رفرش شدن صفحه
-        navigate('/loginPage'); // رفتن به صفحه لاگین
+        e.preventDefault();
+        navigate('/loginPage');
     };
 
 

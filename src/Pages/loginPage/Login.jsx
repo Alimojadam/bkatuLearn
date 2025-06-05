@@ -13,8 +13,8 @@ const Login=()=>{
     const navigate = useNavigate();
       
     const handleClick = (e) => {
-        e.preventDefault(); // جلوگیری از رفرش شدن صفحه
-        navigate('/SignUpPage'); // رفتن به صفحه لاگین
+        e.preventDefault();
+        navigate('/SignUpPage');
     };
 
     return(
