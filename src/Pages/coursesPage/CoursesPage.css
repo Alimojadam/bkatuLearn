@@ -1,0 +1,24 @@
+.header-logo{
+    min-width: 62px;
+    min-height: 39px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+  }
+.searchBar input{
+  width:90%;
+  height: 35px;
+  border: none;
+  outline: none;
+  background: #ccc;
+  direction: rtl;
+  padding: 0px 8px;
+  border-radius: 10px;
+}
+.searchBar i{
+  width: 9%;
+  margin-right: 5px;
+  color: #3073c1;
+  font-size: 20px;
+  cursor: pointer;
+}

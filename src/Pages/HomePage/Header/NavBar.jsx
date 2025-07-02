@@ -29,9 +29,9 @@ const NavBar=()=>{
                 </span>
                 </button>
                 <div className="h-10 header-logo">
-                <div className="logo">
-                    <img src={logo} alt="" />
-                </div>
+                    <div className="logo">
+                        <img src={logo} alt="" />
+                    </div>
                 </div>
 
                 {/* <span className="text-lg text-gray uniName">دانشگاه صنعتی خاتم الانبیا بهبهان</span> */}

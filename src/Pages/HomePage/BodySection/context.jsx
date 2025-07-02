@@ -2,6 +2,6 @@ import { createContext } from "react";
 
 
 export const textContext = createContext({
-    bgColor : '',
+    bgColor : '#eef3f9',
     setBgColor : ()=>{},
 });

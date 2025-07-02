@@ -10,11 +10,16 @@ const Login=()=>{
     const [showPassword, setShowPassword] = useState(false);
 
 
-    const navigate = useNavigate();
+    const SignUpNavigate = useNavigate();
+    const SignInNavigate = useNavigate();
       
-    const handleClick = (e) => {
+    const SignUphandleClick = (e) => {
         e.preventDefault();
-        navigate('/SignUpPage');
+        SignUpNavigate('/SignUpPage');
+    };
+    const SignInhandleClick = (e) => {
+        e.preventDefault();
+        SignInNavigate('/CoursesPage');
     };
 
     return(
@@ -46,10 +51,10 @@ const Login=()=>{
 
                     <div className="formBtn w-[100%] flex justify-start items-center gap-[5px]">
                         <div className="btnLogin pt-[4px] pb-[9px] px-[20px] text-[#3073c1] bg-[snow]">
-                            <a href="#" className="">ورود</a>   
+                            <a href="/CoursesPage" onClick={SignInhandleClick} className="">ورود</a>   
                         </div>
                         <div className="btnSignUp pt-[5px] pb-[8px] px-[20px] text-[#3073c1] bg-[snow]">
-                            <a href="/SignUpPage" onClick={handleClick} className=" border-b border-[#3073c1]">ایجاد حساب جدید</a>
+                            <a href="/SignUpPage" onClick={SignUphandleClick} className=" border-b border-[#3073c1]">ایجاد حساب جدید</a>
                         </div>
 
                     </div>
