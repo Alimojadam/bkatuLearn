@@ -7,6 +7,8 @@ import CoursPage from "./Pages/coursPage/CoursPage";
 import { SearchProvider } from "./Pages/coursesContext";
 import Teachers from "./Pages/teachers/Teachers";
 import AboutTeacher from "./Pages/aboutTeachers/AboutTeacher"
+import AboutUs from "./Pages/aboutUs/AboutUs";
+import UserAccount from "./Pages/UserAccount/UserAccount";
 
 function App() {
   return (
@@ -19,7 +21,9 @@ function App() {
            <Route path="/CoursesPage" element={< CoursesPage/>} />
            <Route path="/CoursPage/:id" element={< CoursPage/>} />
            <Route path="/Teachers" element={< Teachers/>} />
-           <Route path="/AboutTeacher" element={< AboutTeacher/>} />
+           <Route path="/AboutTeacher/:id" element={< AboutTeacher/>} />
+           <Route path="/AboutUs" element={< AboutUs/>} />
+           <Route path="/UserAccount" element={< UserAccount/>} />
         </Routes>
       </BrowserRouter>
     </SearchProvider>

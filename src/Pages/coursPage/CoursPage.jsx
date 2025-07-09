@@ -73,7 +73,7 @@ const CoursPage = () => {
         {/* نمایش محتوای تب‌ها */}
         <div className="w-[80%] mt-4">
           {activeTab === "comments" && <CommentsSection />}
-          {activeTab === "aboutTeacher" && <TeacherInfoPage aboutTeacher={course.aboutTeacher} />}
+          {activeTab === "aboutTeacher" && <TeacherInfoPage aboutTeacherCourse={course.aboutTeacherCourse} />}
           {activeTab === "aboutCourse" && <AboutCourse aboutCourse={course.aboutCourse} />}
         </div>
       </div>

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import TeacherCard from '../../teachers/teacherCard';
 import { textContext } from './context';
 import { teachers } from '../../teachers/TeacherInfo';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const IntroductionOfTeachers=()=>{
 
@@ -25,7 +25,7 @@ const IntroductionOfTeachers=()=>{
                 </div> */}
                 <ul dir='rtl' className=" relative grid gap-5 grid-cols-3">
                     
-                    {teachers.map((teacher,index)=>(
+                    {teachers.slice(0,6).map((teacher,index)=>(
 
                         <li key={index} className="relative teachers-box">
                             <svg viewBox="0 0 300 200" className="absolute top-[-18px] svg">
@@ -40,10 +40,10 @@ const IntroductionOfTeachers=()=>{
                             </svg>
                             <div className="teacher-body flex flex-col justify-start items-start mr-[5px] mb-[5px] gap-[5px] px-[2px]">
                                 <h4 className="text-[#edd400] text-end text-[19px] mt-[5px] z-19">{teacher.name}</h4>
-                                <p className="text-end text-[15px] text-gray-200">{teacher.study}</p>
-                                <pre className="text-end text-[15px] text-gray-200 flex">{teacher.activeCourses}<pre>{teacher.NomberOFactiveCourses}</pre></pre>
+                                <p className="text-end text-[15px] text-gray-200 text-justify leading-tight">{teacher.study}</p>
+                                <pre className="text-end text-[15px] text-gray-200 flex">{teacher.NomberOFactiveCourses} {teacher.activeCourses}</pre>
+                                <Link to={`/AboutTeacher/${teacher.id}`} className=" mr-[55%] text-start text-[17px] text-[snow] border-b border-[snow] pb-[2px]">مشاهده</Link>
                             </div>
-                                <a href={`/AboutTeacher`} onClick={aboutTeacherHandleClick} className="absolute bottom-[7px] left-[10px]  text-start text-[17px] text-[snow] border-b border-[snow] pb-[2px]">مشاهده</a>
                         </li>
 
                     ))}

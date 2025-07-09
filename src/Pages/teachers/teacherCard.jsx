@@ -1,6 +1,6 @@
 
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { textContext } from '../HomePage/BodySection/context';
 // import { teachers } from './TeacherInfo';
 
@@ -16,7 +16,7 @@ const TeacherCard=({teachers})=>{
       
     const aboutTeacherHandleClick = (e) => {
         e.preventDefault();
-        aboutTeacher('/AboutTeacher');
+        aboutTeacher(`/AboutTeacher/${teachers.id}`);
     };
 
     return(
@@ -37,9 +37,9 @@ const TeacherCard=({teachers})=>{
                     <div className="teacher-body flex flex-col justify-end items-start mr-[5px] mb-[5px] gap-[5px] px-[2px]">
                         <h4 className="text-[#edd400] text-start text-[19px] mt-[5px] z-19">{teacher.name}</h4>
                         <p className="text-start text-[15px] text-gray-200">{teacher.study}</p>
-                        <pre className="text-start text-[15px] text-gray-200 flex">{teacher.activeCourses}<pre>{teacher.NomberOFactiveCourses}</pre></pre>
+                        <pre dir='rtl' className="text-start text-[15px] text-gray-200 flex">{teacher.NomberOFactiveCourses} {teacher.activeCourses}</pre>
+                        <Link to={`/AboutTeacher/${teacher.id}`} className="mb-[7px] mr-[55%] text-end text-[17px] text-[snow] border-b border-[snow] pb-[2px]">مشاهده</Link>
                     </div>
-                        <a href={`/AboutTeacher`} onClick={aboutTeacherHandleClick} className="absolute bottom-[7px] left-[10px] text-end text-[17px] text-[snow] border-b border-[snow] pb-[2px]">مشاهده</a>
                 </li>
 
             ))}

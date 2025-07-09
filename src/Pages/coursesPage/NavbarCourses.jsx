@@ -3,7 +3,7 @@ import user from '../img/userIMG.jpg';
 import '../coursesPage/CoursesPage.css';
 import { useState } from 'react';
 import { useSearch } from '../../Pages/coursesContext';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 
 
@@ -18,8 +18,8 @@ const NavbarCourses=()=>{
     const links = [
         { id: 'CoursesPage', label: 'دوره ها' },
         { id: 'Teachers', label: 'مدرسین' },
-        { id: 'Categories', label: 'دسته بندی' },
-        { id: 'AboutUS', label: 'در باره ما' },
+        { id: '', label: 'صفحه اصلی' },
+        { id: 'AboutUs', label: 'در باره ما' },
     ];
     const [activeLink, setActiveLink] = useState(links[0].id);
 
@@ -67,12 +67,12 @@ const NavbarCourses=()=>{
                         </div>
                     </li>
                     <li>
-                        <a href="#" className="rounded-[18px] h-[36px] w-[120px] bg-[#3073c1] flex flex-row-reverse items-center justify-between pr-[10px]">
+                        <Link to="/UserAccount" className="rounded-[18px] h-[36px] w-[120px] bg-[#3073c1] flex flex-row-reverse items-center justify-between pr-[10px]">
                             <p className='text-[snow] text-[17px]'>داشبورد</p>
                             <div className="w-[42px] h-[42px] rounded-[50%] bg-[snow] bg-cover bg-no-repeat">
                                 <img src={user} alt="" className='w-full h-full object-cover rounded-[50%] ' />
                             </div>
-                        </a>
+                        </Link>
                     </li>
                 </ul>
         </div>
