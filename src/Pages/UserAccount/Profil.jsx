@@ -8,7 +8,7 @@ import user from '../img/userIMG.jpg';
 const Profil=()=>{
 
     return(
-        <div className="flex flex-col justify-start items-end gap-20 mt-[10px] ml-[130px] w-[60%] h-[80vh] bg-transparent border border-2 border-[#3073c1] rounded-[10px] shadow-xl">
+        <div className="flex flex-col justify-start items-end gap-20 mt-[10px] w-[60%] h-[80vh] bg-transparent border border-2 border-[#3073c1] rounded-[10px] shadow-xl">
                         <div className="flex flex-col gap-3 w-[150px] h-[150px] rounded-[50%] mt-[-15%] mr-[33%]">
                             <img src={user} alt="" className="w-[150px] h-[150px] rounded-[50%]" />
                             <p className="text-center text-[#3073c1] text-[20px]">ممد عبدلا</p>

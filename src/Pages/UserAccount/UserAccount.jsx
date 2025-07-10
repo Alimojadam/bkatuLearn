@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import ChangePassword from "./ChangePassword";
+import EditProfile from "./EditProfile";
 import MyCourses from "./MyCourses";
 import Profil from "./Profil";
 
@@ -49,7 +51,7 @@ const UserAccount=()=>{
                     </ul>
                 </div>
             </div>
-            <div className={`aboutUser w-[64%] h-full mt-[40px] ml-[20px] flex justify-start items-center bg-[#eef3f9] transition-all duration-500 ease-out opacity-0 ${fadeClass}`}>
+            <div className={`aboutUser w-[64%] h-full mt-[40px] ml-[20px] flex justify-center items-center bg-[#eef3f9] transition-all duration-500 ease-out opacity-0 ${fadeClass}`}>
                 
                 
                 {/* Profile******************** */}
@@ -57,7 +59,12 @@ const UserAccount=()=>{
                 
                 {/* UserCourses**************** */}
                 {isActive===2 && <MyCourses/>}
+                
+                {/* EditProfile**************** */}
+                {isActive===3 && <EditProfile/>}
 
+                {/* ChangePassword************* */}
+                {isActive===4 && <ChangePassword/>}
                     
             </div>
         </div>

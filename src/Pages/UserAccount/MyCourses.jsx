@@ -9,7 +9,7 @@ import { cards } from "../coursPage/CardsInfo";
 const MyCourses=()=>{
 
     return(
-        <div className="flex justify-center items-center w-[90%] bg-transparent">
+        <div className="flex justify-center mr-[50px] items-center w-[90%] bg-transparent">
             <ul className="w-full flex flex-col gap-5 pb-[15px]">
                 {cards.map((card)=>(
                     <li className="flex flex-row-reverse justify-end items-center w-full h-[200px] border-2 border-[#3073c1] rounded-[10px]">
