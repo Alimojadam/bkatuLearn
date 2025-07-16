@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useUser } from "../coursesContext";
 import { cards } from "../coursPage/CardsInfo";
 
 
@@ -8,10 +9,13 @@ import { cards } from "../coursPage/CardsInfo";
 
 const MyCourses=()=>{
 
+    const {user} = useUser();
+
+    const registeredCourses = cards.filter((card) => user.corsesId.includes(card.id));
     return(
         <div className="flex justify-center mr-[50px] items-center w-[90%] bg-transparent">
-            <ul className="w-full flex flex-col gap-5 pb-[15px]">
-                {cards.map((card)=>(
+            <ul className="w-full justify-start items-start flex flex-col gap-5 pb-[15px]">
+                {registeredCourses.map((card)=>(
                     <li className="flex flex-row-reverse justify-end items-center w-full h-[200px] border-2 border-[#3073c1] rounded-[10px]">
                         <div className="border-l-2 border-[#3073c1] h-full w-[42%] rounded-r-[10px]">
                             <img src={card.image} className="w-full h-full object-cover rounded-r-[8px]" alt="" />

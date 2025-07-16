@@ -5,6 +5,7 @@ import Courses from '../img/Courses.jpg';
 export const cards = [
     {
       id: 1,
+      teacherId : 8,
       title: "آموزش جاوا اسکریپت",
       teacher: "علی رضایی",
       price: "490,000 تومان",
@@ -96,6 +97,7 @@ export const cards = [
     },
     {
       id: 2,
+      teacherId : 9,
       title: "آموزش ری‌اکت",
       teacher: "نگار محمدی",
       price: "690,000 تومان",
@@ -187,6 +189,7 @@ export const cards = [
     },
     {
         id: 3,
+        teacherId : 9,
         title: "آموزش ری‌اکت",
         teacher: "نگار محمدی",
         price: "690,000 تومان",
@@ -278,6 +281,7 @@ export const cards = [
     },
     {
         id: 4,
+        teacherId : 9,
         title: "آموزش ری‌اکت",
         teacher: "نگار محمدی",
         price: "690,000 تومان",

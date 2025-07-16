@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { UserInformation } from "../../Information/User";
+import { useUser } from "../coursesContext";
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({
@@ -7,6 +8,7 @@ const ChangePassword = () => {
     newPassword: "",
     confirmPassword: "",
   });
+  const { user, setUser } = useUser();
 
   const [message, setMessage] = useState({ text: "", type: "" });
 
@@ -27,7 +29,6 @@ const ChangePassword = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    const user = UserInformation[0];
   
     if (
       !formData.currentPassword.trim() ||
@@ -38,7 +39,7 @@ const ChangePassword = () => {
       return;
     }
   
-    if (formData.currentPassword !== user.password) {
+    if (formData.currentPassword !== String(user.password)) {
       setMessage({ text: "رمز فعلی نادرست است ❌", type: "error" });
       return;
     }
@@ -54,7 +55,10 @@ const ChangePassword = () => {
       return;
     }
   
-    user.password = formData.newPassword;
+      // ذخیره در context (و احتمالا localStorage یا API)
+    const updatedUser = { ...user, password: Number(formData.newPassword) };
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser)); 
     setMessage({ text: "رمز عبور با موفقیت تغییر یافت ✅", type: "success" });
   
     setFormData({

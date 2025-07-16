@@ -4,24 +4,55 @@ import AboutCourse from './AboutCourse';
 import CommentsSection from './CommentsSection';
 import Syllabus from './Syllabus';
 import TeacherInfoPage from './TeacherInfoPage';
-import {cards} from './CardsInfo';
+import { cards } from './CardsInfo';
+import { UserInformation } from '../../Information/User';  // فرض بر این است که این فایل را ایمپورت می‌کنی
+import { useUser } from '../coursesContext';
 
 const CoursPage = () => {
-  
-
   const { id } = useParams();
   const course = cards.find(c => c.id === parseInt(id));
+  
+  const { user,setUser } = useUser();
 
-  const [activeTab, setActiveTab] = useState("comments"); // مقدار پیش‌فرض: نظرات
 
-  const [videoSrc , setVideoSrc]= useState(course ? course.video : '');
+  const [activeTab, setActiveTab] = useState("comments");
 
-  const playVideo=(src)=>{
+  const [isRegistered, setIsRegistered] = useState(() => {
+    return user?.corsesId.includes(course?.id);
+  });
+
+  const [videoSrc, setVideoSrc] = useState(course ? course.video : '');
+
+  const playVideo = (src) => {
     setVideoSrc(src);
-  }
+  };
+
   if (!course) {
     return <div>دوره پیدا نشد!</div>;
   }
+
+  // تابع ثبت‌نام دوره
+  const handleRegisterCourse = () => {
+    if (!user) {
+      alert("کاربر یافت نشد!");
+      return;
+    }
+  
+    if (!user.corsesId.includes(course.id)) {
+      const updatedUser = {
+        ...user,
+        corsesId: [...user.corsesId, course.id],
+      };
+  
+      setUser(updatedUser);  // از context یا props
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setIsRegistered(true);
+      alert("ثبت‌نام با موفقیت انجام شد!");
+    } else {
+      alert("شما قبلاً ثبت‌نام کرده‌اید.");
+    }
+  };
+  
 
   return (
     <div className="flex">
@@ -35,7 +66,13 @@ const CoursPage = () => {
             <p className="text-right text-[#3073c1]">قیمت : {course.price}</p>
             <div className="flex flex-row-reverse justify-between items-center w-[100%]">
               <p className="font-[1]  text-[#111]">مدرس : {course.teacher}</p>
-              <a href="#" className="bg-[#3073c1] py-[3px] px-[20px] rounded-[3px] text-[snow]">ثبتنام</a>
+              <div className=" flex justify-center items-center" onClick={handleRegisterCourse}>
+                {isRegistered ? (
+                  <p className="bg-transparent text-green-600 border border-[#3073c1] py-[3px] px-[10px] rounded-[3px] cursor-default">ثبت‌نام شده</p>
+                ) : (
+                  <p className="bg-[#3073c1] text-[snow] py-[3px] px-[20px] rounded-[3px] cursor-pointer">ثبت‌نام</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -58,7 +95,6 @@ const CoursPage = () => {
               درباره دوره
             </p>
 
-
             <p
               onClick={() => setActiveTab("aboutTeacher")}
               className={`cursor-pointer text-[17px] border-b-[2px] font-[1] text-right text-[#111] pb-[1px] font-bold transition-all duration-300 ${
@@ -79,7 +115,7 @@ const CoursPage = () => {
       </div>
 
       <div className="w-[40%] bg-[#3073c1]">
-        <Syllabus syllabus={course.syllabus} course={course} onPlayVideo={playVideo}/>
+        <Syllabus syllabus={course.syllabus} course={course} onPlayVideo={playVideo} />
       </div>
     </div>
   );

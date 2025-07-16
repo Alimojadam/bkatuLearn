@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserInformation } from "../../Information/User";
+import { useUser } from "../coursesContext";
 
 const EditProfile = () => {
+
+  let {user,setUser}=useUser();
+
   const [formData, setFormData] = useState({
-    fullName: UserInformation[0].name,
-    email: UserInformation[0].email,
-    studentNumber: UserInformation[0].studentNumber,
+    fullName: user.name,
+    email: user.email,
+    studentNumber: user.studentNumber,
+    study: user.study || "",
+    university: user.university || "",
+    aboutMe: user.aboutMe || "",
   });
 
+  const [profileImage, setProfileImage] = useState(user.profileImg || "");
+  const [previewImage, setPreviewImage] = useState(user.profileImg || "");
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
@@ -18,35 +27,71 @@ const EditProfile = () => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!formData.fullName.trim() || !formData.email.trim()) {
-        setSuccessMessage("همه فیلدها باید پر شوند ❌");
-        setTimeout(() => {
-            setSuccessMessage("");
-        }, 3000);
-        return;
-      }
+      setSuccessMessage("همه فیلدهای الزامی باید پر شوند ❌");
+      setTimeout(() => setSuccessMessage(""), 3000);
+      return;
+    }
 
-    UserInformation[0] = {
+    const updatedUser = {
+      ...user,
       name: formData.fullName,
       email: formData.email,
       studentNumber: formData.studentNumber,
-      password: UserInformation[0].password,
+      study: formData.study,
+      university: formData.university,
+      aboutMe: formData.aboutMe,
+      profileImg: profileImage,
     };
 
-    setSuccessMessage("اطلاعات با موفقیت تغییر یافتند ✅");
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
 
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 3000);
+    setSuccessMessage("اطلاعات با موفقیت ذخیره شدند ✅");
+    setTimeout(() => setSuccessMessage(""), 3000);
   };
 
   return (
-    <div dir="rtl" className="flex flex-col w-[70%] h-[85vh] border-2 border-[#3073c1] rounded-[10px] p-6 bg-transparent shadow-lg">
+    <div
+      dir="rtl"
+      className="flex flex-col w-[70%] min-h-screen mb-[10px] border-2 border-[#3073c1] rounded-[10px] p-6 bg-transparent shadow-lg"
+    >
       <h2 className="text-2xl text-center text-[#3073c1] mb-6">ویرایش اطلاعات</h2>
+
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          {/* پروفایل ایمیج */}
+        <div className="flex flex-col">
+          {previewImage && (
+            <img
+              src={previewImage}
+              alt="پیش‌نمایش پروفایل"
+              className="w-32 h-32 rounded-full object-cover border border-[#3073c1]"
+            />
+          )}
+          <label htmlFor="" className="text-l font-medium mb-2">عکس پروفایل (اختیاری)</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="bg-transparent border border-[#3073c1] rounded-lg px-4 py-2 cursor-pointer text-[#444]"
+          />
+        </div>
+
         <div className="flex flex-col">
           <label className="text-l font-medium mb-2">شماره دانشجویی</label>
           <input
@@ -77,6 +122,41 @@ const EditProfile = () => {
             value={formData.email}
             onChange={handleChange}
             className="bg-transparent border border-[#3073c1] rounded-lg px-4 py-2 focus:outline-none"
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-l font-medium mb-2">رشته تحصیلی</label>
+          <input
+            type="text"
+            name="study"
+            value={formData.study}
+            placeholder="اختیاری"
+            onChange={handleChange}
+            className="bg-transparent border border-[#3073c1] rounded-lg px-4 py-2 focus:outline-none"
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-l font-medium mb-2">دانشگاه محل تحصیل</label>
+          <input
+            type="text"
+            name="university"
+            value={formData.university}
+            placeholder="اختیاری"
+            onChange={handleChange}
+            className="bg-transparent border border-[#3073c1] rounded-lg px-4 py-2 focus:outline-none"
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="text-l font-medium mb-2">درباره من</label>
+          <textarea
+            name="aboutMe"
+            value={formData.aboutMe}
+            placeholder="در حد 40 کلمه درمورد خودت بگو :) "
+            onChange={handleChange}
+            className="bg-transparent border border-[#3073c1] rounded-lg px-4 py-2 focus:outline-none resize-none"
           />
         </div>
 

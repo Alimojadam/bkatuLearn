@@ -6,12 +6,18 @@ import { useSearch } from '../../Pages/coursesContext';
 import { Link, useNavigate } from 'react-router-dom';
 import pattern from "../img/pattern.png"
 import { cards } from '../coursPage/CardsInfo';
+import { UserInformation } from '../../Information/User';
 
 
 const CoursesPage=()=>{
 
     const [activeIndex, setActiveIndex] = useState(0);
     const [selectedType, setSelectedType] = useState("All");
+
+    const getTeacherName = (teacherId) => {
+        const teacher = UserInformation.find(u => u.id === teacherId && u.type === "Teacher");
+        return teacher ? teacher.name : "نامشخص";
+    };
 
     const filters = ["جدید ترین", "پر بازدید ترین", "ارزان ترین", "گران ترین"];
 
@@ -36,7 +42,11 @@ const CoursesPage=()=>{
         const filteredCards = cards.filter(card => {
             const matchesSearch = card.title.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesType = selectedType === "All" || card.type === selectedType;
-            return matchesSearch && matchesType;
+
+            const teacher = UserInformation.find(u => u.id === card.teacherId);
+            const isTeacher = teacher && teacher.type === "Teacher";
+
+            return matchesSearch && matchesType && isTeacher;
         });
         const [isMenuOpen, setIsMenuOpen] = useState(false); 
         const toggleMenu = () => {
@@ -118,7 +128,7 @@ const CoursesPage=()=>{
                             <img src={card.image} alt={card.title} className="w-full h-40 object-cover rounded-[8px]" />
                             <div className="px-[8px] flex flex-col gap-[5px] p-1">
                                 <h3 className="text-[18px] text-[#222] font-bold mt-2 font-[1]">{card.title}</h3>
-                                <p className="text-[15px] font-[1]">مدرس: {card.teacher}</p>
+                                <p className="text-[15px] font-[1]">مدرس: {getTeacherName(card.teacherId)}</p>
                                 <div className="flex justify-between items-center">
                                 <p className="text-[#3073c1] font-semibold ">{card.price}</p>
                                 <Link to={`/CoursPage/${card.id}`} className="bg-[#3073c1] text-[snow] py-[3px] px-[10px] rounded-[3px]">مشاهده</Link>

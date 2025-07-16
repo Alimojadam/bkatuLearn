@@ -22,7 +22,7 @@ const Teachers=()=>{
         teacher.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     return(
-        <div className="bg-[#eef3f9] pb-[20px]">
+        <div className="bg-[#eef3f9] pb-[20px] min-h-screen">
             <div className="">
                 <NavbarCourses/>
             </div>

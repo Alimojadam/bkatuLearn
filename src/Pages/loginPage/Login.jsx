@@ -1,67 +1,101 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserInformation } from "../../Information/User";
+import { useUser } from "../coursesContext";
 import './Login.css';
 
+const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [studentNumber, setStudentNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
+  const navigate = useNavigate();
+  const { setUser } = useUser();
 
+  const SignUphandleClick = (e) => {
+    e.preventDefault();
+    navigate('/SignUpPage');
+  };
 
-const Login=()=>{
+  const SignInhandleClick = (e) => {
+    e.preventDefault();
 
-    const [showPassword, setShowPassword] = useState(false);
-
-
-    const SignUpNavigate = useNavigate();
-    const SignInNavigate = useNavigate();
-      
-    const SignUphandleClick = (e) => {
-        e.preventDefault();
-        SignUpNavigate('/SignUpPage');
-    };
-    const SignInhandleClick = (e) => {
-        e.preventDefault();
-        SignInNavigate('/CoursesPage');
-    };
-
-    return(
-        <div className="loginPage flex justify-center items-center w-[100%] h-[100vh]">
-            <div className="title w-[60%] h-[100%] flex flex-col justify-center items-center">
-                <h1 className="text-[85px] font-bold text-[#3073c1]">WELCOME</h1>
-                <p className="w-[51%] text-right text-[18px] text-[#3073c1] mr-[5px]">
-                   : به اطلاع دانشجویان محترم میرساند <br />
-                    نام کاربری شما همان شماره دانشجویی شما می باشد <br />
-                    و رمز عبور هر شخص موقع ثبتنام ثبت شده است
-                </p>
-            </div>
-            <div className="login w-[40%] h-[100%] flex justify-center items-center flex-col gap-[20px]">
-                <div dir="rtl" className="form flex flex-col mb-4 justify-center items-start gap-[10px]">
-                    <label htmlFor="userName" className="text-[snow] mr-[10px]">نام کاربری</label>
-                    <input id="userName" className="w-[90%] h-[30px] pr-[10px]" type="text" />
-
-                    <label htmlFor="password" className="text-[snow] mr-[10px]">رمز عبور</label>
-                    <div className="relative w-[90%]">
-                        <input id="password" className="w-full h-[30px] pr-[10px]" type={showPassword ? "text" : "password"}/>
-                        <button type="button" onClick={() => setShowPassword(prev => !prev)} className="absolute top-[3px] left-2 text-[#3073c1]">
-                        {showPassword ? (
-                            <i className="fas fa-eye-slash"></i>
-                        ) : (
-                            <i className="fas fa-eye"></i>
-                        )}
-                        </button>
-                    </div>
-
-                    <div className="formBtn w-[100%] flex justify-start items-center gap-[5px]">
-                        <div className="btnLogin pt-[4px] pb-[9px] px-[20px] text-[#3073c1] bg-[snow]">
-                            <a href="/CoursesPage" onClick={SignInhandleClick} className="">ورود</a>   
-                        </div>
-                        <div className="btnSignUp pt-[5px] pb-[8px] px-[20px] text-[#3073c1] bg-[snow]">
-                            <a href="/SignUpPage" onClick={SignUphandleClick} className=" border-b border-[#3073c1]">ایجاد حساب جدید</a>
-                        </div>
-
-                    </div>
-                </div>
-                <a href="#" className="text-[snow] ml-[37px] border-b border-[snow]">نمیتوانید وارد شوید؟</a>
-            </div>
-        </div>
+    const foundUser = UserInformation.find(
+      (user) =>
+        user.studentNumber.toString() === studentNumber.trim() &&
+        user.password.toString() === password.trim()
     );
+
+    if (foundUser) {
+      setUser(foundUser);
+      localStorage.setItem("user", JSON.stringify(foundUser)); // ذخیره کاربر واقعی
+      navigate("/CoursesPage");
+    } else {
+      setError("!شماره دانشجویی یا رمز عبور اشتباه است");
+    }
+  };
+
+  return (
+    <div className="loginPage flex justify-center items-center w-[100%] h-[100vh]">
+      <div className="title w-[60%] h-[100%] flex flex-col justify-center items-center">
+        <h1 className="text-[85px] font-bold text-[#3073c1]">WELCOME</h1>
+        <p className="w-[51%] text-right text-[18px] text-[#3073c1] mr-[5px]">
+          : به اطلاع دانشجویان محترم میرساند <br />
+          نام کاربری شما همان شماره دانشجویی شما می باشد <br />
+          و رمز عبور هر شخص موقع ثبتنام ثبت شده است
+        </p>
+      </div>
+      <div className="login w-[40%] h-[100%] flex justify-center items-center flex-col gap-[20px]">
+        <form dir="rtl" onSubmit={SignInhandleClick} className="form flex flex-col mb-4 justify-center items-start gap-[10px]">
+          <label htmlFor="userName" className="text-[snow] mr-[10px]">نام کاربری</label>
+          <input
+            id="userName"
+            value={studentNumber}
+            onChange={(e) => setStudentNumber(e.target.value)}
+            className="w-[90%] h-[30px] pr-[10px]"
+            type="text"
+          />
+
+          <label htmlFor="password" className="text-[snow] mr-[10px]">رمز عبور</label>
+          <div className="relative w-[90%]">
+            <input
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full h-[30px] pr-[10px]"
+              type={showPassword ? "text" : "password"}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(prev => !prev)}
+              className="absolute top-[3px] left-2 text-[#3073c1]"
+            >
+              {showPassword ? (
+                <i className="fas fa-eye-slash"></i>
+              ) : (
+                <i className="fas fa-eye"></i>
+              )}
+            </button>
+          </div>
+
+          <div className="formBtn w-[100%] flex justify-start items-center gap-[5px]">
+            <button type="submit" className="cursor-pointer btnLogin pt-[4px] pb-[9px] px-[20px] text-[#3073c1] bg-[snow]">ورود</button>
+
+            <button
+              type="button"
+              onClick={SignUphandleClick}
+              className="cursor-pointer btnSignUp pt-[5px] pb-[8px] px-[20px] text-[#3073c1] bg-[snow] border-b border-[#3073c1]"
+            >
+              ایجاد حساب جدید
+            </button>
+          </div>
+        </form>
+        <a href="#" className="text-[snow] ml-[37px] border-b border-[snow]">نمیتوانید وارد شوید؟</a>
+        {error && <p className="text-[snow] border-b border-[snow] pb-1 text-x mt-3 ml-[37px]">{error}</p>}
+      </div>
+    </div>
+  );
 };
+
 export default Login;
