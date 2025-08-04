@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { teachers } from "../../Pages/teachers/TeacherInfo";
-import student from "../../Pages/img/userIMG.jpg"
+import student from "../../Pages/img/userIMG.jpg";
 import { useUser } from "../../Pages/coursesContext";
+import RequestsComponent from "../myRequestsComponent/RequestsComponent";
+import EditProfile from "../EditProfile/EditProfile";
+import RequestToAddCourse from "../Request to Add a New Course/RequestToAddCourse";
 import { useNavigate } from "react-router-dom";
 
 const TeacherHomePage = () => {
-  const {user}=useUser();
-  const navigate = useNavigate();
+  const { user } = useUser();
+  const [activeSection, setActiveSection] = useState("dashboard");
 
+  const navigate=useNavigate();
+  const handleNavigate=(e,id)=>{
+    e.preventDefault();
+    navigate(`/CoursPage/${id}`)
+  }
   if (!user) {
     return (
       <div className="w-full min-h-screen flex justify-center items-center text-[#3073c1] text-xl">
@@ -15,76 +23,89 @@ const TeacherHomePage = () => {
       </div>
     );
   }
-  
-  const teacher = user; // مدرس لاگین کرده
-  const teacherCourses = teachers.find(t => t.id === teacher.id)?.courses || [];
-
-
-  const handleNavigate=(e)=>{
-    e.preventDefault();
-    navigate("/TeacherEditProfile")
-    
-  }
+ 
+  const teacher = user;
+  const teacherCourses = teachers.find((t) => t.id === teacher.id)?.courses || [];
 
   return (
-    <div className="w-full min-h-screen p-6 bg-[#eef3f9] flex flex-col items-center justify-center gap-6" dir="rtl">
-      
-      {/* عنوان */}
-      <h1 className="text-3xl  text-[#3073c1]">پنل مدرس</h1>
+    <div className="w-full min-h-screen p-6 bg-gradient-to-b bg-[#eef3f9] flex flex-col items-center gap-6" dir="rtl">
+      <h1 className="text-4xl font-extrabold text-[#2c5282] mb-4">پنل مدرس</h1>
 
       {/* کارت اطلاعات مدرس */}
-      <div className="w-full max-w-4xl bg-transparent p-6 rounded-2xl shadow-md border border-[#3073c1] flex flex-col md:flex-row gap-6">
+      <div className="w-5xl bg-[snow] p-6 rounded-3xl shadow-lg border border-[#2c5282] flex flex-col md:flex-row gap-6 items-start justify-center">
         <img
           src={student || "/default-profile.png"}
           alt="teacher"
-          className="w-32 h-32 rounded-full object-cover border-2 border-[#3073c1]"
+          className="w-36 h-36 rounded-full object-cover border-4 border-[#2c5282]"
         />
-        <div className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold text-[#333]">{teacher.name}</h2>
-          <p className="text-gray-600 mt-2">رشته : {teacher.study}</p>
-          <p className="text-gray-600">دانشگاه : {teacher.university}</p>
-          <p className="text-gray-600">ایمیل : {teacher.email}</p>
+
+        <div className="flex flex-col gap-2 flex-1">
+          <h2 className="text-2xl font-semibold text-[#2c5282]">{teacher.name}</h2>
+          <p className="text-gray-700 mt-1">رشته : <span className="font-medium">{teacher.study}</span></p>
+          <p className="text-gray-700">دانشگاه : <span className="font-medium">{teacher.university}</span></p>
+          <p className="text-gray-700">ایمیل : <span className="font-medium">{teacher.email}</span></p>
           {teacher.aboutTeacher && (
-            <p className="text-gray-600 text-justify mt-2">درباره مدرس : {teacher.aboutTeacher}</p>
+            <p className="text-gray-600 text-justify mt-3 bg-[#f7fafc] p-3 rounded-lg shadow-inner">
+              درباره مدرس : {teacher.aboutTeacher}
+            </p>
           )}
         </div>
       </div>
 
-      {/* آمار و عملیات سریع */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl">
-        <div className="bg-[#eef3f9] p-4 border border-[#3073c1] rounded-xl shadow-md text-center">
-          <h3 className="text-xl font-bold text-[#3073c1]">تعداد دوره‌ها</h3>
-          <p className="text-3xl mt-2">{teacherCourses.length}</p>
-        </div>
-
-        <button className="bg-[#3073c1] text-[snow] text-[20px] cursor-pointer rounded-xl p-4 shadow-md hover:bg-[#2558a0] transition">
-          درخواست افزودن دوره جدید
-        </button>
-
-        <button onClick={handleNavigate} className="bg-[#3073c1] text-[snow] text-[20px] cursor-pointer rounded-xl p-4 shadow-md hover:bg-[#2558a0] transition">
-          ویرایش پروفایل
-        </button>
+      {/* تب‌ها */}
+      <div className="w-5xl bg-white rounded-3xl shadow-md flex overflow-hidden border border-[#2c5282]">
+        {[
+          { id: "dashboard", label: "دوره‌های من" },
+          { id: "addCourse", label: "درخواست افزودن دوره جدید" },
+          { id: "editProfile", label: "ویرایش پروفایل" },
+          { id: "requests", label: "درخواست‌های من" },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveSection(tab.id)}
+            className={`flex-1 py-4 cursor-pointer text-center font-semibold transition-colors duration-300 ${
+              activeSection === tab.id
+                ? "bg-[#2c5282] text-white shadow-inner"
+                : "bg-transparent text-[#2c5282] hover:bg-[#cbd5e0]"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
-      {/* لیست دوره‌ها */}
-      <div className="w-[70%] flex flex-col mt-6">
-        <h3 className="text-2xl font-semibold text-[#333] mb-4">دوره‌های من</h3>
-        {teacherCourses.length === 0 ? (
-          <p className="text-gray-500">هنوز دوره‌ای اضافه نکرده‌اید.</p>
-        ) : (
-          <ul className="w-full flex flex-col gap-4">
-            {teacherCourses.map((course, index) => (
-              <li key={index} className="w-full flex justify-between items-center bg-[snow] border border-[#3073c1] p-4 rounded-xl shadow-md">
-                <h4 className="text-lg font-semibold text-[#3073c1]">{course.title}</h4>
-                {/* <p className="text-gray-600 mt-1">تعداد دانشجو: {course.students.length}</p> */}
-                <div className="flex justify-center items-center gap-2 border border-[#3073c1] rounded-[5px] cursor-pointer px-[8px] py-[3px] text-[#3073c1] bg-transparent">
-                  <p>ویرایش</p>
-                  <i class="fas fa-edit"></i>
-                </div>
-              </li>
-            ))}
-          </ul>
+      {/* محتوای بخش‌ها */}
+      <div className="w-5xl bg-[snow] rounded-3xl shadow-lg p-6 mt-4">
+        {activeSection === "dashboard" && (
+          <>
+            {teacherCourses.length === 0 ? (
+              <p className="text-gray-500 text-center text-lg mt-10">هنوز دوره‌ای اضافه نکرده‌اید.</p>
+            ) : (
+              <ul className="flex flex-col gap-4">
+                {teacherCourses.map((course, index) => (
+                  <li
+                    key={index}
+                    className="flex justify-between items-center border border-[#2c5282] rounded-xl p-5 shadow hover:shadow-lg transition-shadow bg-[#f9fafb]"
+                  >
+                    <h4 className="text-xl font-semibold text-[#2c5282]">{course.title}</h4>
+                    <button
+                      className="flex items-center gap-2 border border-[#2c5282] rounded-[5px] px-[8px] py-[3px] cursor-[pointer] text-[#2c5282] hover:text-[#1a365d] transition-colors font-medium"
+                      title="ویرایش دوره"
+                      onClick={(e) => handleNavigate(e, course.id)}
+                    >
+                      <i className="fas fa-edit"></i>
+                      <p className="">مشاهده و ویرایش</p>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         )}
+
+        {activeSection === "requests" && <RequestsComponent />}
+        {activeSection === "addCourse" && <RequestToAddCourse />}
+        {activeSection === "editProfile" && <EditProfile />}
       </div>
     </div>
   );

@@ -103,12 +103,12 @@ const EditProfile = () => {
   }
 
   return (
-    <div dir="rtl" className="bg-[#eef3f9] min-h-screen flex flex-col justify-center items-center py-[15px]">
+    <div dir="rtl" className="bg-[snow] min-h-screen flex flex-col justify-center items-center py-[15px]">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col py-[20px] gap-4 justify-start items-center w-[50%] border-2 border-[#3073c1] rounded-[10px]"
+        className="flex flex-col py-[20px] gap-4 justify-start items-center w-[70%] border-2 border-[#2c5282] rounded-[10px]"
       >
-        <h3 className="text-[21px] text-[#3073c1]">ویرایش حساب مدرس</h3>
+        <h3 className="text-[21px] text-[#2c5282]">ویرایش حساب مدرس</h3>
 
         <div className="w-[97%] flex flex-col gap-2">
           <label className="text-[#222] text-[17px]">نام و نام خانوادگی</label>
@@ -196,7 +196,7 @@ const EditProfile = () => {
         <div className="w-[97%]">
           <button
             type="submit"
-            className="bg-[#3073c1] text-[17px] text-[snow] rounded-[5px] px-[20px] py-[5px] cursor-pointer"
+            className="bg-[#2c5282] hover:bg-[#1a365d] text-[17px] text-[snow] rounded-[5px] px-[20px] py-[5px] cursor-pointer"
           >
             ثبت
           </button>

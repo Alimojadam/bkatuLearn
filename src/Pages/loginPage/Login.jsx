@@ -30,7 +30,12 @@ const Login = () => {
     if (foundUser) {
       setUser(foundUser);
       localStorage.setItem("user", JSON.stringify(foundUser)); // ذخیره کاربر واقعی
+      if(foundUser.type==="Admin"){
+        navigate("/AdminPanel")
+      }
+      else{
       navigate("/CoursesPage");
+      }
     } else {
       setError("!شماره دانشجویی یا رمز عبور اشتباه است");
     }
