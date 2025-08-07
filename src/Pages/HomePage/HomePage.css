@@ -10,7 +10,7 @@ body{
   }
   .headerBody{
     position: relative;
-    width: 62%;
+    
   }
   .header-logo{
     min-width: 62px;
@@ -78,7 +78,7 @@ body{
   }
   .body{
     background: #eef3f9;
-    height: 600px;
+
   
   }
   a{

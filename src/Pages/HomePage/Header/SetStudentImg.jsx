@@ -2,8 +2,8 @@ import student from '../../img/png.png'
 
 const SetStudentImg=()=>{
     return(
-        <>
-            <div className="student-img z-10 absolute flex justify-center items-center">
+        <div className='hidden md:block'>
+            <div className=" student-img z-10 absolute flex justify-center items-center">
                 <img src={student} alt="" />
             </div>
             <div className="flex gap-5">
@@ -24,7 +24,7 @@ const SetStudentImg=()=>{
                     <p>دوره</p>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 export default SetStudentImg;

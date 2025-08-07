@@ -16,16 +16,16 @@ const Header=()=>{
 
     return(
         <nav className="flex w-full nav-header relative">
-            <div className="headerBody relative">
+            <div className="headerBody w-[100%] sm:w-[62%] relative">
                 <NavBar/>
-                <div className="body items-center relative">
-                <div className="grid items-center justify-center absolute mt-50 ">
-                    <h1 className="text-center text-black text-[27px] mb-[15px] pr-[75px]">!به سیستم آموزشی جامع دانشگاه خاتم خوش آمدید</h1>
-                    <p className="text-end text-[19px] px-[100px] pr-[160px] text-gray-900 mr-[15px]">در سیستم نرم افزاری طراحی شده ما شما میتوانید با مشاهده نمونه تدریس اساتید مختلف و آشنایی با روش تدریس هریک مطابق سلیقه خود دوره آن ها را تهیه کنید و سپس میتوانید با مدرس هر دوره ارتباط داشته باشید و سوالات خود را بپرسید</p>
-                    <div className="btn btn-login">
-                    <a href="/loginPage"  onClick={handleClick} className="text-end">ثبتنام یا ورود</a>
+                <div className="body h-[600px] items-center relative">
+                    <div className="grid items-center justify-center absolute mt-40 sm:mt-50 ">
+                        <h1 className="text-center text-black text-[22px] px-[5px] sm:px-[0px] sm:text-[27px] mb-[15px] sm:pr-[75px]">!به سیستم آموزشی جامع دانشگاه خاتم خوش آمدید</h1>
+                        <p dir='rtl' className="text-justify sm:text-start text-[16px] px-[5px] sm:px-[0px] sm:text-[19px] sm:px-[100px] sm:pr-[160px] text-gray-900 mr-[15px]">در سیستم نرم افزاری طراحی شده ما شما میتوانید با مشاهده نمونه تدریس اساتید مختلف و آشنایی با روش تدریس هریک مطابق سلیقه خود دوره آن ها را تهیه کنید و سپس میتوانید با مدرس هر دوره ارتباط داشته باشید و سوالات خود را بپرسید</p>
+                        <div className="btn btn-login">
+                        <a href="/loginPage"  onClick={handleClick} className="text-center sm:text-end">ثبتنام یا ورود</a>
+                        </div>
                     </div>
-                </div>
                 </div>
             
             </div>
@@ -42,7 +42,7 @@ const Header=()=>{
                     </a>
                 </section>
             </section>
-            <div className="khatam-img z-10 absolute flex justify-center items-center">
+            <div className="khatam-img z-10 absolute flex justify-center items-center hidden sm:block">
                 <img src={khatam} alt="" />
             </div>
             <SetStudentImg/>

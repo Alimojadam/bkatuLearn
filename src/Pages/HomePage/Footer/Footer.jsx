@@ -22,7 +22,7 @@ const Footer=()=>{
                     fill="#3073c1"/>
             </svg>
             </div>
-            <div className="flex gap-100 items-center justify-center mt-[50px]">
+            <div className="flex flex-col-reverse sm:flex-row gap-10 sm:gap-100 items-center justify-center mt-[50px]">
             <div className="logosFooter flex gap-[10px]">
                 <img src={logoFooter2}alt="" />
                 <img src={logoFooter3}alt="" />

@@ -17,13 +17,13 @@ const IntroductionOfTeachers=()=>{
 
 
     return(
-        <div className="relative flex flex-col lg:flex-row items-start justify-start gap-8 p-10">
-            <div className=" mt-[50px] ml-[50px] z-10">
+        <div className="relative flex flex-col lg:flex-row items-center justify-center sm:items-start sm:justify-start gap-8 p-10">
+            <div className=" mt-[30px] sm:mt-[50px] sm:ml-[50px] z-10">
                 {/* <img src={teacher_img} alt="" /> */}
                 {/* <div className="teachers-box relative">
                     
                 </div> */}
-                <ul dir='rtl' className=" relative grid gap-5 grid-cols-3">
+                <ul dir='rtl' className=" relative grid justify-center items-center gap-15 sm:gap-5 grid-cols-2 sm:grid-cols-3">
                     
                     {teachers.slice(0,6).map((teacher,index)=>(
 
@@ -50,9 +50,9 @@ const IntroductionOfTeachers=()=>{
                 </ul>
             </div> 
                 {/* Info Section */}
-            <div className="max-w-xl text-center lg:text-right mt-[180px] ">
-                <h2 className=" text-[27px]">!بهترین اساتید دانشگاه رو برات اینجا جمع کردیم</h2>
-                <p className="text-gray-900 mt-4 text-[18px]">در سیستم نرم‌افزاری طراحی‌شده‌ی ما، شما می‌توانید با مشاهده نمونه تدریس اساتید مختلف، آشنا شوید و روش تدریس هر یک را مقایسه کنید</p>
+            <div className=" max-w-xl text-center lg:text-right sm:mt-[180px] ">
+                <h2 className="hidden sm:block  text-[27px]">!بهترین اساتید دانشگاه رو برات اینجا جمع کردیم</h2>
+                <p className="hidden sm:block text-gray-900 mt-4 text-[18px]">در سیستم نرم‌افزاری طراحی‌شده‌ی ما، شما می‌توانید با مشاهده نمونه تدریس اساتید مختلف، آشنا شوید و روش تدریس هر یک را مقایسه کنید</p>
                 <button className="mt-6 px-6 py-2 btn btn-blue shadow-md transition">مشاهده بیشتر</button>
             </div>
         </div>

@@ -1,183 +1,142 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Admin from "../Pages/img/userIMG.jpg";
 
-const sampleCourses = [
-  { id: 1, title: "React مقدماتی", price: 50000, teacher: "علی رضایی", teacherId: 10 },
-  { id: 2, title: "Node.js پیشرفته", price: 75000, teacher: "مریم حسینی", teacherId: 11 },
+const NavList = [
+  { id: "courses", label: "مدیریت دوره‌ها", iconClass: "fa-solid fa-book" },
+  { id: "teachers", label: "مدیریت مدرس‌ها", iconClass: "fa-solid fa-chalkboard-teacher" },
+  { id: "videos", label: "مدیریت ویدیوها", iconClass: "fa-solid fa-video" },
+  { id: "video-metadata", label: "ویرایش و تایید ویدیوها", iconClass: "fa-solid fa-pen-to-square" },
+  { id: "users", label: "مدیریت کاربران", iconClass: "fa-solid fa-users" },
+  { id: "user-roles", label: "نقش کاربران", iconClass: "fa-solid fa-user-shield" },
+  { id: "reset-password", label: "ریست پسورد کاربران", iconClass: "fa-solid fa-key" },
+  { id: "moderation", label: "رسیدگی به گزارش‌ها و شکایات", iconClass: "fa-solid fa-flag" },
+  { id: "categories", label: "مدیریت دسته‌بندی‌ها", iconClass: "fa-solid fa-folder-tree" },
+  { id: "tags", label: "مدیریت تگ‌ها", iconClass: "fa-solid fa-tags" },
+  { id: "notifications", label: "پیام‌ها و اعلان‌ها", iconClass: "fa-solid fa-bell" },
+  { id: "analytics", label: "آمار و فعالیت کاربران", iconClass: "fa-solid fa-chart-line" },
+  { id: "storage", label: "فایل‌ها و فضای ذخیره‌سازی", iconClass: "fa-solid fa-database" },
+  { id: "security", label: "امنیت و کنترل دسترسی", iconClass: "fa-solid fa-shield-halved" },
+  { id: "profile", label: "پروفایل و تنظیمات", iconClass: "fa-solid fa-user-cog" },
 ];
 
-const sampleTeachers = [
-  { id: 10, name: "علی رضایی", study: "مهندسی کامپیوتر", email: "ali@example.com" },
-  { id: 11, name: "مریم حسینی", study: "علوم کامپیوتر", email: "maryam@example.com" },
-];
+const LogOut = { id: "logout", label: "خروج", iconClass: "fa-solid fa-right-from-bracket" };
 
 const AdminPanel = () => {
-  const [activeTab, setActiveTab] = useState("courses");
-  const navigate = useNavigate();
-
-  const goToEditCourse = (id) => navigate(`/EditeCours/${id}`);
-  const goToTeacherProfile = (id) => navigate(`/TeacherProfile/${id}`);
-
-  const labelValueRow = "flex justify-between items-center mb-3";
+  const [activeItem, setActiveItem] = useState("courses");
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div
-      className="min-h-screen p-10 bg-gradient-to-tr from-[#dbe8fb] via-[#a9c7f8] to-[#7faaf7]"
-      dir="rtl"
-    >
-      <h1 className="text-6xl font-extrabold text-gradient bg-gradient-to-r from-[#3073c1] via-[#3f7dd6] to-[#3073c1] bg-clip-text text-transparent mb-12 select-none drop-shadow-lg">
-        پنل ادمین
-      </h1>
-
-      <div className="max-w-7xl mx-auto flex gap-10">
-        {/* تب‌ها سمت راست */}
-        <nav
-          aria-label="ناوبری تب‌ها"
-          className="flex flex-col gap-3 min-w-[240px] bg-white rounded-3xl shadow-xl border-4 border-[#3073c1] overflow-hidden"
-          role="tablist"
-          dir="rtl"
+    <>
+      {/* open Button*/}
+      {!isOpen && (
+        <button
+          className="sm:hidden fixed top-4 right-4 z-50 p-2 text-[#1E3A8A] rounded-md"
+          onClick={() => setIsOpen(true)}
+          aria-label="Open menu"
         >
-          {[
-            { id: "courses", label: "مدیریت دوره‌ها" },
-            { id: "teachers", label: "مدیریت مدرس‌ها" },
-            { id: "requests", label: "درخواست‌ها و پروفایل" },
-            { id: "settings", label: "تنظیمات" },
-            { id: "reports", label: "گزارش‌ها" },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`py-5 px-8 text-right font-bold text-lg transition-all duration-400 border-b border-[#a6c3f4]
-                ${
-                  activeTab === tab.id
-                    ? "bg-gradient-to-r from-[#3073c1] via-[#3f7dd6] to-[#3073c1] text-white shadow-lg scale-105"
-                    : "bg-white text-[#3073c1] hover:bg-[#c5d7f8] hover:text-[#1e5bbf]"
-                }
-                focus:outline-none rounded-tr-xl`}
-              role="tab"
-              aria-selected={activeTab === tab.id}
-              tabIndex={activeTab === tab.id ? 0 : -1}
-              style={{ transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)" }}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
+          <i className="fa-solid fa-bars text-2xl"></i>
+        </button>
+      )}
 
-        {/* محتوای تب‌ها سمت چپ */}
-        <main
-          className="flex-1 bg-white rounded-3xl shadow-2xl p-10 min-h-[580px] border-4 border-[#3073c1]"
-          role="tabpanel"
-          aria-labelledby={activeTab}
-          dir="rtl"
+      <div className="w-full flex flex-row-reverse h-full bg-[#eef3f9] overflow-hidden">
+        {/* Sidebar */}
+        <div
+          className={`
+            top-0 right-0 h-full bg-[#1E3A8A] flex flex-col gap-4 pb-5
+            w-[85%]
+            transform transition-transform duration-300 ease-in-out
+            ${isOpen ? "translate-x-0" : "translate-x-full"}
+            sm:static sm:translate-x-0 sm:w-[30%]
+            z-40
+          `}
         >
-          {activeTab === "courses" && (
-            <>
-              {sampleCourses.length === 0 ? (
-                <p className="text-[#3073c1] text-center text-2xl mt-24 font-semibold select-none">
-                  هیچ دوره‌ای ثبت نشده است.
-                </p>
-              ) : (
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                  {sampleCourses.map((course) => (
-                    <li
-                      key={course.id}
-                      className="flex flex-col justify-between bg-gradient-to-br from-[#e6f0ff] to-[#c3d7f9] border border-[#3073c1] rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-shadow duration-500 transform hover:-translate-y-2 hover:scale-[1.03] cursor-pointer"
-                    >
-                      <h4 className="text-3xl font-extrabold text-[#3073c1] mb-6 drop-shadow-md select-none">
-                        {course.title}
-                      </h4>
-
-                      <div className={labelValueRow}>
-                        <span className="text-[#3073c1] font-semibold w-32 text-right select-text">
-                          مدرس:
-                        </span>
-                        <span className="text-[#1e5bbf] font-medium select-text">{course.teacher}</span>
-                      </div>
-                      <div className={labelValueRow}>
-                        <span className="text-[#3073c1] font-semibold w-32 text-right select-text">
-                          قیمت:
-                        </span>
-                        <span className="text-[#1e5bbf] font-medium select-text">
-                          {course.price.toLocaleString()} تومان
-                        </span>
-                      </div>
-
-                      <button
-                        onClick={() => goToEditCourse(course.id)}
-                        className="mt-8 self-start bg-gradient-to-r from-[#3073c1] via-[#3f7dd6] to-[#3073c1] text-white rounded-2xl px-8 py-4 font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform flex items-center gap-4"
-                      >
-                        <i className="fas fa-edit"></i> ویرایش دوره
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </>
-          )}
-
-          {activeTab === "teachers" && (
-            <>
-              {sampleTeachers.length === 0 ? (
-                <p className="text-[#3073c1] text-center text-2xl mt-24 font-semibold select-none">
-                  هیچ مدرس فعالی وجود ندارد.
-                </p>
-              ) : (
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                  {sampleTeachers.map((teacher) => (
-                    <li
-                      key={teacher.id}
-                      className="flex flex-col justify-between bg-gradient-to-tr from-[#c3d7f9] to-[#e6f0ff] border border-[#3073c1] rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-shadow duration-500 transform hover:-translate-y-2 hover:scale-[1.03] cursor-pointer"
-                    >
-                      <h4 className="text-3xl font-extrabold text-[#3073c1] mb-6 drop-shadow-sm select-none">
-                        {teacher.name}
-                      </h4>
-
-                      <div className={labelValueRow}>
-                        <span className="text-[#3073c1] font-semibold w-32 text-right select-text">رشته:</span>
-                        <span className="text-[#1e5bbf] font-medium select-text">{teacher.study}</span>
-                      </div>
-                      <div className={labelValueRow}>
-                        <span className="text-[#3073c1] font-semibold w-32 text-right select-text">ایمیل:</span>
-                        <span className="text-[#1e5bbf] font-medium select-text">{teacher.email}</span>
-                      </div>
-
-                      <button
-                        onClick={() => goToTeacherProfile(teacher.id)}
-                        className="mt-8 self-start bg-gradient-to-r from-[#3073c1] via-[#3f7dd6] to-[#3073c1] text-white rounded-2xl px-8 py-4 font-bold shadow-lg hover:scale-105 active:scale-95 transition-transform flex items-center gap-4"
-                      >
-                        <i className="fas fa-user"></i> نمایش پروفایل
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </>
-          )}
-
-          {activeTab === "requests" && (
-            <div className="text-center text-[#3073c1] font-bold text-2xl mt-28 select-none">
-              <p>بخش درخواست‌ها و مدیریت پروفایل‌ها اینجا نمایش داده می‌شود.</p>
-              <p className="mt-4 text-[#4b7fc9] text-lg italic">
-                به زودی امکانات بیشتر اضافه خواهد شد!
-              </p>
+          {/* close button */}
+          {isOpen && (
+            <div className="flex justify-start p-4 sm:hidden">
+              <button
+                className="p-2 text-white rounded-md"
+                onClick={() => setIsOpen(false)}
+                aria-label="Close menu"
+              >
+                <i className="fa-solid fa-xmark text-2xl"></i>
+              </button>
             </div>
           )}
 
-          {activeTab === "settings" && (
-            <div className="text-center text-[#3073c1] font-bold text-2xl mt-28 select-none">
-              <p>بخش تنظیمات پنل ادمین اینجا قرار می‌گیرد.</p>
+          {/* Admin Info */}
+          <div className="mr-[40px] mt-[20px] flex flex-row-reverse justify-start items-center gap-8">
+            <div className="w-[100px] h-[100px] rounded-[50%]">
+              <img
+                src={Admin}
+                alt=""
+                className="w-full h-full rounded-full border border-[#eef3f9]"
+              />
             </div>
-          )}
+            <div className="flex flex-col justify-center items-center gap-1">
+              <p className="text-[20px] text-[snow]">علی مجدم</p>
+              <div className="border-b w-[120%] border-[#eef3f9]"></div>
+              <p className="text-[18px] text-[snow]">Admin</p>
+            </div>
+          </div>
 
-          {activeTab === "reports" && (
-            <div className="text-center text-[#3073c1] font-bold text-2xl mt-28 select-none">
-              <p>بخش گزارش‌ها و آمار به زودی اضافه خواهد شد.</p>
-            </div>
-          )}
-        </main>
+          {/* Divider */}
+          <div className="w-full flex items-center justify-center">
+            <div className="border-b w-[90%] border-[#eef3f9]"></div>
+          </div>
+
+          {/* Menu List */}
+          <div className="w-full">
+            <ul className="flex w-[97%] flex-col gap-3 justify-center items-end">
+              {NavList.map((item) => (
+                <li
+                  key={item.id}
+                  onClick={() => {
+                    setActiveItem(item.id);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full flex flex-row-reverse items-center gap-5 p-2 rounded-r-md cursor-pointer transition-all
+                    ${
+                      activeItem === item.id
+                        ? "bg-[snow] text-[#1E3A8A]"
+                        : "text-[#eef3f9] hover:bg-[#eef3f9] hover:text-[#1E3A8A]"
+                    }`}
+                >
+                  <i className={`${item.iconClass} text-[18px]`}></i>
+                  <span className="text-[19px]">{item.label}</span>
+                </li>
+              ))}
+
+              {/* Divider */}
+              <div className="w-full flex items-center justify-center my-2">
+                <div className="border-b w-[90%] border-[#eef3f9]"></div>
+              </div>
+
+              {/* Log out item */}
+              <li
+                onClick={() => {
+                  setActiveItem(LogOut.id);
+                  setIsOpen(false);
+                }}
+                className={`w-full flex flex-row-reverse items-center gap-5 p-2 rounded-r-md cursor-pointer transition-all
+                  ${
+                    activeItem === LogOut.id
+                      ? "bg-[snow] text-[#1E3A8A]"
+                      : "text-[#eef3f9] hover:bg-[#eef3f9] hover:text-[#1E3A8A]"
+                  }`}
+              >
+                <i className={`${LogOut.iconClass} text-lg text-[18px]`}></i>
+                <span className="text-[18px]">{LogOut.label}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="flex-1 bg-[#eef3f9] transition-all duration-300">
+          
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
