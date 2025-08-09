@@ -1,28 +1,19 @@
 import { useContext } from 'react';
-import TeacherCard from '../../teachers/teacherCard';
 import { textContext } from './context';
 import { teachers } from '../../teachers/TeacherInfo';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const IntroductionOfTeachers=()=>{
 
     const {bgColor}=useContext(textContext);
 
-    const aboutTeacher = useNavigate();
+
       
-    const aboutTeacherHandleClick = (e) => {
-        e.preventDefault();
-        aboutTeacher('/AboutTeacher');
-    };
 
 
     return(
         <div className="relative flex flex-col lg:flex-row items-center justify-center sm:items-start sm:justify-start gap-8 p-10">
             <div className=" mt-[30px] sm:mt-[50px] sm:ml-[50px] z-10">
-                {/* <img src={teacher_img} alt="" /> */}
-                {/* <div className="teachers-box relative">
-                    
-                </div> */}
                 <ul dir='rtl' className=" relative grid justify-center items-center gap-15 sm:gap-5 grid-cols-2 sm:grid-cols-3">
                     
                     {teachers.slice(0,6).map((teacher,index)=>(

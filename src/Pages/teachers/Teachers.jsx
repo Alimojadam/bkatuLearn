@@ -43,7 +43,7 @@ const Teachers=()=>{
                         ))}
                     </div>
                 <div className="w-[80%] flex justify-center items-center pt-[120px]">
-                    <ul dir="rtl" className="w-full grid grid-cols-5 gap-[50px]">
+                    <ul dir="rtl" className="w-full grid grid-cols-2 sm:grid-cols-5 gap-[50px]">
                         <TeacherCard teachers={filteredTeacher}/>
                     </ul>
                 </div>

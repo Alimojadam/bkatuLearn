@@ -79,29 +79,29 @@ const Login=()=>{
         }
     }
     return(
-        <div className="loginPage flex justify-center items-center w-[100%] h-[100vh]">
-            <div className="title w-[60%] h-[100%] flex flex-col justify-center items-center">
-                <h1 className="text-[85px] font-bold text-[#3073c1]">WELCOME</h1>
-                <p className="w-[53%] text-right text-[18px] text-[#3073c1] mr-[5px]">
+        <div className="loginPage bg-[#eef3f9] py-8 sm:py-0 flex flex-col gap-8 sm:gap-0 sm:flex-row justify-center items-center w-[100%] min-h-screen sm:h-[100vh]">
+            <div className="title w-[100%] sm:w-[60%] h-[100%] flex flex-col justify-center items-center">
+                <h1 className="text-[65px] sm:text-[85px] font-bold text-[#3073c1]">WELCOME</h1>
+                <p className="sm:w-[53%] text-right text-[16px] sm:text-[18px] text-[#3073c1] mr-[5px]">
                    : به اطلاع دانشجویان محترم میرساند <br />
                     لطفا اطلاعات خواسته شده را به درستی وارد کنید<br />
                     رمز عبور حداقل باید 8 کاراکتر و حداکثر 12 کاراکتر باشد
                 </p>
             </div>
-            <div className="login w-[40%] h-[100%] flex justify-center items-center flex-col">
+            <div className="login bg-[#eef3f9] sm:bg-[#3073c1] w-[100%] sm:w-[40%] h-[100%] flex justify-center items-center flex-col">
                 <div dir="rtl" className="form flex flex-col mb-4 justify-center items-start gap-[10px]">
-                    <label htmlFor="username" className="text-[snow] mr-[10px]">نام و نام خانوادگی</label>
-                    <input type="text" className="w-[90%] h-[30px] pr-[10px]" id="username" value={UserID} onChange={handleUserID}/>
+                    <label htmlFor="username" className="text-[#3073c1] sm:text-[snow] mr-[10px]">نام و نام خانوادگی</label>
+                    <input type="text" className="w-[90%] h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" id="username" value={UserID} onChange={handleUserID}/>
 
-                    <label htmlFor="studentNumber" className="text-[snow] mr-[10px]">شماره دانشجویی</label>
-                    <input type="text" className="w-[90%] h-[30px] pr-[10px]" id="studentNumber" value={studentNumber} onChange={handleStudentNumber}/>
+                    <label htmlFor="studentNumber" className="text-[#3073c1] sm:text-[snow] mr-[10px]">شماره دانشجویی</label>
+                    <input type="text" className="w-[90%] h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" id="studentNumber" value={studentNumber} onChange={handleStudentNumber}/>
 
-                    <label htmlFor="email" className="text-[snow] mr-[10px]">ایمیل</label>
-                    <input type="email" className="w-[90%] h-[30px] pr-[10px]" id="email" value={Email} onChange={handleEmail}/>
+                    <label htmlFor="email" className="text-[#3073c1] sm:text-[snow] mr-[10px]">ایمیل</label>
+                    <input type="email" className="w-[90%] h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" id="email" value={Email} onChange={handleEmail}/>
 
-                    <label htmlFor="password" className="text-[snow] mr-[10px]">رمز عبور</label>
+                    <label htmlFor="password" className="text-[#3073c1] sm:text-[snow] mr-[10px]">رمز عبور</label>
                     <div className="relative w-[90%]">
-                        <input id="password" className="w-full h-[30px] pr-[10px]" type={showPassword ? "text" : "password" }value={password} onChange={handlePass}/>
+                        <input id="password" className="w-full h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" type={showPassword ? "text" : "password" }value={password} onChange={handlePass}/>
                         <button type="button" onClick={() => setShowPassword(prev => !prev)} className="absolute top-[3px] left-2 text-[#3073c1]">
                             {showPassword ? (
                             <i className="fas fa-eye-slash"></i>
@@ -111,9 +111,9 @@ const Login=()=>{
                         </button>
                     </div>
 
-                    <label htmlFor="confirmPassword" className="text-[snow] mr-[10px]">تکرار رمز عبور</label>
+                    <label htmlFor="confirmPassword" className="text-[#3073c1] sm:text-[snow] mr-[10px]">تکرار رمز عبور</label>
                     <div className="relative w-[90%]">
-                        <input id="confirmPassword" className="w-full h-[30px] pr-[10px]" type={showConfirmPassword ? "text" : "password" } value={ConfirmPassword} onChange={handleConfirmPassword}/>
+                        <input id="confirmPassword" className="w-full h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" type={showConfirmPassword ? "text" : "password" } value={ConfirmPassword} onChange={handleConfirmPassword}/>
                         <button type="button" onClick={() => setShowConfirmPassword(prev => !prev)} className="absolute top-[3px] left-2 text-[#3073c1]">
                             {showConfirmPassword ? (
                             <i className="fas fa-eye-slash"></i>
@@ -124,23 +124,23 @@ const Login=()=>{
                     </div>
 
 
-                    <div className="formBtn w-[100%] flex justify-start items-center gap-[5px]">
-                        <div className="btnLogin pt-[4px] pb-[9px] px-[24px] text-[#3073c1] bg-[snow]">
+                    <div className="formBtn w-[90%] flex justify-start items-center gap-[5px]">
+                        <div className="btnLogin py-[6px] px-[23px] border border-[#3073c1] text-[#3073c1] bg-[snow]">
                             <a href="/loginPage" className="" onClick={handleSignUP}>ثبتنام</a>   
                         </div>
-                        <div className="btnSignUp pt-[5px] pb-[8px] px-[24px] text-[#3073c1] bg-[snow]">
-                            <a href="/loginPage" onClick={handleClick} className=" border-b border-[#3073c1]">ورود به حساب </a>
+                        <div className="btnSignUp py-[6px] px-[23px] sm:border-b border border-[#3073c1] text-[#3073c1] bg-[snow]">
+                            <a href="/loginPage" onClick={handleClick} className="border-b border-[#3073c1]">ورود به حساب </a>
                         </div>
 
                     </div>
                 </div>
                 {text ?(
-                            <p className="text-[snow] border-b border-[snow] ml-[30px]">{text}</p>
+                            <p className="text-[#3073c1] sm:text-[snow] border-b border-[#3073c1] sm:border-[snow] ml-[30px]">{text}</p>
                         ):(
                             <p className="hidden">{text}</p>
                         )
                     }
-                <a href="#" className="text-[snow] ml-[37px] mt-[20px] text-start border-b border-[snow]">نمیتوانید ثبتنام کنید؟</a>
+                <a href="#" className="text-[#3073c1] sm:text-[snow] ml-[37px] mt-[20px] text-start border-b border-[#3073c1] sm:border-[snow]">نمیتوانید ثبتنام کنید؟</a>
             </div>
         </div>
     );

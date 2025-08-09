@@ -12,7 +12,7 @@ const AboutUs = ()=>{
 
 
     return(
-        <div className="relative flex flex-col justify-center items-center gap-5 w-full bg-[#eef3f9] overflow-hidden">
+        <div className="relative flex flex-col justify-center items-center gap-5 w-full bg-[#eef3f9] overflow-hidden min-h-screen">
 
             <NavbarCourses/>
 
@@ -51,7 +51,7 @@ const AboutUs = ()=>{
 
             <div className="border-b border-[1px] border-[#3073c1] w-[80%] mt-[20px]"></div>
 
-            <div className="w-full">
+            <div className="w-full mb-0 pb-0">
                 <Footer/>
             </div>
         </div>

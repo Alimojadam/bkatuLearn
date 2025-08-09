@@ -1,12 +1,8 @@
 .title{
     background: #eef3f9;
 }
-.login{
-    background: #3073c1;
-}
 .form input{
     outline: none;
-    border: none;
     background: snow;
     border-radius: 10px;
 }

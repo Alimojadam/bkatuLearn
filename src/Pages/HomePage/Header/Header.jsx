@@ -19,11 +19,11 @@ const Header=()=>{
             <div className="headerBody w-[100%] sm:w-[62%] relative">
                 <NavBar/>
                 <div className="body h-[600px] items-center relative">
-                    <div className="grid items-center justify-center absolute mt-40 sm:mt-50 ">
-                        <h1 className="text-center text-black text-[22px] px-[5px] sm:px-[0px] sm:text-[27px] mb-[15px] sm:pr-[75px]">!به سیستم آموزشی جامع دانشگاه خاتم خوش آمدید</h1>
-                        <p dir='rtl' className="text-justify sm:text-start text-[16px] px-[5px] sm:px-[0px] sm:text-[19px] sm:px-[100px] sm:pr-[160px] text-gray-900 mr-[15px]">در سیستم نرم افزاری طراحی شده ما شما میتوانید با مشاهده نمونه تدریس اساتید مختلف و آشنایی با روش تدریس هریک مطابق سلیقه خود دوره آن ها را تهیه کنید و سپس میتوانید با مدرس هر دوره ارتباط داشته باشید و سوالات خود را بپرسید</p>
-                        <div className="btn btn-login">
-                        <a href="/loginPage"  onClick={handleClick} className="text-center sm:text-end">ثبتنام یا ورود</a>
+                    <div className="flex flex-col items-center justify-center absolute mt-40 sm:mt-50 ">
+                        <h1 className="text-center text-black text-[19px] px-[5px] sm:px-[0px] sm:text-[27px] mb-[15px] sm:pr-[75px]">!به سیستم آموزشی جامع دانشگاه خاتم خوش آمدید</h1>
+                        <p dir='rtl' className="text-justify sm:text-start text-[16px] px-[10px] sm:px-[0px] sm:text-[19px] sm:px-[100px] sm:pr-[160px] text-gray-900 mr-[15px]">در سیستم نرم افزاری طراحی شده ما شما میتوانید با مشاهده نمونه تدریس اساتید مختلف و آشنایی با روش تدریس هریک مطابق سلیقه خود دوره آن ها را تهیه کنید و سپس میتوانید با مدرس هر دوره ارتباط داشته باشید و سوالات خود را بپرسید</p>
+                        <div className="w-full relative">
+                            <a href="/loginPage"  onClick={handleClick} className="absolute right-7 sm:right-45 btn btn-login text-center">ثبتنام یا ورود</a>
                         </div>
                     </div>
                 </div>
@@ -32,9 +32,7 @@ const Header=()=>{
 
             <section>
                 <section className="header-icon flex gap-10 relative">
-                    {/* <a href="#"><i class="fa-solid fa-user icon"></i></a> */}
                     <a href="#" className="">
-                    {/* <img src={user} alt="" /> */}
                     <i class="fa-solid fa-user icon user"></i>
                     </a>
                     <a href="#" className="icon menu">

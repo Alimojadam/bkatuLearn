@@ -53,7 +53,7 @@ const CoursesPage=()=>{
             setIsMenuOpen(!isMenuOpen);
         };
     return(
-        <div className="w-[100%] bg-[#eef3f9]">
+        <div className="w-[100%] bg-[#eef3f9] min-h-screen">
 
             
            <NavbarCourses/>
@@ -74,12 +74,12 @@ const CoursesPage=()=>{
               {/* ************************************************ */}
 
 
-            <div className="Courses px-[50px] pt-[115px] pb-[30px] z-10">
+            <div className="Courses px-[30px] pt-[115px] pb-[30px] z-10">
               <ul className="filter flex flex-row-reverse items-start gap-[20px] border-b border-[#888] pb-[10px]">
                   {filters.map((label, index) => (
                   <li key={index}>
                       <a href="#" onClick={(e) => {e.preventDefault();setActiveIndex(index);}}
-                          className={`text-[#222] font-[1] text-[19px] border-b-2 pb-[5px] transition-all duration-300 ${
+                          className={`text-[#222] font-[1] text-[15px] sm:text-[19px] border-b-2 pb-[5px] transition-all duration-300 ${
                               activeIndex === index ? "border-[#3073c1]" : "border-transparent"
                           }`}
                 >
@@ -91,18 +91,23 @@ const CoursesPage=()=>{
             </div>
 
             {/* ******************************************************* */}
-            <div className="flex flex-row-reverse justify-between items-start w-[100%] px-[20px]">
+            <div className="relative flex flex-row-reverse sm:justify-center gap-6 items-start w-[100%] pl-[20px]">
 
-                <div className={`transition-all duration-700 ease-in-out relative mt-[20px] bg-[#3073c1] mr-[30px] rounded-[10px] h-[100vh] ${isMenuOpen ? "w-[35%]" : "w-[7%]"}`}>
-                    <div className="absolute top-4 left-2 flex items-center justify-center">
-                        {isMenuOpen ?(
-                            <i className="fa-solid fa-xmark text-[24px] text-[snow] cursor-pointer" onClick={toggleMenu}></i>
-                            
-                        ) :(
-                            <i className="fa-solid fa-bars text-[22px] text-[snow] cursor-pointer" onClick={toggleMenu}></i>
-
+                <div className={`transition-all duration-700 ease-in-out mt-[20px] bg-[#3073c1] mr-[30px] rounded-[10px] h-[100vh] ${isMenuOpen ? "absolute sm:relative w-[75%] sm:w-[29%]" : "relative w-[0] sm:w-[7%]"}`}>
+                    <div className="absolute button-9 sm:top-4 sm:left-2 flex items-center justify-center ">
+                        {isMenuOpen ? (
+                            <i
+                            className="fa-solid fa-xmark absolute top-1/2 left-2 sm:relative sm:top-0 sm:left-0 text-[24px] text-[snow] cursor-pointer"
+                            onClick={toggleMenu}
+                            ></i>
+                        ) : (
+                            <i
+                            className="fa-solid fa-bars text-[22px] text-[#3073c1] sm:text-[snow] cursor-pointer"
+                            onClick={toggleMenu}
+                            ></i>
                         )}
                     </div>
+
                     
                         <ul className="flex flex-col gap-3 py-[20px] w-full max-h-[80vh] overflow-y-auto mt-[30px]">
                             {filterBar.map((Element)=>(
@@ -119,12 +124,12 @@ const CoursesPage=()=>{
 
                 {/* *********Cards********* */}
 
-                <div dir='rtl' className={`transition-all duration-700 ease-in-out grid ${isMenuOpen ? "w-[60%] grid-cols-2" : "w-[87%] grid-cols-3"} justify-center items-center gap-6 `}>
+                <div dir='rtl' className={`w-full sm:transition-all sm:duration-700 sm:ease-in-out grid justify-center items-center sm:items-center grid-cols-1 ${isMenuOpen ? " w-[70%] sm:grid-cols-2" : "w-[100%] sm:grid-cols-3"} gap-6 `}>
                     {filteredCards.length === 0 ? (
                         <p className="text-end text-[#3073c1] text-[25px] w-full mt-[20px]">هیچ دوره‌ای یافت نشد.</p>
                     ) : (
                         filteredCards.map((card) => (
-                        <div key={card.id} className="flex flex-col gap-[5px] p-1 bg-[snow] rounded-[10px] mt-[20px] ">
+                        <div key={card.id} className="w-[350px] flex flex-col gap-[5px] p-1 bg-[snow] rounded-[10px] mt-[20px] ">
                             <img src={card.image} alt={card.title} className="w-full h-40 object-cover rounded-[8px]" />
                             <div className="px-[8px] flex flex-col gap-[5px] p-1">
                                 <h3 className="text-[18px] text-[#222] font-bold mt-2 font-[1]">{card.title}</h3>
