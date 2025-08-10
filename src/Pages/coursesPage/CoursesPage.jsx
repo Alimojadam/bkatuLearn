@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../coursesPage/CoursesPage.css';
 import NavbarCourses from './NavbarCourses';
 import { useSearch } from '../../Pages/coursesContext';
@@ -13,6 +13,7 @@ const CoursesPage=()=>{
 
     const [activeIndex, setActiveIndex] = useState(0);
     const [selectedType, setSelectedType] = useState("All");
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     const getTeacherName = (teacherId) => {
         const teacher = UserInformation.find(u => u.id === teacherId && u.type === "Teacher");
@@ -49,11 +50,18 @@ const CoursesPage=()=>{
             return matchesSearch && matchesType && isTeacher;
         });
         const [isMenuOpen, setIsMenuOpen] = useState(false); 
+        useEffect(() => {
+            const handleResize = () => {
+              setIsMobile(window.innerWidth < 768);
+            };
+            window.addEventListener('resize', handleResize);
+            return () => window.removeEventListener('resize', handleResize);
+          }, []);
         const toggleMenu = () => {
             setIsMenuOpen(!isMenuOpen);
         };
     return(
-        <div className="w-[100%] bg-[#eef3f9] min-h-screen">
+        <div className="w-full pb-[40px] sm:pb-0 bg-[#eef3f9] min-h-screen">
 
             
            <NavbarCourses/>
@@ -65,7 +73,7 @@ const CoursesPage=()=>{
                         src={pattern}
                         alt=""
                         className="absolute w-full opacity-9"
-                        style={{ top: `${index * 250}px` }} // فاصله بین ردیف‌ها، قابل تنظیم
+                        style={{ top: `${index * 250}px` }}
                         />
                         ))}
             </div>
@@ -93,16 +101,16 @@ const CoursesPage=()=>{
             {/* ******************************************************* */}
             <div className="relative flex flex-row-reverse sm:justify-center gap-6 items-start w-[100%] pl-[20px]">
 
-                <div className={`transition-all duration-700 ease-in-out mt-[20px] bg-[#3073c1] mr-[30px] rounded-[10px] h-[100vh] ${isMenuOpen ? "absolute sm:relative w-[75%] sm:w-[29%]" : "relative w-[0] sm:w-[7%]"}`}>
-                    <div className="absolute button-9 sm:top-4 sm:left-2 flex items-center justify-center ">
+                <div className={`transition-all duration-700 ease-in-out mt-[20px] bg-[#3073c1] sm:mr-[30px] rounded-l-[10px] sm:rounded-[10px] h-[100vh] ${isMenuOpen ? "absolute sm:relative w-[75%] sm:w-[29%]" : "relative w-[0] sm:w-[7%]"}`}>
+                    <div className="sm:absolute button-9 sm:top-3 sm:left-2 flex items-start justify-start ">
                         {isMenuOpen ? (
                             <i
-                            className="fa-solid fa-xmark absolute top-1/2 left-2 sm:relative sm:top-0 sm:left-0 text-[24px] text-[snow] cursor-pointer"
+                            className="fa-solid fa-xmark absolute top-3 left-2 sm:top-0 sm:left-0 sm:relative text-[24px] text-[snow] cursor-pointer"
                             onClick={toggleMenu}
                             ></i>
                         ) : (
                             <i
-                            className="fa-solid fa-bars text-[22px] text-[#3073c1] sm:text-[snow] cursor-pointer"
+                            className="fa-solid fa-bars text-[22px] absolute right-3 top-3 sm:left-0 sm:top-1  text-[#3073c1] sm:text-[snow] cursor-pointer"
                             onClick={toggleMenu}
                             ></i>
                         )}
@@ -111,7 +119,7 @@ const CoursesPage=()=>{
                     
                         <ul className="flex flex-col gap-3 py-[20px] w-full max-h-[80vh] overflow-y-auto mt-[30px]">
                             {filterBar.map((Element)=>(
-                                <li key={Element.id} onClick={() => setSelectedType(Element.type)} className={`flex gap-10 items-center justify-end cursor-pointer rounded-r-[10px] h-[40px] w-[97%] px-[20px] mr-[2px] transition-all duration-500 ease-in-out ${selectedType === Element.type ? "bg-[#eef3f9]" : "bg-[#3073c1]"}`}>
+                                <li key={Element.id} onClick={() =>{ setSelectedType(Element.type);{isMobile&&(toggleMenu());}}} className={`flex gap-10 items-center justify-end cursor-pointer rounded-r-[10px] h-[40px] w-[97%] px-[20px] mr-[2px] transition-all duration-500 ease-in-out ${selectedType === Element.type ? "bg-[#eef3f9]" : "bg-[#3073c1]"}`}>
                                 {isMenuOpen &&(
                                     <p className={`text-[#3073c1] text-[19px] ${selectedType === Element.type ? "text-[#3073c1]" : "text-[#eef3f9]"}`}>{Element.Major}</p>
                                     )}
@@ -124,12 +132,12 @@ const CoursesPage=()=>{
 
                 {/* *********Cards********* */}
 
-                <div dir='rtl' className={`w-full sm:transition-all sm:duration-700 sm:ease-in-out grid justify-center items-center sm:items-center grid-cols-1 ${isMenuOpen ? " w-[70%] sm:grid-cols-2" : "w-[100%] sm:grid-cols-3"} gap-6 `}>
+                <div className={`w-full sm:transition-all sm:duration-700 ml-[1%] sm:ml-0 sm:ease-in-out grid grid-dir justify-center items-center grid-cols-1 ${isMenuOpen ? " sm:w-[70%] sm:grid-cols-2" : "sm:w-[100%] sm:grid-cols-3"} gap-6 `}>
                     {filteredCards.length === 0 ? (
-                        <p className="text-end text-[#3073c1] text-[25px] w-full mt-[20px]">هیچ دوره‌ای یافت نشد.</p>
+                        <p className="text-center text-[#3073c1] text-[25px] w-full mt-[20px]">هیچ دوره‌ای یافت نشد</p>
                     ) : (
                         filteredCards.map((card) => (
-                        <div key={card.id} className="w-[350px] flex flex-col gap-[5px] p-1 bg-[snow] rounded-[10px] mt-[20px] ">
+                        <div dir='rtl' key={card.id} className="w-[350px] flex flex-col gap-[5px] p-1 bg-[snow] rounded-[10px] mt-[20px]">
                             <img src={card.image} alt={card.title} className="w-full h-40 object-cover rounded-[8px]" />
                             <div className="px-[8px] flex flex-col gap-[5px] p-1">
                                 <h3 className="text-[18px] text-[#222] font-bold mt-2 font-[1]">{card.title}</h3>

@@ -30,11 +30,10 @@ const EditeCourse = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // اینجا می‌تونی اطلاعات رو به‌روز کنی یا ذخیره‌سازی واقعی انجام بدی
     console.log("اطلاعات جدید:", course);
     alert("اطلاعات با موفقیت ذخیره شد!");
 
-    navigate(`/CoursPage/${courseId}`); // برگشت به صفحه دوره
+    navigate(`/CoursPage/${courseId}`);
   };
 
   if (!course) return <div>در حال بارگذاری...</div>;
@@ -42,7 +41,7 @@ const EditeCourse = () => {
   return (
     <div className="p-8 w-full flex justify-start items-center flex-col gap-3 bg-[#eef3f9] min-h-screen">
       <h2 className="text-2xl text-[#111] mb-6 text-center">ویرایش دوره</h2>
-      <form dir='rtl' onSubmit={handleSubmit} className="w-[50%] flex flex-col gap-3 justify-center items-center">
+      <form dir='rtl' onSubmit={handleSubmit} className="w-[90%] sm:w-[50%] flex flex-col gap-3 justify-center items-center">
         <div className="w-full flex flex-col gap-2">
             <label className=" text-right text-[17px] text-[#111]">
             عنوان دوره

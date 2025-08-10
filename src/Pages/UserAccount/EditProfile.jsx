@@ -69,7 +69,7 @@ const EditProfile = () => {
   return (
     <div
       dir="rtl"
-      className="flex flex-col w-[70%] min-h-screen mb-[10px] border-2 border-[#3073c1] rounded-[10px] p-6 bg-transparent shadow-lg"
+      className="flex flex-col w-[90%] sm:w-[70%] min-h-screen mb-[10px] border-2 border-[#3073c1] rounded-[10px] p-6 bg-transparent shadow-lg"
     >
       <h2 className="text-2xl text-center text-[#3073c1] mb-6">ویرایش اطلاعات</h2>
 

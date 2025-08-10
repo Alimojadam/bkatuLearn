@@ -9,10 +9,11 @@ import RequestForTeaching from "./RequestForTeaching";
 
 const UserAccount = () => {
   const { user, setUser } = useUser();
+  const [isMenuOpen, setIsMenuOpen] = useState(false); 
 
   const [isActive, setIsActive] = useState(1);
   const [fadeClass, setFadeClass] = useState("opacity-0 translate-y-4");
-  const [logout, setLogout] = useState(false); // ✅ برای کنترل خروج
+  const [logout, setLogout] = useState(false);
 
   useEffect(() => {
     setFadeClass("opacity-0 translate-y-4");
@@ -44,17 +45,37 @@ const UserAccount = () => {
     if (id === 7) {
       localStorage.removeItem("user");
       setUser(null);
-      setLogout(true); // ✅ ری‌دایرکت فعال میشه
+      setLogout(true);
     } else {
       setIsActive(id);
     }
+    toggleMenu();
   };
+
+  
+        const toggleMenu = () => {
+            setIsMenuOpen(!isMenuOpen);
+        };
 
   return (
     <div className="relative flex justify-between items-center flex-row-reverse w-full min-h-screen bg-[#eef3f9] px-[20px]">
       <div className="relative h-full">
-        <div className="fixed top-10 right-0 z-50 navList mr-[20px] flex justify-start items-start bg-[#3073c1] w-[35%] h-[90vh] rounded-[10px]">
-          <ul className="w-[97%] flex flex-col gap-3 mt-[20px] ">
+        <div className={`fixed top-0 sm:top-10 right-0 z-50 navList  sm:mr-[20px] flex justify-start items-start bg-[#3073c1] min-h-screen sm:h-[90vh] rounded-l-[10px] sm:rounded-[10px]
+            ${isMenuOpen ? "w-[80%]" : "w-0"} sm:w-[35%] transition-all duration-300 ease-in-out`}>
+          <div className="sm:absolute sm:hidden button-9 sm:top-3 sm:left-2 flex items-start justify-start ">
+            {isMenuOpen ? (
+                <i
+                className="fa-solid fa-xmark absolute top-3 left-3 sm:top-0 sm:left-0 sm:relative text-[24px] text-[snow] cursor-pointer"
+                onClick={toggleMenu}
+                ></i>
+            ):(
+              <i
+                className="fa-solid fa-bars absolute right-3 top-3 text-[22px] text-[#3073c1] sm:text-[snow] cursor-pointer"
+                onClick={toggleMenu}
+              ></i>
+            )}
+          </div>
+          <ul className={`w-[97%] flex flex-col gap-3 pt-5 sm:pt-0 min-h-screen mt-[20px] ${isMenuOpen ? "block" : "hidden"} sm:block`}>
             {navbarList.map((List) => (
               <li
                 key={List.id}
@@ -74,7 +95,7 @@ const UserAccount = () => {
       </div>
 
       <div
-        className={`aboutUser w-[64%] h-full mt-[40px] ml-[20px] flex justify-center items-center bg-[#eef3f9] transition-all duration-500 ease-out opacity-0 ${fadeClass}`}
+        className={`aboutUser w-full sm:w-[64%] h-full my-[6vh] sm:ml-[20px] flex justify-center items-center bg-[#eef3f9] transition-all duration-500 ease-out opacity-0 ${fadeClass}`}
       >
         {isActive === 1 && <Profil />}
         {isActive === 2 && <MyCourses />}

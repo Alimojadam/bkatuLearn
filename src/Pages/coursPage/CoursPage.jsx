@@ -16,7 +16,14 @@ const CoursPage = () => {
   const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [newPrice, setNewPrice] = useState(course.price);
 
-  const [activeTab, setActiveTab] = useState("comments");
+  const [activeTab, setActiveTab] = useState(() => {
+    if (window.innerWidth < 640) {
+      return "Syllabus";
+    } else {
+      return "comments";
+    }
+  });
+  
   const EditeNavigate=useNavigate()
 
   const handleEditeNavigate=(e,id)=>{
@@ -96,22 +103,22 @@ const CoursPage = () => {
   
 
   return (
-    <div className="flex">
-      <div className="aboutCours w-[60%] bg-[#eef3f9] flex flex-col justify-start items-center">
+    <div className="flex flex-col sm:flex-row">
+      <div className="aboutCours w-[100%] sm:w-[60%] bg-[#eef3f9] flex flex-col justify-start items-center">
         <div className="cours flex flex-col gap-[30px] justify-center items-center w-[95%] mt-[50px]">
           <video
-            width="420"
-            height="260"
+            // width="420"
+            // height="260"
             controls
-            className="rounded-[10px] shadow-xl shadow-[#ccc]"
+            className="rounded-[10px] w-[80%] h-[10%] sm:w-[420px] sm:h-[220px] shadow-xl shadow-[#ccc]"
             key={videoSrc} // برای رفرش کردن کامل پلیر وقتی src تغییر می‌کند
           >
             <source src={videoSrc} type="video/mp4" />
             مرورگر شما ویدیو را پشتیبانی نمی‌کند.
           </video>
-          <div className="w-[50%] flex flex-col gap-[10px] items-end ">
+          <div className="w-[70%] sm:w-[50%] flex flex-col gap-[10px] items-end ">
             <p className="text-right font-[1] text-[#111]">موضوع : {course.title}</p>
-            <div className="w-full flex flex-row-reverse justify-between items-center">
+            <div className="w-full flex flex-col sm:flex-row-reverse justify-between items-end gap-1 sm:gap-0 sm:items-center">
               <p className="text-right text-[#111]">قیمت : <span className='text-[#3073c1]'>{course.price} تومان</span></p>
               {isTeacherOwner && (
                 isEditingPrice ? (
@@ -161,7 +168,7 @@ const CoursPage = () => {
               )}
 
             </div>
-            <div className="flex flex-row-reverse justify-between items-center w-[100%]">
+            <div className={`flex ${isTeacherOwner? "flex-col" : "flex-row-reverse"} sm:flex-row-reverse justify-between items-end sm:items-center gap-1 sm:gap-0 w-[100%]`}>
               <p className="font-[1]  text-[#111]">مدرس : {course.teacher}</p>
               <div className=" flex justify-center items-center">
                 {isTeacherOwner ?
@@ -183,9 +190,17 @@ const CoursPage = () => {
           </div>
         </div>
         <hr className="border-t-[2px] border-[#3073c1] w-[80%] mt-[15px]" />
-        <div className="relative w-[80%]">
+        <div className="relative w-[85%] sm:w-[80%]">
           <div className="absolute right-0 flex gap-4 flex-row-reverse justify-start items-start mt-[20px] px-[5px] py-[20px]">
-            <p onClick={() => setActiveTab("comments")} className={`cursor-pointer text-[17px] border-b-[2px] font-[1] text-right text-[#111] pb-[1px] font-bold transition-all duration-300 ${
+            <p
+              onClick={() => setActiveTab("Syllabus")}
+              className={`cursor-pointer sm:hidden text-[16px] sm:text-[17px] border-b-[2px] font-[1] text-right text-[#111] pb-[1px] font-bold transition-all duration-300 ${
+                activeTab === "Syllabus" ? "border-[#3073c1]" : "border-transparent"
+              }`}
+            >
+              سرفصل ها
+            </p>
+            <p onClick={() => setActiveTab("comments")} className={`cursor-pointer text-[16px] sm:text-[17px] border-b-[2px] font-[1] text-right text-[#111] pb-[1px] font-bold transition-all duration-300 ${
                 activeTab === "comments" ? "border-[#3073c1]" : "border-transparent"
               }`}
             >
@@ -194,7 +209,7 @@ const CoursPage = () => {
 
             <p
               onClick={() => setActiveTab("aboutCourse")}
-              className={`cursor-pointer text-[17px] border-b-[2px] font-[1] text-right text-[#111] pb-[1px] font-bold transition-all duration-300 ${
+              className={`cursor-pointer text-[16px] sm:text-[17px] border-b-[2px] font-[1] text-right text-[#111] pb-[1px] font-bold transition-all duration-300 ${
                 activeTab === "aboutCourse" ? "border-[#3073c1]" : "border-transparent"
               }`}
             >
@@ -203,7 +218,7 @@ const CoursPage = () => {
 
             <p
               onClick={() => setActiveTab("aboutTeacher")}
-              className={`cursor-pointer text-[17px] border-b-[2px] font-[1] text-right text-[#111] pb-[1px] font-bold transition-all duration-300 ${
+              className={`cursor-pointer text-[16px] sm:text-[17px] border-b-[2px] font-[1] text-right text-[#111] pb-[1px] font-bold transition-all duration-300 ${
                 activeTab === "aboutTeacher" ? "border-[#3073c1]" : "border-transparent"
               }`}
             >
@@ -213,14 +228,62 @@ const CoursPage = () => {
         </div>
 
         {/* نمایش محتوای تب‌ها */}
-        <div className="w-[80%] mt-4">
-          {activeTab === "comments" && <CommentsSection />}
-          {activeTab === "aboutTeacher" && <TeacherInfoPage aboutTeacherCourse={course.aboutTeacherCourse} />}
-          {activeTab === "aboutCourse" && <AboutCourse aboutCourse={course.aboutCourse} />}
+        <div className="w-[100%] flex justify-center mt-4">
+          {activeTab === "comments" && (<div className='w-[80%]'><CommentsSection /></div>)}
+          {activeTab === "aboutTeacher" && (<div className='w-[80%]'><TeacherInfoPage aboutTeacherCourse={course.aboutTeacherCourse} /></div>)}
+          {activeTab === "aboutCourse" && (<div className='w-[80%]'><AboutCourse aboutCourse={course.aboutCourse} /></div>)}
+          {activeTab === "Syllabus" &&  (
+            <div className="w-full bg-[#eef3f9] mt-13">
+            <Syllabus
+              syllabus={course.syllabus}
+              course={course}
+              onPlayVideo={playVideo}
+              isTeacherOwner={isTeacherOwner}
+              onAddSection={handleAddSection}
+              onDeleteSection={handleDeleteSection}
+              onDeleteEpisode={handleDeleteEpisode}
+              onAddEpisode={(sectionIndex, newEpisode) => {
+                const updatedSyllabus = course.syllabus.map((section, idx) => {
+                  if (idx === sectionIndex) {
+                    return {
+                      ...section,
+                      subtopics: [...section.subtopics, newEpisode],
+                    };
+                  }
+                  return section;
+                });
+                setCourse({ ...course, syllabus: updatedSyllabus });
+              }}
+              onEditEpisode={(sectionIndex, episodeIndex, updatedEpisode) => {
+                const updatedSyllabus = course.syllabus.map((section, sIndex) => {
+                  if (sIndex === sectionIndex) {
+                    return {
+                      ...section,
+                      subtopics: section.subtopics.map((ep, eIndex) =>
+                        eIndex === episodeIndex ? updatedEpisode : ep
+                      ),
+                    };
+                  }
+                  return section;
+                });
+    
+                setCourse(prev => ({ ...prev, syllabus: updatedSyllabus }));
+              }}
+              onUpdateSyllabus={(updatedSyllabus) => {
+                setCourse(prev => ({
+                  ...prev,
+                  syllabus: updatedSyllabus,
+                }));
+              }}
+            />
+    
+    
+          </div>
+          )}
         </div>
       </div>
 
-      <div className="w-[40%] bg-[#3073c1]">
+      <div className="hidden sm:block w-[40%] bg-[#3073c1]">
         <Syllabus
           syllabus={course.syllabus}
           course={course}

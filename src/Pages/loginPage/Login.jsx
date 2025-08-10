@@ -96,8 +96,8 @@ const Login = () => {
             </button>
           </div>
         </form>
-        <a href="#" className="text-[#3073c1]  sm:text-[snow] ml-[37px] border-b border-[snow]">نمیتوانید وارد شوید؟</a>
-        {error && <p className="text-[#3073c1] sm:text-[snow] border-b border-[snow] pb-1 text-x mt-3 ml-[37px]">{error}</p>}
+        <a href="#" className="text-[#3073c1]  sm:text-[snow] ml-[37px] border-b border-[#3073c1] sm:border-[snow]">نمیتوانید وارد شوید؟</a>
+        {error && <p className="text-[#3073c1] sm:text-[snow] border-b border-[#3073c1] sm:border-[snow] pb-1 text-x mt-3 ml-[37px]">{error}</p>}
       </div>
     </div>
   );

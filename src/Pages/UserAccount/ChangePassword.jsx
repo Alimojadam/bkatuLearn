@@ -73,7 +73,7 @@ const ChangePassword = () => {
   const iconClass ="text-[#3073c1] text-center text-[18px] cursor-pointer";
 
   return (
-    <div dir="rtl" className="flex flex-col w-[70%] h-[85vh] rounded-[10px] p-6 bg-transparent">
+    <div dir="rtl" className="flex flex-col w-[90%] sm:w-[70%] h-[85vh] rounded-[10px] p-6 bg-transparent">
       <h2 className="text-2xl text-center text-[#3073c1] mb-6">تغییر رمز عبور</h2>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="w-full flex flex-col border-b-2 border-[#3073c1] pb-[30px]">

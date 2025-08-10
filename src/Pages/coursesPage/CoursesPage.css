@@ -22,3 +22,8 @@
   font-size: 20px;
   cursor: pointer;
 }
+@media (min-width: 1024px) { /* لپتاپ و بزرگ‌تر */
+  .grid-dir {
+    direction: rtl;
+  }
+}

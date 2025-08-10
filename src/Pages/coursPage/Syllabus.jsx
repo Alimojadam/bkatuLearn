@@ -120,11 +120,11 @@ const Syllabus = (props) => {
 
   return (
     <div className="p-10 flex flex-col justify-center items-end text-right gap-[20px]">
-      <h2 className="text-[22px] text-[snow] font-bold mb-4 p-2 border-b border-[#eef3f9]">{course.title}</h2>
+      <h2 className="hidden sm:block text-[22px] text-[snow] font-bold mb-4 p-2 border-b border-[#eef3f9]">{course.title}</h2>
 
       {isTeacherOwner && (
-        <div className="mb-4 w-[95%] flex justify-end items-center flex-col gap-2">
-          <div className="w-full pr-6 flex flex-col justify-center items-end">
+        <div className="mb-4 w-full sm:w-[95%] flex justify-end items-center flex-col gap-2">
+          <div className="w-full sm:pr-6 flex flex-col justify-center items-end">
             <div
               className={`${addingNewSection ? "rounded-b-[0px]" : "rounded-b-[5px]"} px-[10px] flex justify-between flex-row-reverse items-center w-full text-[#3073c1] bg-[snow] rounded-t-[5px] cursor-pointer transition-all duration-300`}
               onClick={() => setAddingNewSection(!addingNewSection)}
@@ -169,11 +169,11 @@ const Syllabus = (props) => {
         </div>
       )}
 
-      <ul className="w-[95%] pr-6 space-y-2 flex flex-col justify-center items-end gap-[15px]">
+      <ul className="w-full sm:w-[95%] sm:pr-6 space-y-2 flex flex-col justify-center items-center sm:items-end gap-[15px]">
         {syllabus.map((item, index) => (
           <li
             key={index}
-            className={`p-[5px] flex flex-col justify-center items-end w-full bg-[snow] rounded-[5px]
+            className={`p-[5px] flex flex-col justify-center items-end border border-[#3073c1] sm:border-none w-full bg-[snow] rounded-[5px]
               transition-opacity duration-300 ease-in-out
               ${fadeDeleteSectionIndex === index ? 'opacity-0 max-h-0 overflow-hidden' : 'opacity-100'}
             `}
