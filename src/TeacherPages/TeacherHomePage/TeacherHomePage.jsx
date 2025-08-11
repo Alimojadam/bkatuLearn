@@ -39,7 +39,7 @@ const TeacherHomePage = () => {
   return (
     <div className="min-h-screen w-full p-6 bg-gradient-to-b bg-[#eef3f9] flex flex-col justify-center items-center gap-6 overflow-hidden" dir="rtl">
       
-      <div className={`${activeSection ==="profile" ? "block" : "hidden" } sm:block`}>
+      <div className="hidden sm:block">
         <TeacherPanel/>
       </div>
 
@@ -85,6 +85,7 @@ const TeacherHomePage = () => {
 
       {/* محتوای بخش‌ها */}
       <div className={`sm:block ${window.innerWidth<768 ? "w-full min-h-screen mt-2" :"w-5xl"}`}>
+        {activeSection==="profile" && <TeacherPanel/>}
         {activeSection === "dashboard" && (
           <>
             <TeacherCourses/>
