@@ -101,7 +101,7 @@ const TeacherHomePage = () => {
 
   return (
     <div
-      className="w-full p-6 bg-gradient-to-b from-white to-[#eef3f9] flex flex-col items-center gap-6"
+      className="min-h-screen w-full p-6 bg-gradient-to-b from-white to-[#eef3f9] flex flex-col items-center gap-6"
       dir="rtl"
     >
       {/* در دسکتاپ همیشه پنل کناری نشون داده میشه */}
@@ -113,18 +113,18 @@ const TeacherHomePage = () => {
       {isMobile && (
         <button
           onClick={() => setIsMenuOpen((s) => !s)}
-          className="fixed top-4 right-4 z-50 bg-[#2c5282] text-white p-2 rounded-md shadow-md sm:hidden"
+          className="z-50 sm:hidden"
           aria-expanded={isMenuOpen}
           aria-label={isMenuOpen ? "بستن منو" : "باز کردن منو"}
         >
-          <i className={`fas ${isMenuOpen ? "fa-times" : "fa-bars"} text-xl`}></i>
+          <i className={`fas ${isMenuOpen ? "fa-times text-[#2c5282] fixed right-3 top-3 z-100" : "fa-bars fixed text-[#2c5282] top-3 right-3"} text-xl`}></i>
         </button>
       )}
 
       {/* منو — استفاده از transform برای اسلاید (اجتناب از تغییر width مستقیم) */}
       <nav
-        className={`fixed top-0 right-0 h-full z-40 sm:static sm:h-auto sm:w-full sm:rounded-3xl
-          bg-white border border-[#2c5282] shadow-md transform transition-transform duration-300
+        className={`fixed top-0 right-0 h-full mt-10 sm:,t-0 z-40 sm:static sm:h-auto sm:w-full sm:rounded-3xl
+          bg-white  shadow-md transform transition-transform duration-300
           ${isMobile ? "w-64" : "w-full max-w-5xl"}
           ${isMobile ? (isMenuOpen ? "translate-x-0" : "translate-x-full") : "translate-x-0"}
           rounded-l-xl sm:rounded-3xl overflow-hidden`}
@@ -139,7 +139,7 @@ const TeacherHomePage = () => {
                 // در موبایل وقتی تب انتخاب شد منو رو ببند
                 if (isMobile) setIsMenuOpen(false);
               }}
-              className={`flex-1 py-4 text-center font-semibold transition-colors duration-200
+              className={`flex flex-col gap-5 sm:flex-1 py-4 text-start pr-4 sm:pr-0 sm:text-center font-semibold transition-colors duration-200 cursor-pointer
                 ${activeSection === tab.id ? "bg-[#2c5282] text-white shadow-inner" : "text-[#2c5282] hover:bg-[#cbd5e0]"}
                 ${tab.mobileOnly ? "block sm:hidden" : ""}`}
             >
