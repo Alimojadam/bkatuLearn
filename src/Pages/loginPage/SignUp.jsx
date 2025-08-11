@@ -128,8 +128,8 @@ const Login=()=>{
                         <div className="btnLogin py-[6px] px-[23px] border border-[#3073c1] text-[#3073c1] bg-[snow]">
                             <a href="/loginPage" className="" onClick={handleSignUP}>ثبتنام</a>   
                         </div>
-                        <div className="btnSignUp py-[6px] px-[23px] sm:border-b border border-[#3073c1] text-[#3073c1] bg-[snow]">
-                            <a href="/loginPage" onClick={handleClick} className="border-b text-[16px] border-[#3073c1]">ورود به حساب </a>
+                        <div className="btnSignUp py-[6px] px-[19px] sm:px-[23px] sm:border-b border border-[#3073c1] text-[#3073c1] bg-[snow]">
+                            <a href="/loginPage" onClick={handleClick} className="border-b border-[#3073c1]">ورود به حساب </a>
                         </div>
 
                     </div>
