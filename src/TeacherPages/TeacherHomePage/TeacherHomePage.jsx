@@ -27,6 +27,20 @@ const TeacherHomePage = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // کنترل overflow روی body هنگام باز و بسته شدن منو موبایل
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    // ریست overflow در زمان unmount
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMenuOpen]);
+
   if (!user) {
     return (
       <div className="w-full min-h-screen flex justify-center items-center text-[#3073c1] text-xl">
@@ -37,7 +51,7 @@ const TeacherHomePage = () => {
  
 
   return (
-    <div className="min-h-screen w-full p-6 bg-gradient-to-b bg-[#eef3f9] flex flex-col justify-center items-center gap-6 overflow-hidden" dir="rtl">
+    <div className="min-h-screen w-full p-6 bg-gradient-to-b bg-[#eef3f9] flex flex-col justify-center items-center gap-6" dir="rtl">
       
       <div className="hidden sm:block">
         <TeacherPanel/>
