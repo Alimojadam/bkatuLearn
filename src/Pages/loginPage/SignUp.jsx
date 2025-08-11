@@ -124,12 +124,12 @@ const Login=()=>{
                     </div>
 
 
-                    <div className="formBtn w-[90%] flex justify-start items-center gap-[5px]">
+                    <div className="formBtn w-[90%] flex justify-between sm:justify-start items-center sm:gap-[5px]">
                         <div className="btnLogin py-[6px] px-[23px] border border-[#3073c1] text-[#3073c1] bg-[snow]">
                             <a href="/loginPage" className="" onClick={handleSignUP}>ثبتنام</a>   
                         </div>
                         <div className="btnSignUp py-[6px] px-[23px] sm:border-b border border-[#3073c1] text-[#3073c1] bg-[snow]">
-                            <a href="/loginPage" onClick={handleClick} className="border-b border-[#3073c1]">ورود به حساب </a>
+                            <a href="/loginPage" onClick={handleClick} className="border-b text-[16px] border-[#3073c1]">ورود به حساب </a>
                         </div>
 
                     </div>

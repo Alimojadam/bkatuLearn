@@ -84,7 +84,7 @@ const Login = () => {
             </button>
           </div>
 
-          <div className="formBtn w-[90%] flex justify-start items-center gap-[5px]">
+          <div className="formBtn w-[90%] flex justify-between sm:justify-start items-center sm:gap-[5px]">
             <button type="submit" className="cursor-pointer btnLogin pt-[4px] pb-[9px] px-[20px] text-[#3073c1] bg-[snow] border border-[#3073c1] sm:border-none">ورود</button>
 
             <button
