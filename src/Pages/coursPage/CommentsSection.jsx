@@ -62,7 +62,7 @@ const CommentsSection = () => {
   };
 
   return (
-    <div className="min-h-screen w-[100%] mt-24 text-right">
+    <div className="min-h-screen w-[100%] mt-24 text-right overflow-hidden">
 
       {/* فرم ارسال نظر جدید */}
       <div className="mb-6 w-full">
