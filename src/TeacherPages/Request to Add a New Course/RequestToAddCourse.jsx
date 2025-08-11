@@ -73,7 +73,7 @@ const RequestToAddCourse = () => {
   }, [successMessage]);
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-[snow]">
+    <div className="flex flex-col justify-center items-center min-h-screen mt-5 sm:mt-0 w-full bg-[snow]">
       {successMessage && (
         <div
           className={`fixed top-[20%] left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-500 text-green-800 font-semibold py-3 px-6 rounded-[10px] z-50 shadow-lg transition-opacity duration-1000 ease-in-out ${
@@ -87,7 +87,7 @@ const RequestToAddCourse = () => {
       <form
         dir="rtl"
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 justify-start items-center py-[15px] w-[70%] bg-transparent my-[20px]"
+        className="flex flex-col gap-4 justify-start items-center py-[15px] w-[90%] sm:w-[70%] bg-transparent my-[20px]"
       >
         <h3 className="text-[#2c5282] text-[22px]">درخواست افزودن دوره</h3>
 
@@ -109,7 +109,7 @@ const RequestToAddCourse = () => {
           )}
         </div>
 
-        <div className="w-[120%] border-b border-[#3073c1] mt-3"></div>
+        <div className="w-[100%] sm:w-[120%] border-b border-[#3073c1] mt-3"></div>
 
         {/* عکس دوره */}
         <div className="w-[95%] mt-2 flex flex-col gap-2 justify-center items-start">
@@ -125,7 +125,7 @@ const RequestToAddCourse = () => {
           />
         </div>
 
-        <div className="w-[120%] border-b border-[#3073c1] mt-3"></div>
+        <div className="w-[100%] sm:w-[120%] border-b border-[#3073c1] mt-3"></div>
 
         {/* ویدیوی معرفی دوره */}
         <div className="w-[95%] mt-2 flex flex-col gap-2 justify-center items-start">
@@ -148,7 +148,7 @@ const RequestToAddCourse = () => {
           )}
         </div>
 
-        <div className="w-[120%] border-b border-[#3073c1] mt-3"></div>
+        <div className="w-[100%] sm:w-[120%] border-b border-[#3073c1] mt-3"></div>
 
         {/* معرفی مدرس */}
         <div className="w-[95%] mt-2 flex flex-col gap-2 justify-center items-start">
@@ -167,7 +167,7 @@ const RequestToAddCourse = () => {
           )}
         </div>
 
-        <div className="w-[120%] border-b border-[#3073c1] mt-3"></div>
+        <div className="w-[100%] sm:w-[120%] border-b border-[#3073c1] mt-3"></div>
 
         {/* توضیحات دوره */}
         <div className="w-[95%] mt-2 flex flex-col gap-2 justify-center items-start">

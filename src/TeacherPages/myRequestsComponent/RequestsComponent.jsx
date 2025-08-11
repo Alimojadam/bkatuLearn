@@ -16,7 +16,7 @@ const RequestsComponent = () => {
     };
   
     return (
-      <>
+      <div className="mt-5 sm:mt-0">
         <h3 className="text-3xl font-bold text-[#2c5282] mb-6 text-center">درخواست‌های من</h3>
         {myRequests.length === 0 ? (
           <p className="text-gray-500 text-center text-lg">درخواستی ثبت نکرده‌اید.</p>
@@ -43,7 +43,7 @@ const RequestsComponent = () => {
             ))}
           </ul>
         )}
-      </>
+      </div>
     );
   };
 

@@ -1,21 +1,32 @@
-import React, { useState } from "react";
-import { teachers } from "../../Pages/teachers/TeacherInfo";
-import student from "../../Pages/img/userIMG.jpg";
+import React, {useEffect, useState } from "react";
 import { useUser } from "../../Pages/coursesContext";
 import RequestsComponent from "../myRequestsComponent/RequestsComponent";
 import EditProfile from "../EditProfile/EditProfile";
 import RequestToAddCourse from "../Request to Add a New Course/RequestToAddCourse";
-import { useNavigate } from "react-router-dom";
+import TeacherPanel from "../TeacherPanel/TeacherPanel";
+import TeacherCourses from "../TeacherCourses/TeacherCourses";
 
 const TeacherHomePage = () => {
   const { user } = useUser();
-  const [activeSection, setActiveSection] = useState("dashboard");
+  const [activeSection, setActiveSection] = useState(window.innerWidth<768 ? "profile" : "dashboard");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 768) {
+        setActiveSection("profile");
+      } else {
+        setActiveSection("dashboard");
+      }
+    }
 
-  const navigate=useNavigate();
-  const handleNavigate=(e,id)=>{
-    e.preventDefault();
-    navigate(`/CoursPage/${id}`)
-  }
+    window.addEventListener("resize", handleResize);
+
+    // صدا زدن اولیه برای هماهنگ‌سازی حالت فعال
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   if (!user) {
     return (
       <div className="w-full min-h-screen flex justify-center items-center text-[#3073c1] text-xl">
@@ -24,82 +35,59 @@ const TeacherHomePage = () => {
     );
   }
  
-  const teacher = user;
-  const teacherCourses = teachers.find((t) => t.id === teacher.id)?.courses || [];
 
   return (
-    <div className="w-full min-h-screen p-6 bg-gradient-to-b bg-[#eef3f9] flex flex-col items-center gap-6" dir="rtl">
-      <h1 className="text-4xl font-extrabold text-[#2c5282] mb-4">پنل مدرس</h1>
-
-      {/* کارت اطلاعات مدرس */}
-      <div className="w-5xl bg-[snow] p-6 rounded-3xl shadow-lg border border-[#2c5282] flex flex-col md:flex-row gap-6 items-start justify-center">
-        <img
-          src={student || "/default-profile.png"}
-          alt="teacher"
-          className="w-36 h-36 rounded-full object-cover border-4 border-[#2c5282]"
-        />
-
-        <div className="flex flex-col gap-2 flex-1">
-          <h2 className="text-2xl font-semibold text-[#2c5282]">{teacher.name}</h2>
-          <p className="text-gray-700 mt-1">رشته : <span className="font-medium">{teacher.study}</span></p>
-          <p className="text-gray-700">دانشگاه : <span className="font-medium">{teacher.university}</span></p>
-          <p className="text-gray-700">ایمیل : <span className="font-medium">{teacher.email}</span></p>
-          {teacher.aboutTeacher && (
-            <p className="text-gray-600 text-justify mt-3 bg-[#f7fafc] p-3 rounded-lg shadow-inner">
-              درباره مدرس : {teacher.aboutTeacher}
-            </p>
-          )}
-        </div>
+    <div className="min-h-screen w-full p-6 bg-gradient-to-b bg-[#eef3f9] flex flex-col justify-center items-center gap-6 overflow-hidden" dir="rtl">
+      
+      <div className={`${activeSection ==="profile" ? "block" : "hidden" } sm:block`}>
+        <TeacherPanel/>
       </div>
 
       {/* تب‌ها */}
-      <div className="w-5xl bg-white rounded-3xl shadow-md flex overflow-hidden border border-[#2c5282]">
-        {[
-          { id: "dashboard", label: "دوره‌های من" },
-          { id: "addCourse", label: "درخواست افزودن دوره جدید" },
-          { id: "editProfile", label: "ویرایش پروفایل" },
-          { id: "requests", label: "درخواست‌های من" },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveSection(tab.id)}
-            className={`flex-1 py-4 cursor-pointer text-center font-semibold transition-colors duration-300 ${
-              activeSection === tab.id
-                ? "bg-[#2c5282] text-white shadow-inner"
-                : "bg-transparent text-[#2c5282] hover:bg-[#cbd5e0]"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      <div className={`${
+              isMenuOpen? "w-[70%]":"w-0"
+            }  absolute top-0 right-0 sm:relative flex flex-col justify-center sm:w-5xl  rounded-l-xl sm:rounded-3xl bg-white border border-[#2c5282] transition-all duration-300`}>
+        {/* دکمه موبایل برای باز/بستن منو (فقط در موبایل نمایش داده میشه) */}
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="sm:hidden z-50"
+        >
+          <i className={`fas ${isMenuOpen ? "fa-times absolute text-[#2c5282] left-3 top-3" : "fa-bars fixed text-[#2c5282] top-4 right-4"} text-xl`}></i>
+        </button>
+        <div className={`min-h-screen sm:min-h-full sm:w-full sm:mt-0 mt-10 sm:rounded-3xl shadow-md flex flex-col sm:flex-row overflow-hidden  `}>
+          {[
+            { id: "profile", label: "پروفایل مدرس", mobileOnly: true },
+            { id: "dashboard", label: "دوره‌های من" },
+            { id: "addCourse", label: "درخواست افزودن دوره جدید" },
+            { id: "editProfile", label: "ویرایش پروفایل" },
+            { id: "requests", label: "درخواست‌های من" },
+            { id: "Logout", label: "خروج" }
+          ].map((tab) => {
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveSection(tab.id)}
+                className={`sm:block flex-1 sm:py-4 cursor-pointer text-center font-semibold transition-colors duration-300
+                  ${tab.mobileOnly ? "block sm:hidden" : ""}
+                  ${
+                    activeSection === tab.id
+                      ? "bg-[#2c5282] text-white shadow-inner"
+                      : "bg-transparent text-[#2c5282] hover:bg-[#cbd5e0]"
+                  }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
+
       {/* محتوای بخش‌ها */}
-      <div className="w-5xl bg-[snow] rounded-3xl shadow-lg p-6 mt-4">
+      <div className={`sm:block ${window.innerWidth<768 ? "w-full min-h-screen mt-2" :"w-5xl"}`}>
         {activeSection === "dashboard" && (
           <>
-            {teacherCourses.length === 0 ? (
-              <p className="text-gray-500 text-center text-lg mt-10">هنوز دوره‌ای اضافه نکرده‌اید.</p>
-            ) : (
-              <ul className="flex flex-col gap-4">
-                {teacherCourses.map((course, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between items-center border border-[#2c5282] rounded-xl p-5 shadow hover:shadow-lg transition-shadow bg-[#f9fafb]"
-                  >
-                    <h4 className="text-xl font-semibold text-[#2c5282]">{course.title}</h4>
-                    <button
-                      className="flex items-center gap-2 border border-[#2c5282] rounded-[5px] px-[8px] py-[3px] cursor-[pointer] text-[#2c5282] hover:text-[#1a365d] transition-colors font-medium"
-                      title="ویرایش دوره"
-                      onClick={(e) => handleNavigate(e, course.id)}
-                    >
-                      <i className="fas fa-edit"></i>
-                      <p className="">مشاهده و ویرایش</p>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <TeacherCourses/>
           </>
         )}
 

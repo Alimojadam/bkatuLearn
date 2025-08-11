@@ -22,7 +22,7 @@ const Profil=()=>{
                     <p dir="rtl" className="text-end text-[#3073c1] text-[19px]">ایمیل : {user.email}</p>
                     <p className="text-end text-[#3073c1] text-[19px]">رشته تحصیلی : {user.study}</p>
                     <p className="text-end text-[#3073c1] text-[19px]">دانشگاه محل تحصیل : {user.university}</p>
-                    <p className="text-end text-[#3073c1] text-[19px]">درباره من : {user.aboutMe}</p>
+                    <p className="text-end text-[#3073c1] text-[19px] whitespace-normal break-words">درباره من : {user.aboutMe}</p>
                 </div>
             </div>
         </div>

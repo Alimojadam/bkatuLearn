@@ -19,7 +19,7 @@ function AppRoutes() {
 
   return (
     <Routes>
-      {/* 🟢 Public Routes (همه دسترسی دارند) */}
+      {/* 🟢 Public Routes */}
       <Route path="/" element={<HomePage />} />
       <Route path="/loginPage" element={<Login />} />
       <Route path="/SignUpPage" element={<SignUp />} />

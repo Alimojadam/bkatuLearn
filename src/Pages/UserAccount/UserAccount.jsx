@@ -58,7 +58,7 @@ const UserAccount = () => {
         };
 
   return (
-    <div className="relative flex justify-between items-center flex-row-reverse w-full min-h-screen bg-[#eef3f9] px-[20px]">
+    <div className="relative flex justify-between items-start flex-row-reverse w-full min-h-screen bg-[#eef3f9] px-[20px]">
       <div className="relative h-full">
         <div className={`fixed top-0 sm:top-10 right-0 z-50 navList  sm:mr-[20px] flex justify-start items-start bg-[#3073c1] min-h-screen sm:h-[90vh] rounded-l-[10px] sm:rounded-[10px]
             ${isMenuOpen ? "w-[80%]" : "w-0"} sm:w-[35%] transition-all duration-300 ease-in-out`}>
@@ -75,7 +75,7 @@ const UserAccount = () => {
               ></i>
             )}
           </div>
-          <ul className={`w-[97%] flex flex-col gap-3 pt-5 sm:pt-0 min-h-screen mt-[20px] ${isMenuOpen ? "block" : "hidden"} sm:block`}>
+          <ul className={`w-[97%] flex flex-col gap-3 pt-5 sm:pt-0 min-h-screen mt-[20px] ${isMenuOpen ? "flex" : "hidden"} sm:flex`}>
             {navbarList.map((List) => (
               <li
                 key={List.id}
@@ -95,7 +95,7 @@ const UserAccount = () => {
       </div>
 
       <div
-        className={`aboutUser w-full sm:w-[64%] h-full my-[6vh] sm:ml-[20px] flex justify-center items-center bg-[#eef3f9] transition-all duration-500 ease-out opacity-0 ${fadeClass}`}
+        className={`aboutUser w-full sm:w-[64%] h-full my-[10vh] sm:ml-[20px] flex justify-center items-center bg-[#eef3f9] transition-all duration-500 ease-out opacity-0 ${fadeClass}`}
       >
         {isActive === 1 && <Profil />}
         {isActive === 2 && <MyCourses />}

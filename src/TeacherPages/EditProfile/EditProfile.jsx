@@ -103,10 +103,10 @@ const EditProfile = () => {
   }
 
   return (
-    <div dir="rtl" className="bg-[snow] min-h-screen flex flex-col justify-center items-center py-[15px]">
+    <div dir="rtl" className="w-full bg-[snow] min-h-screen flex flex-col justify-center items-center py-[15px] mt-5 sm:mt-0">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col py-[20px] gap-4 justify-start items-center w-[70%] border-2 border-[#2c5282] rounded-[10px]"
+        className="flex flex-col py-[20px] gap-4 justify-start items-center w-[90%] sm:w-[70%] border-2 border-[#2c5282] rounded-[10px]"
       >
         <h3 className="text-[21px] text-[#2c5282]">ویرایش حساب مدرس</h3>
 
