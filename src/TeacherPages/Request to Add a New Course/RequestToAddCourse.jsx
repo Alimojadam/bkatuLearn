@@ -73,7 +73,7 @@ const RequestToAddCourse = () => {
   }, [successMessage]);
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen mt-5 sm:mt-0 w-full bg-[snow]">
+    <div className="flex flex-col justify-center items-center mt-5 sm:mt-0 w-full bg-[snow]">
       {successMessage && (
         <div
           className={`fixed top-[20%] left-1/2 transform -translate-x-1/2 bg-green-100 border border-green-500 text-green-800 font-semibold py-3 px-6 rounded-[10px] z-50 shadow-lg transition-opacity duration-1000 ease-in-out ${

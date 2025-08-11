@@ -10,7 +10,7 @@ const TeacherPanel=()=>{
 
 
     return(
-        <div className="w-full flex flex-col justify-center gap-5 items-center overflow-hidden">
+        <div className="w-full flex flex-col justify-center gap-5 items-center">
             <h1 className="text-4xl font-extrabold text-[#2c5282] mb-4">پنل مدرس</h1>
 
             {/* کارت اطلاعات مدرس */}
