@@ -12,12 +12,12 @@ const AboutTeacher = () => {
     }
 
     return (
-        <div className="w-full bg-[#eef3f9] pt-20 pb-5 sm:pt-0 sm:pb-0  sm:h-[100vh] flex flex-col sm:flex-row">
+        <div className="min-h-screen w-full bg-[#eef3f9] pt-20 pb-5 sm:pt-0 sm:pb-0  sm:h-[100vh] flex flex-col sm:flex-row">
 
 
             {/* AboutTeacher ********************************************************/}
 
-            <div className="min-h-screen relative flex justify-center sm:h-[100vh] items-end w-full sm::w-[60%] bg-[#eef3f9]">
+            <div className="relative flex justify-center sm:h-[100vh] items-end w-full sm::w-[60%] bg-[#eef3f9]">
                 <div className="flex flex-col justify-start items-center relative shadow-2xl bg-transparent sm:mb-[20px] border border-[#3073c1] border-2 rounded-[10px] w-[90%] sm:w-[65%] sm:h-[500px]">
                     <div className="absolute flex justify-center items-center flex-col gap-3 left-1/2 transform -translate-x-1/2 top-[-11vh]">
                         <div className="shadow-xl w-[120px] h-[120px] rounded-[50%] border border-1 border-[#3073c1]">
