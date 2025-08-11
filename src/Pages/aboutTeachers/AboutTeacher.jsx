@@ -12,7 +12,7 @@ const AboutTeacher = () => {
     }
 
     return (
-        <div className="min-h-screen w-full bg-[#eef3f9] pb-5 sm:pt-0 sm:pb-0  sm:h-[100vh] flex flex-col sm:flex-row">
+        <div className="min-h-screen w-full bg-[#eef3f9] sm:pt-0 sm:pb-0  sm:h-[100vh] flex flex-col sm:flex-row">
 
 
             {/* AboutTeacher ********************************************************/}
