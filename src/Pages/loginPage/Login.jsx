@@ -90,7 +90,7 @@ const Login = () => {
             <button
               type="button"
               onClick={SignUphandleClick}
-              className="cursor-pointer btnSignUp pt-[5px] pb-[8px] px-[17px] sm:px-[20px] text-[#3073c1] bg-[snow] border sm:border-b border-[#3073c1] "
+              className="cursor-pointer btnSignUp pt-[5px] pb-[8px] px-[16px] sm:px-[20px] text-[#3073c1] bg-[snow] border sm:border-b border-[#3073c1] "
             >
               ایجاد حساب جدید
             </button>
