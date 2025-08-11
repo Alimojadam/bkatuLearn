@@ -119,7 +119,7 @@ const Syllabus = (props) => {
   
 
   return (
-    <div className="min-h-screen p-10 flex flex-col justify-center items-end text-right gap-[20px]">
+    <div className="min-h-screen overflow-hidden p-10 flex flex-col justify-center items-end text-right gap-[20px]">
       <h2 className="hidden sm:block text-[22px] text-[snow] font-bold mb-4 p-2 border-b border-[#eef3f9]">{course.title}</h2>
 
       {isTeacherOwner && (
@@ -182,7 +182,7 @@ const Syllabus = (props) => {
               <p className="text-[18px] text-[#3073c1] mr-[5px]">{item.title}</p>
               <div className="w-[15%] flex justify-between gap-5 items-center">
                 <button onClick={() => toggleIndex(index)} className="font-[thin]">
-                  <span className="text-16px sm:text-[20px] text-[#111] text-[#3073c1] sm:text-[#111] cursor-pointer">{openIndex === index ? '▲' : '▼'}</span>
+                  <span className="text-18px sm:text-[20px] text-[#111] text-[#3073c1] sm:text-[#111] cursor-pointer">{openIndex === index ? '▲' : '▼'}</span>
                 </button>
 
                 {isTeacherOwner&&(

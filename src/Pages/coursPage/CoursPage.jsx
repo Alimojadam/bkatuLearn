@@ -103,7 +103,7 @@ const CoursPage = () => {
   
 
   return (
-    <div className="min-h-screen flex flex-col sm:flex-row overflow-hidden">
+    <div className="min-h-screen m-0 p-0 flex flex-col sm:flex-row overflow-hidden">
       <div className="aboutCours w-[100%] sm:w-[60%] bg-[#eef3f9] flex flex-col justify-start items-center">
         <div className="cours flex flex-col gap-[30px] justify-center items-center w-[95%] mt-[50px]">
           <video
