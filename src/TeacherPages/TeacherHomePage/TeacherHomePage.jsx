@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useUser } from "../../Pages/coursesContext";
 import RequestsComponent from "../myRequestsComponent/RequestsComponent";
 import EditProfile from "../EditProfile/EditProfile";
@@ -6,37 +6,80 @@ import RequestToAddCourse from "../Request to Add a New Course/RequestToAddCours
 import TeacherPanel from "../TeacherPanel/TeacherPanel";
 import TeacherCourses from "../TeacherCourses/TeacherCourses";
 
+const MOBILE_BREAKPOINT = 768;
+
 const TeacherHomePage = () => {
   const { user } = useUser();
 
-  // state برای ذخیره عرض پنجره
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1024
+  // وضعیت موبایل (true اگر موبایل)
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
   );
 
-  const [activeSection, setActiveSection] = useState(
-    typeof window !== "undefined" && window.innerWidth < 768 ? "profile" : "dashboard"
-  );
+  // بخش فعال، مقدار پیش‌فرض بر اساس isMobile تعیین میشه
+  const [activeSection, setActiveSection] = useState(isMobile ? "profile" : "dashboard");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    function handleResize() {
-      setWindowWidth(window.innerWidth);
+  // برای نگهداری موقعیت اسکرول قبل از قفل کردن
+  const scrollPosRef = useRef(0);
 
-      if (window.innerWidth < 768) {
-        setActiveSection("profile");
-      } else {
-        setActiveSection("dashboard");
-      }
-    }
+  // resize handler: فقط وقتی که از یک وضعیت به وضعیت دیگر عبور کردیم isMobile رو آپدیت و نه همیشه
+  useEffect(() => {
+    const handleResize = () => {
+      const nowMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      setIsMobile((prev) => {
+        if (prev !== nowMobile) {
+          // تنها وقتی breakpoint عوض شده:
+          // اگر الان موبایلیم و قبلاً دسکتاپ بود => انتخاب اولیه رو به profile بزن
+          // اگر الان دسکتاپیم و قبلاً موبایل بود => انتخاب اولیه رو به dashboard بزن
+          if (nowMobile) {
+            setActiveSection((prevSection) => (prevSection ? prevSection : "profile"));
+          } else {
+            // وقتی میریم دسکتاپ منو موبایل رو ببند و پیش‌فرض دسکتاپ بذار
+            setIsMenuOpen(false);
+            setActiveSection((prevSection) => (prevSection ? prevSection : "dashboard"));
+          }
+          return nowMobile;
+        }
+        return prev; // هیچ تغییری نده
+      });
+    };
 
     window.addEventListener("resize", handleResize);
-
-    // اجرای اولیه برای مقداردهی صحیح
+    // مقدار اولیه را هم هماهنگ می‌کنیم (در صورتی که window در دسترس باشه)
     handleResize();
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // قفل اسکرول صفحه وقتی منو موبایل بازه، به طوری که موقعیت اسکرول حفظ بشه
+  useEffect(() => {
+    if (!isMobile) return; // فقط برای موبایل اعمال می‌کنیم
+
+    if (isMenuOpen) {
+      // ذخیره موقعیت فعلی
+      scrollPosRef.current = window.pageYOffset || document.documentElement.scrollTop || 0;
+      // قفل کردن صفحه و نگه داشتن موقعیت
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollPosRef.current}px`;
+      document.body.style.width = "100%";
+    } else {
+      // بازگرداندن موقعیت اسکرول
+      const top = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      const scrollY = top ? -parseInt(top, 10) : scrollPosRef.current;
+      window.scrollTo(0, scrollY);
+    }
+
+    // cleanup هنگام unmount
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+    };
+  }, [isMenuOpen, isMobile]);
 
   if (!user) {
     return (
@@ -46,69 +89,74 @@ const TeacherHomePage = () => {
     );
   }
 
+  // لیست تب‌ها (پروفایل فقط در موبایل نشان داده میشه)
+  const tabs = [
+    ...(isMobile ? [{ id: "profile", label: "پروفایل مدرس", mobileOnly: true }] : []),
+    { id: "dashboard", label: "دوره‌های من" },
+    { id: "addCourse", label: "درخواست افزودن دوره جدید" },
+    { id: "editProfile", label: "ویرایش پروفایل" },
+    { id: "requests", label: "درخواست‌های من" },
+    { id: "Logout", label: "خروج" },
+  ];
+
   return (
     <div
-      className={`min-h-screen w-full p-6 bg-gradient-to-b bg-[#eef3f9] flex flex-col justify-center items-center gap-6 ${
-        isMenuOpen ? "overflow-hidden" : "overflow-auto"
-      }`}
+      className="w-full p-6 bg-gradient-to-b from-white to-[#eef3f9] flex flex-col items-center gap-6"
       dir="rtl"
     >
-      <div className="hidden sm:block">
+      {/* در دسکتاپ همیشه پنل کناری نشون داده میشه */}
+      <div className="hidden sm:block w-full max-w-5xl">
         <TeacherPanel />
       </div>
 
-      {/* تب‌ها */}
-      <div
-        className={`${
-          isMenuOpen ? "w-[70%]" : "w-0"
-        } absolute top-0 right-0 sm:relative flex flex-col justify-center sm:w-5xl rounded-l-xl sm:rounded-3xl bg-white border border-[#2c5282] transition-all duration-300`}
-      >
-        {/* دکمه موبایل برای باز/بستن منو (فقط در موبایل نمایش داده میشه) */}
-        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="sm:hidden z-50">
-          <i
-            className={`fas ${
-              isMenuOpen
-                ? "fa-times absolute text-[#2c5282] left-3 top-3"
-                : "fa-bars fixed text-[#2c5282] top-4 right-4"
-            } text-xl`}
-          ></i>
-        </button>
-        <div
-          className={`min-h-screen sm:min-h-full sm:w-full sm:mt-0 mt-10 sm:rounded-3xl shadow-md flex flex-col sm:flex-row overflow-hidden`}
+      {/* دکمه منو (فقط موبایل) */}
+      {isMobile && (
+        <button
+          onClick={() => setIsMenuOpen((s) => !s)}
+          className="fixed top-4 right-4 z-50 bg-[#2c5282] text-white p-2 rounded-md shadow-md sm:hidden"
+          aria-expanded={isMenuOpen}
+          aria-label={isMenuOpen ? "بستن منو" : "باز کردن منو"}
         >
-          {[
-            { id: "profile", label: "پروفایل مدرس", mobileOnly: true },
-            { id: "dashboard", label: "دوره‌های من" },
-            { id: "addCourse", label: "درخواست افزودن دوره جدید" },
-            { id: "editProfile", label: "ویرایش پروفایل" },
-            { id: "requests", label: "درخواست‌های من" },
-            { id: "Logout", label: "خروج" },
-          ].map((tab) => (
+          <i className={`fas ${isMenuOpen ? "fa-times" : "fa-bars"} text-xl`}></i>
+        </button>
+      )}
+
+      {/* منو — استفاده از transform برای اسلاید (اجتناب از تغییر width مستقیم) */}
+      <nav
+        className={`fixed top-0 right-0 h-full z-40 sm:static sm:h-auto sm:w-full sm:rounded-3xl
+          bg-white border border-[#2c5282] shadow-md transform transition-transform duration-300
+          ${isMobile ? "w-64" : "w-full max-w-5xl"}
+          ${isMobile ? (isMenuOpen ? "translate-x-0" : "translate-x-full") : "translate-x-0"}
+          rounded-l-xl sm:rounded-3xl overflow-hidden`}
+        aria-hidden={!isMenuOpen && isMobile}
+      >
+        <div className="flex flex-col sm:flex-row min-h-screen sm:min-h-full">
+          {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveSection(tab.id)}
-              className={`sm:block flex-1 sm:py-4 cursor-pointer text-center font-semibold transition-colors duration-300
-                ${tab.mobileOnly ? "block sm:hidden" : ""}
-                ${
-                  activeSection === tab.id
-                    ? "bg-[#2c5282] text-white shadow-inner"
-                    : "bg-transparent text-[#2c5282] hover:bg-[#cbd5e0]"
-                }`}
+              onClick={() => {
+                setActiveSection(tab.id);
+                // در موبایل وقتی تب انتخاب شد منو رو ببند
+                if (isMobile) setIsMenuOpen(false);
+              }}
+              className={`flex-1 py-4 text-center font-semibold transition-colors duration-200
+                ${activeSection === tab.id ? "bg-[#2c5282] text-white shadow-inner" : "text-[#2c5282] hover:bg-[#cbd5e0]"}
+                ${tab.mobileOnly ? "block sm:hidden" : ""}`}
             >
               {tab.label}
             </button>
           ))}
         </div>
-      </div>
+      </nav>
 
-      {/* محتوای بخش‌ها */}
-      <div className={`sm:block ${windowWidth < 768 ? "w-full min-h-screen mt-2" : "w-5xl"}`}>
+      {/* محتوای اصلی */}
+      <main className={`w-full max-w-5xl mt-4 ${isMobile ? "px-2" : "px-0"}`}>
         {activeSection === "profile" && <TeacherPanel />}
         {activeSection === "dashboard" && <TeacherCourses />}
         {activeSection === "requests" && <RequestsComponent />}
         {activeSection === "addCourse" && <RequestToAddCourse />}
         {activeSection === "editProfile" && <EditProfile />}
-      </div>
+      </main>
     </div>
   );
 };
