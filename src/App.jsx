@@ -52,7 +52,7 @@ function App() {
     <UserProvider>
       <SearchProvider>
         <BrowserRouter>
-          <AppRoutes /> {/* ✅ فقط اینجا useUser قابل استفاده است */}
+          <AppRoutes /> 
         </BrowserRouter>
       </SearchProvider>
     </UserProvider>
