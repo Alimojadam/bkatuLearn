@@ -1,11 +1,12 @@
 import logo from '../img/logo_header.png';
-import user from '../img/userIMG.jpg';
+import userImg from '../img/userIMG.jpg';
 import '../coursesPage/CoursesPage.css';
 import { useState } from 'react';
-import { useSearch } from '../../Pages/coursesContext';
+import { useSearch, useUser } from '../../Pages/coursesContext';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const NavbarCourses = () => {
+  const {user} = useUser();
   const { searchTerm, setSearchTerm } = useSearch();
   const links = [
     { id: 'CoursesPage', label: 'دوره ها' },
@@ -81,19 +82,29 @@ const NavbarCourses = () => {
           </div>
         </li>
         <li>
-          <Link
+          {user && user.type!="Admin" ? (
+            <Link
             to="/UserAccount"
             className="rounded-[18px] h-[36px] w-[120px] bg-[#3073c1] flex flex-row-reverse items-center justify-between pr-[10px]"
-          >
+            >
             <p className="text-[snow] text-[17px]">داشبورد</p>
             <div className="w-[42px] h-[42px] rounded-[50%] bg-[snow] bg-cover bg-no-repeat">
               <img
-                src={user}
+                src={userImg}
                 alt=""
                 className="w-full h-full object-cover rounded-[50%]"
               />
             </div>
           </Link>
+          ) : (
+            <Link
+            to="/loginPage"
+            className="rounded-[18px] h-[36px] w-[120px] bg-[#3073c1] flex flex-row-reverse items-center justify-center gap-2"
+            >
+              <i class="far fa-user text-[snow]"></i>
+              <p className="text-[snow] text-[17px]">ورود/ثبتنام</p>
+            </Link>
+          )}
         </li>
       </ul>
     </div>

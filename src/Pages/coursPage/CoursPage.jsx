@@ -59,8 +59,8 @@ const CoursPage = () => {
   }
 
   const handleRegisterCourse = () => {
-    if (!user) {
-      alert("کاربر یافت نشد!");
+    if (!user || user.type === "Admin" ) {
+      alert("ابتدا وارد حساب کاربری خود شوید");
       return;
     }
   
