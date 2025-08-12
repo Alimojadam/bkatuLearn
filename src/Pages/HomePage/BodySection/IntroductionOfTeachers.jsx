@@ -41,10 +41,12 @@ const IntroductionOfTeachers=()=>{
                 </ul>
             </div> 
                 {/* Info Section */}
-            <div className=" max-w-xl text-center lg:text-right sm:mt-[180px] ">
+            <div className="flex flex-col items-end justify-between gap-4 max-w-xl text-center lg:text-right sm:mt-[180px] ">
                 <h2 className="hidden sm:block  text-[27px]">!بهترین اساتید دانشگاه رو برات اینجا جمع کردیم</h2>
-                <p className="hidden sm:block text-gray-900 mt-4 text-[18px]">در سیستم نرم‌افزاری طراحی‌شده‌ی ما، شما می‌توانید با مشاهده نمونه تدریس اساتید مختلف، آشنا شوید و روش تدریس هر یک را مقایسه کنید</p>
-                <button className="mt-6 px-6 py-2 btn btn-blue shadow-md transition">مشاهده بیشتر</button>
+                <p className="hidden sm:block text-gray-900 text-[18px]">در سیستم نرم‌افزاری طراحی‌شده‌ی ما، شما می‌توانید با مشاهده نمونه تدریس اساتید مختلف، آشنا شوید و روش تدریس هر یک را مقایسه کنید</p>
+                <Link to="/Teachers" className="px-6 py-5 btn bg-[#3073c1] shadow-md transition">
+                مشاهده بیشتر 
+                </Link>
             </div>
         </div>
     )

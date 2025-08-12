@@ -5,7 +5,7 @@ import logoFooter3 from '../img/samandehi-1030x1030.png'
 
 const Footer=()=>{
     return(
-        <footer className="min-h-[300px] flex items-start justify-center bg-transparent">
+        <footer className="min-h-[200px] flex items-start justify-center bg-transparent">
             <div className="flex gap-10 sm:gap-100 flex-col-reverse sm:flex-row items-center justify-between mt-[30px] sm:mb-[20px]">
             <div className="logosFooter flex gap-[10px]">
                 <img src={logoFooter2}alt="" />

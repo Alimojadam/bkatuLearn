@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import pattern from "../img/pattern.png"
 import { cards } from '../coursPage/CardsInfo';
 import { UserInformation } from '../../Information/User';
+import Footer from '../aboutUs/Footer';
 
 
 const CoursesPage=()=>{
@@ -61,7 +62,7 @@ const CoursesPage=()=>{
             setIsMenuOpen(!isMenuOpen);
         };
     return(
-        <div className="w-full pb-[40px] sm:pb-0 bg-[#eef3f9] min-h-screen">
+        <div className="relative w-full pb-[40px] sm:pb-0 bg-[#eef3f9] min-h-screen">
 
             
            <NavbarCourses/>
@@ -99,40 +100,71 @@ const CoursesPage=()=>{
             </div>
 
             {/* ******************************************************* */}
-            <div className="relative flex flex-row-reverse sm:justify-center gap-6 items-start w-[100%] pl-[20px]">
+            <div className="sm:relative flex flex-row-reverse sm:justify-center gap-6 items-start w-[100%] pl-[20px]">
 
-                <div className={`transition-all duration-700 ease-in-out mt-[20px] bg-[#3073c1] sm:mr-[30px] rounded-l-[10px] sm:rounded-[10px] h-[100vh] ${isMenuOpen ? "absolute sm:relative w-[75%] sm:w-[29%]" : "relative w-[0] sm:w-[7%]"}`}>
-                    <div className="sm:absolute button-9 sm:top-3 sm:left-2 flex items-start justify-start ">
+                <div
+                    className={`transition-all duration-700 ease-in-out
+                        ${isMenuOpen ? "w-[75%] sm:w-[29%]" : "w-0 sm:w-[7%]"}
+                        fixed sm:relative sm:mt-[20px] sm:mr-[30px]
+                        top-[72px] sm:top-0 right-0
+                        bg-[#3073c1] rounded-l-[10px] sm:rounded-[10px] h-screen`}
+                    >
+                    <div className="sm:absolute sm:top-3 sm:left-2 flex items-start justify-start">
                         {isMenuOpen ? (
-                            <i
-                            className="fa-solid fa-xmark absolute top-3 left-2 sm:top-0 sm:left-0 sm:relative text-[24px] text-[snow] cursor-pointer"
+                        <i
+                            className="fa-solid fa-xmark absolute top-3 left-2 sm:static text-[24px] text-[snow] cursor-pointer"
                             onClick={toggleMenu}
-                            ></i>
+                        ></i>
                         ) : (
-                            <i
-                            className="fa-solid fa-bars text-[22px] absolute right-3 top-3 sm:left-0 sm:top-1  text-[#3073c1] sm:text-[snow] cursor-pointer"
+                        <i
+                            className="fa-solid fa-bars text-[22px] fixed right-3 top-[84px] sm:static text-[#3073c1] sm:text-[snow] cursor-pointer"
                             onClick={toggleMenu}
-                            ></i>
+                        ></i>
                         )}
                     </div>
 
-                    
-                        <ul className="flex flex-col gap-3 py-[20px] w-full max-h-[80vh] overflow-y-auto mt-[30px]">
-                            {filterBar.map((Element)=>(
-                                <li key={Element.id} onClick={() =>{ setSelectedType(Element.type);{isMobile&&(toggleMenu());}}} className={`flex gap-10 items-center justify-end cursor-pointer rounded-r-[10px] h-[40px] w-[97%] px-[20px] mr-[2px] transition-all duration-500 ease-in-out ${selectedType === Element.type ? "bg-[#eef3f9]" : "bg-[#3073c1]"}`}>
-                                {isMenuOpen &&(
-                                    <p className={`text-[#3073c1] text-[19px] ${selectedType === Element.type ? "text-[#3073c1]" : "text-[#eef3f9]"}`}>{Element.Major}</p>
-                                    )}
-                                    <i className={`${Element.icon} text-[20px] ${selectedType === Element.type ? "text-[#3073c1]" : "text-[#eef3f9]"}`}></i>                            
-                                </li>
-                            ))}
-                        </ul>
-
+                    <ul className="flex flex-col gap-3 py-[20px] w-full max-h-[80vh] overflow-y-auto mt-[30px]">
+                        {filterBar.map((Element) => (
+                        <li
+                            key={Element.id}
+                            onClick={() => {
+                            setSelectedType(Element.type);
+                            if (isMobile) toggleMenu();
+                            }}
+                            className={`flex gap-10 items-center justify-end cursor-pointer rounded-r-[10px] h-[40px] w-[97%] px-[20px] mr-[2px] transition-all duration-500 ease-in-out
+                            ${
+                                selectedType === Element.type
+                                ? "bg-[#eef3f9]"
+                                : "bg-[#3073c1]"
+                            }`}
+                        >
+                            {isMenuOpen && (
+                            <p
+                                className={`text-[19px] ${
+                                selectedType === Element.type
+                                    ? "text-[#3073c1]"
+                                    : "text-[#eef3f9]"
+                                }`}
+                            >
+                                {Element.Major}
+                            </p>
+                            )}
+                            <i
+                            className={`${Element.icon} text-[20px] ${
+                                selectedType === Element.type
+                                ? "text-[#3073c1]"
+                                : "text-[#eef3f9]"
+                            }`}
+                            ></i>
+                        </li>
+                        ))}
+                    </ul>
                 </div>
+
 
                 {/* *********Cards********* */}
 
-                <div className={`w-full sm:transition-all sm:duration-700 ml-[1%] sm:ml-0 sm:ease-in-out grid grid-dir justify-center items-center grid-cols-1 ${isMenuOpen ? " sm:w-[70%] sm:grid-cols-2" : "sm:w-[100%] sm:grid-cols-3"} gap-6 `}>
+                <div className={`w-full min-h-screen sm:transition-all sm:duration-700 ml-[1%] sm:ml-0 sm:ease-in-out grid grid-dir justify-center items-start grid-cols-1 ${isMenuOpen ? " sm:w-[70%] sm:grid-cols-2" : "sm:w-[100%] sm:grid-cols-3"} gap-6 `}>
                     {filteredCards.length === 0 ? (
                         <p className="text-center text-[#3073c1] text-[25px] w-full mt-[20px]">هیچ دوره‌ای یافت نشد</p>
                     ) : (
@@ -152,6 +184,13 @@ const CoursesPage=()=>{
                     )}
                </div>
 
+            </div>
+
+            <div className="w-full flex flex-col justify-center items-center mt-5">
+                <div className="w-[90%] md:w-[80%] border-b-2 border-[#3073c1]"></div>
+                <div className="w-full bg-transparent mb-0 pb-0">
+                    <Footer/>
+                </div>
             </div>
         </div>
         

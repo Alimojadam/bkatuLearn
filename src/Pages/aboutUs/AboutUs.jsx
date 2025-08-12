@@ -49,7 +49,7 @@ const AboutUs = ()=>{
 </p>
             </div>
 
-            <div className="border-b border-[1px] border-[#3073c1] w-[80%] mt-[20px]"></div>
+            <div className="border-b border-[1px] border-[#3073c1] w-[90%] md:w-[80%] mt-[20px]"></div>
 
             <div className="w-full mb-0 pb-0">
                 <Footer/>

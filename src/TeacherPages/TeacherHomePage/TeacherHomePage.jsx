@@ -5,7 +5,7 @@ import EditProfile from "../EditProfile/EditProfile";
 import RequestToAddCourse from "../Request to Add a New Course/RequestToAddCourse";
 import TeacherPanel from "../TeacherPanel/TeacherPanel";
 import TeacherCourses from "../TeacherCourses/TeacherCourses";
-
+import {Navigate, useNavigate } from "react-router-dom";
 const MOBILE_BREAKPOINT = 768;
 
 const TeacherHomePage = () => {
@@ -19,6 +19,7 @@ const TeacherHomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const scrollPosRef = useRef(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -77,13 +78,14 @@ const TeacherHomePage = () => {
 
 
   const tabs = [
-    ...(isMobile ? [{ id: "profile", label: "پروفایل مدرس", mobileOnly: true }] : []),
-    { id: "dashboard", label: "دوره‌های من" },
-    { id: "addCourse", label: "درخواست افزودن دوره جدید" },
-    { id: "editProfile", label: "ویرایش پروفایل" },
-    { id: "requests", label: "درخواست‌های من" },
-    { id: "Logout", label: "خروج" },
+    ...(isMobile ? [{ id: "profile", label: "پروفایل مدرس", mobileOnly: true, icon: "fas fa-user" }] : []),
+    { id: "dashboard", label: "دوره‌های من", icon: "fas fa-graduation-cap" },
+    { id: "addCourse", label: "درخواست افزودن دوره جدید", icon: "fas fa-plus-circle" },
+    { id: "editProfile", label: "ویرایش پروفایل", icon: "fas fa-edit" },
+    { id: "requests", label: "درخواست‌های من", icon: "fas fa-inbox" },
+    { id: "Logout", label: "خروج", icon: "fas fa-sign-out-alt" },
   ];
+  
 
   return (
     <div
@@ -94,30 +96,45 @@ const TeacherHomePage = () => {
         <TeacherPanel />
       </div>
 
+
       {isMobile && (
         <button
           onClick={() => setIsMenuOpen((s) => !s)}
-          className="z-50 sm:hidden"
+          className={`z-50 fixed top-3 right-3 sm:hidden ${ isMenuOpen ? "hidden" : "block"}`}
           aria-expanded={isMenuOpen}
           aria-label={isMenuOpen ? "بستن منو" : "باز کردن منو"}
         >
-          <i className={`fas ${isMenuOpen ? "fa-times text-[#2c5282] fixed right-3 top-3 z-100" : "fa-bars fixed text-[#2c5282] top-3 right-3"} text-xl`}></i>
+          <i className={`fas fa-bars text-[#2c5282] text-xl`}></i>
+          {/* <i className={`fas ${isMenuOpen ? "" : ""} text-xl`}></i> */}
         </button>
       )}
-
       <nav
-        className={`fixed top-0 right-0 h-full mt-10 sm:,t-0 z-40 sm:static sm:h-auto sm:w-full sm:rounded-3xl
+        className={`fixed top-0 right-0 h-full sm:mt-10 sm:t-0 z-40 sm:static sm:h-auto sm:w-full sm:rounded-3xl
           bg-white  shadow-md transform transition-transform duration-300
           ${isMobile ? "w-64" : "w-full max-w-5xl"}
           ${isMobile ? (isMenuOpen ? "translate-x-0" : "translate-x-full") : "translate-x-0"}
           rounded-l-xl sm:rounded-3xl overflow-hidden`}
         aria-hidden={!isMenuOpen && isMobile}
       >
-        <div className="flex flex-col sm:flex-row min-h-screen sm:min-h-full">
+        {isMobile && (
+          <button
+            onClick={() => setIsMenuOpen((s) => !s)}
+            className={`z-50 fixed left-3 top-3 sm:hidden ${ isMenuOpen ? "block" : "hidden"}`}
+            aria-expanded={isMenuOpen}
+            aria-label={isMenuOpen ? "بستن منو" : "باز کردن منو"}
+          >
+            <i className={`fas fa-times text-[#2c5282] z-100 text-xl`}></i>
+          </button>
+        )}
+        <div className="flex flex-col sm:flex-row min-h-screen mt-10 sm:mt-0 sm:min-h-full">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => {
+                if (tab.id === "Logout") {
+                  navigate("/UserAccount"); // یا هر آدرسی که میخوای
+                  return;
+                }
                 setActiveSection(tab.id);
                 if (isMobile) setIsMenuOpen(false);
               }}
@@ -125,7 +142,10 @@ const TeacherHomePage = () => {
                 ${activeSection === tab.id ? "bg-[#2c5282] text-white shadow-inner" : "text-[#2c5282] hover:bg-[#cbd5e0]"}
                 ${tab.mobileOnly ? "block sm:hidden" : ""}`}
             >
-              {tab.label}
+              <div className={`flex ${!isMobile && "justify-center"} items-center gap-5`}>
+                {isMobile && (<i className={`${tab.icon} text-lg`}></i>)}
+                <p>{tab.label}</p>
+              </div>
             </button>
           ))}
         </div>

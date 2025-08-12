@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "../../img/logo_header.png";
 
 const NavBar = () => {
@@ -78,27 +79,27 @@ const NavBar = () => {
           menuOpen ? "block" : "hidden"
         } absolute top-full justify-end items-start right-0 mt-2 bg-white shadow-md rounded-md w-48 origin-top-right flex-col flex z-20 sm:static sm:w-auto sm:mt-0 sm:bg-transparent sm:shadow-none sm:rounded-none sm:flex-row sm:relative`}
       >
-        <a
-          href="#"
+        <Link
+          to="/AboutUs"
           className="w-full text-end hover:text-blue-600 list-font whitespace-nowrap p-3 border-b sm:border-none border-gray-200 last:border-b-0"
           onClick={() => setMenuOpen(false)}
         >
           درباره ما
-        </a>
-        <a
-          href="#"
+        </Link>
+        <Link
+          to="/Teachers"
           className="w-full text-end hover:text-blue-600 list-font whitespace-nowrap p-3 border-b sm:border-none border-gray-200 last:border-b-0"
           onClick={() => setMenuOpen(false)}
         >
-          اساتید
-        </a>
-        <a
-          href="#"
+          مدرسین
+        </Link>
+        <Link
+          to="/CoursesPage"
           className="w-full text-end hover:text-blue-600 list-font whitespace-nowrap p-3 border-b sm:border-none border-gray-200 last:border-b-0"
           onClick={() => setMenuOpen(false)}
         >
           دوره‌های آموزشی
-        </a>
+        </Link>
       </nav>
     </header>
   );

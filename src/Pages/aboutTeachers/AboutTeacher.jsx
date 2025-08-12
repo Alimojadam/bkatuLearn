@@ -6,6 +6,11 @@ const AboutTeacher = () => {
     const { id } = useParams();
     const teacher = teachers.find(c => c.id === parseInt(id));
     var num=0;
+    const navigate = useNavigate()
+
+    const handleSetNavigate=(Id)=>{
+        navigate(`/CoursPage/${Id}`)
+    }
 
     if (!teacher) {
         return <p>معلم مورد نظر پیدا نشد</p>;  // نمایش پیام در صورت عدم یافتن معلم
@@ -46,8 +51,8 @@ const AboutTeacher = () => {
                             <ul className="flex flex-col gap-5 w-[90%]" >
                                 {teacher.courses.map(course => (
                                     num++,
-                                    <li dir="rtl" key={course.id} className="w-full bg-[snow] flex justify-start items-center mr-[5px] rounded-[5px] pr-[10px] py-[8px] border border-[#3073c1] sm:border-none text-[#3073c1] text-[18px] cursor-pointer">
-                                        <Link to={`/CoursPage/${course.id}`} className="w-full h-full flex justify-start items-center"> {num} - {course.title} </Link>
+                                    <li dir="rtl" onClick={() => handleSetNavigate(course.id)} key={course.id} className="w-full bg-[snow] flex justify-start items-center mr-[5px] rounded-[5px] pr-[10px] py-[8px] border border-[#3073c1] sm:border-none text-[#3073c1] text-[18px] cursor-pointer hover:scale-105 hover:shadow-md transition-all duration-300 transform">
+                                        <p className="w-full h-full flex justify-start items-center"> {num} - {course.title} </p>
                                     </li>
                                 ))}
                             </ul>
