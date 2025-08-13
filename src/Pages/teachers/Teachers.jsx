@@ -1,5 +1,4 @@
 import NavbarCourses from "../coursesPage/NavbarCourses";
-import TeacherCard from "./teacherCard";
 import pattern from "../img/pattern.png"
 
 import { teachers } from "./TeacherInfo";

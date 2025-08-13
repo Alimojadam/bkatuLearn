@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useUser } from "../coursesContext";
 import ChangePassword from "./ChangePassword";
 import EditProfile from "./EditProfile";
@@ -14,6 +14,7 @@ const UserAccount = () => {
   const [isActive, setIsActive] = useState(1);
   const [fadeClass, setFadeClass] = useState("opacity-0 translate-y-4");
   const [logout, setLogout] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setFadeClass("opacity-0 translate-y-4");
@@ -25,7 +26,7 @@ const UserAccount = () => {
   }, [isActive]);
 
   if (!user || logout) {
-    return <Navigate to="/LoginPage" replace />;
+    return <Navigate to="/" replace />;
   }
 
   const userType = user.type;
@@ -38,15 +39,18 @@ const UserAccount = () => {
     ...(userType === "User"
       ? [{ id: 5, title: "درخواست تدریس", icon: "fas fa-chalkboard-teacher" }]
       : [{ id: 6, title: "ورود به پنل تدریس", icon: "fas fa-door-open" }]),
-    { id: 7, title: "خروج از حساب کاربری", icon: "fas fa-sign-out-alt" },
+    { id: 7, title: "خروج از داشبورد", icon: "fas fa-power-off" },
+    { id: 8, title: "خروج از حساب کاربری", icon: "fas fa-sign-out-alt" },
   ];
 
   const handleIsActive = (id) => {
-    if (id === 7) {
-      localStorage.removeItem("user");
+    if (id === 8) {
+      // localStorage.removeItem("user");
       setUser(null);
       setLogout(true);
-    } else {
+    }else if(id===7){
+      navigate("/CoursesPage")
+    }else {
       setIsActive(id);
     }
     toggleMenu();

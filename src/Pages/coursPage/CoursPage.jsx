@@ -16,6 +16,28 @@ const CoursPage = () => {
   const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [newPrice, setNewPrice] = useState(course.price);
 
+    // const [courses, setCourses] = useState([]); // برای ذخیره دوره‌ها
+    // const [loading, setLoading] = useState(true); // برای نمایش وضعیت بارگذاری
+    // const [error, setError] = useState(null); // برای ذخیره خطاها
+
+//     // درخواست برای دریافت داده‌ها
+//   useEffect(() => {
+//     // درخواست برای دریافت دوره‌ها
+//     const fetchCourses = async () => {
+//       try {
+//         const courseResponse = await axios.get('https://your-api-url.com/api/courses');
+//         setCourses(courseResponse.data); // ذخیره داده‌ها در وضعیت
+//       } catch (error) {
+//         setError('خطا در بارگذاری دوره‌ها');
+//       }
+//     };
+
+//     // اجرای درخواست‌ها
+
+//     fetchUsers();
+//     setLoading(false); // وضعیت بارگذاری را به false تغییر می‌دهیم
+//   }, []); // با بارگذاری کامپوننت اینبار اجرا می‌شود
+
   const [activeTab, setActiveTab] = useState(() => {
     if (window.innerWidth < 640) {
       return "Syllabus";

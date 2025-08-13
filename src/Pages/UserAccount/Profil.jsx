@@ -13,7 +13,7 @@ const Profil=()=>{
     return(
         <div className="relative flex flex-col justify-start items-end gap-20 mt-[7vh] w-full w-[90%] sm:w-[60%] sm:h-[85vh] bg-transparent border border-2 border-[#3073c1] rounded-[10px] shadow-xl">
             <div className="absolute flex flex-col gap-3 w-[150px] h-[150px] rounded-[50%] left-1/2 -translate-x-1/2 top-[-11vh]">
-                <img src={userIMG} alt="" className="w-[150px] h-[150px] rounded-[50%]" />
+                <img src={user.profileImg} alt="" className="w-[150px] h-[150px] rounded-[50%]" />
                 <p className="text-center text-[#3073c1] text-[20px]">{user.name}</p>
             </div>
             <div className="mr-[20px] mt-[160px] pb-5">

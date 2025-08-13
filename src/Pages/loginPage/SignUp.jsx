@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './Login.css';
+import { UserInformation } from "../../Information/User";
 import axios from "axios"
 
 
 
 
-const Login=()=>{
+const SignUp=()=>{
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -44,35 +45,97 @@ const Login=()=>{
         setStudentNumber(e.target.value)
     }
 
+
     const handleRegister = async (e) => {
         e.preventDefault();
-    
+
+        // بررسی اینکه تمام فیلدها پر شده‌اند
+        if (!UserID || !studentNumber || !Email || !password || !ConfirmPassword) {
+            setText("!لطفاً تمام فیلدها را پر کنید");
+            return;
+        }
+
+        // بررسی مطابقت رمز عبور و تکرار رمز عبور
         if (password !== ConfirmPassword) {
             setText("!رمز عبور و تکرار رمز عبور یکسان نیستند");
             return false;
         }
-    
+
+        // بررسی طول رمز عبور
         if (password.length < 8 || password.length > 12) {
             setText("!رمز عبور باید بین ۸ تا ۱۲ کاراکتر باشد");
             return false;
         }
-    
+
+        // ایجاد یک کاربر جدید با داده‌های وارد شده
+        const newUser = {
+            id: Date.now(),
+            name: UserID,
+            studentNumber,
+            type: "User",
+            profileImg: "",
+            email: Email,
+            password,
+            study: "",
+            university: "",
+            aboutMe: "",
+            aboutTeacher: "",
+            corsesId: [],
+        };
+
         try {
-            await axios.post('https://bingo-web-pump-lm.trycloudflare.com/api/register', {
-                UserID,
-                password,
-                Email,
-                studentNumber,
-            });
-            setText("");
-            return true;
+            // ابتدا کاربران را از localStorage می‌خوانیم
+            let usersFromLocalStorage = JSON.parse(localStorage.getItem('UserInformation')) || [];
+
+            // ترکیب کاربران از localStorage و کاربران پیش‌تعریف شده در UserInformation
+            let allUsers = [...usersFromLocalStorage, ...UserInformation];
+
+            // بررسی وجود کاربر با شماره دانشجویی مشابه در تمامی کاربران
+            const userExists = allUsers.some(user => user.studentNumber === studentNumber);
+            if (userExists) {
+                setText("!این شماره دانشجویی قبلاً ثبت شده است");
+                return false;
+            }
+
+            // بررسی وجود کاربر با ایمیل مشابه در تمامی کاربران
+            const userEmail = allUsers.some(user => user.email === Email);
+            if (userEmail) {
+                setText("!این ایمیل قبلاً ثبت شده است");
+                return false;
+            }
+
+            // ارسال اطلاعات کاربر جدید سمت بکند و دریافت توکن
+            
+            // const response = await axios.post('http://your-backend-url/api/users', newUser);
+            // if (response.status === 200) {
+            //     const { token } = response.data;
+                
+            //     // ذخیره توکن در localStorage برای احراز هویت در درخواست‌های بعدی
+            //     localStorage.setItem('authToken', token);
+            
+
+                // افزودن کاربر جدید به لیست کاربران
+                allUsers.push(newUser);
+
+                // ذخیره‌سازی لیست کاربران به روز شده در localStorage
+                localStorage.setItem('UserInformation', JSON.stringify(allUsers));
+                
+
+                setText("ثبت‌نام با موفقیت انجام شد"); 
+                return true;
+            // } 
         } catch (err) {
             setText("!خطا در ارسال اطلاعات");
             return false;
         }
     };
+
+    
+    
+    
     
     const handleSignUP=async(e)=>{
+        e.preventDefault();
         const isSuccess = await handleRegister(e);
         if (isSuccess) {
             navigate('/loginPage');
@@ -145,4 +208,4 @@ const Login=()=>{
         </div>
     );
 };
-export default Login;
+export default SignUp;
