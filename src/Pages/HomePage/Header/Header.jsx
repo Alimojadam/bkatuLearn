@@ -2,12 +2,14 @@ import khatam from '../../img/khatam.png'
 import menu from '../../img/menu icon.png'
 import NavBar from './NavBar'
 import SetStudentImg from './SetStudentImg'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
+import { useUser } from '../../coursesContext';
 
 
 const Header=()=>{
     const navigate = useNavigate();
+    const {user} =useUser()
       
     const handleClick = (e) => {
         e.preventDefault(); // جلوگیری از رفرش شدن صفحه
@@ -32,11 +34,11 @@ const Header=()=>{
 
             <section>
                 <section className="header-icon flex gap-10 relative">
-                    <a href="#" className="">
-                    <i class="fa-solid fa-user icon user"></i>
-                    </a>
+                    <Link to={`${user ? "/UserAccount":"/loginPage"}`} className="">
+                        <i class="fa-solid fa-user icon user"></i>
+                    </Link>
                     <a href="#" className="icon menu">
-                    <img src={menu} alt="" />
+                        <img src={menu} alt="" />
                     </a>
                 </section>
             </section>

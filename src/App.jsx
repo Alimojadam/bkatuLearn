@@ -12,7 +12,7 @@ import AboutUs from "./Pages/aboutUs/AboutUs";
 import UserAccount from "./Pages/UserAccount/UserAccount";
 import TeacherHomePage from "./TeacherPages/TeacherHomePage/TeacherHomePage";
 import EditeCours from "./TeacherPages/TeacherHomePage/EditeCours";
-import AdminPanel from "./AdminPanel/AdminPanel";
+import AdminPanel from "./AdminPanel/AdminHomePage/AdminHomePage";
 
 function AppRoutes() {
   const { user } = useUser();

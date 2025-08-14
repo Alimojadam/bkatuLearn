@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { textContext } from './context';
 import { teachers } from '../../teachers/TeacherInfo';
 import { Link } from 'react-router-dom';
@@ -7,8 +7,16 @@ const IntroductionOfTeachers=()=>{
 
     const {bgColor}=useContext(textContext);
 
+    const [isMobile, setIsMobile] = useState(false)
 
-      
+    useEffect(() => {
+        if (window.innerWidth < 640) {
+            setIsMobile(true);
+        }else {
+            setIsMobile(false);
+        }  
+    });
+    
 
 
     return(
@@ -16,7 +24,7 @@ const IntroductionOfTeachers=()=>{
             <div className=" mt-[30px] sm:mt-[50px] sm:ml-[50px] z-10">
                 <ul dir='rtl' className=" relative grid justify-center items-center gap-15 sm:gap-5 grid-cols-2 sm:grid-cols-3">
                     
-                    {teachers.slice(0,6).map((teacher,index)=>(
+                    {teachers.slice(0,(isMobile ? 4 : 6) ).map((teacher,index)=>(
 
                         <li key={index} className="relative teachers-box">
                             <svg viewBox="0 0 300 200" className="absolute top-[-18px] svg">

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import '../coursesPage/CoursesPage.css';
 import NavbarCourses from './NavbarCourses';
-import { useSearch } from '../../Pages/coursesContext';
+import { useSearch, useUser } from '../../Pages/coursesContext';
 import { Link, useNavigate } from 'react-router-dom';
 import pattern from "../img/pattern.png"
 import { cards } from '../coursPage/CardsInfo';
@@ -12,9 +12,14 @@ import Footer from '../aboutUs/Footer';
 
 const CoursesPage=()=>{
 
+    const [cardsinfo, setCardsinfo] = useState(cards);
     const [activeIndex, setActiveIndex] = useState(0);
     const [selectedType, setSelectedType] = useState("All");
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const {user}=useUser();
+    const isAdmin = user && user.type === "Admin";
+    const [showModal, setShowModal] = useState(false);
+    const [courseToDeleteId, setCourseToDeleteId] = useState(null);
 
     // const [courses, setCourses] = useState([]); // برای ذخیره دوره‌ها
     // const [users, setUsers] = useState([]); // برای ذخیره اطلاعات کاربران
@@ -61,7 +66,7 @@ const CoursesPage=()=>{
       const { searchTerm } = useSearch("");
     
       
-      const rows = Math.ceil((cards.length / 3)+1);
+      const rows = Math.ceil((cardsinfo.length / 3)+1);
       
       
       const filterBar = [
@@ -74,7 +79,7 @@ const CoursesPage=()=>{
       ];
       
         
-        const filteredCards = cards.filter(card => {
+        const filteredCards = cardsinfo.filter(card => {
             const matchesSearch = card.title.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesType = selectedType === "All" || card.type === selectedType;
 
@@ -94,6 +99,20 @@ const CoursesPage=()=>{
         const toggleMenu = () => {
             setIsMenuOpen(!isMenuOpen);
         };
+        const handleDeleteCourse = () => {
+            if (courseToDeleteId != null) {
+                setCardsinfo(prev => prev.filter(c => c.id !== courseToDeleteId));
+                setCourseToDeleteId(null);
+                setShowModal(false);
+            }
+        };
+    
+        const confirmDeleteCourse = (card) => {
+            setCourseToDeleteId(card.id);
+            setShowModal(true);
+        };
+    
+        const selectedCourse = cardsinfo.find(c => c.id === courseToDeleteId);
     return(
         <div className="relative w-full pb-[40px] sm:pb-0 bg-[#eef3f9] min-h-screen">
 
@@ -209,7 +228,16 @@ const CoursesPage=()=>{
                                 <p className="text-[15px] font-[1]">مدرس: {getTeacherName(card.teacherId)}</p>
                                 <div className="flex justify-between items-center">
                                 <p className="text-[#3073c1] font-semibold ">{card.price}</p>
-                                <Link to={`/CoursPage/${card.id}`} className="bg-[#3073c1] text-[snow] py-[3px] px-[10px] rounded-[3px]">مشاهده</Link>
+                                <div className="flex justify-center items-center gap-5">
+                                        {isAdmin && (
+                                            <i
+                                                onClick={() => confirmDeleteCourse(card)}
+                                                title='حذف دوره'
+                                                className='fas fa-trash text-red-500 text-[18px] cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-xl'
+                                            ></i>
+                                        )}
+                                        <Link to={`/CoursPage/${card.id}`} className="bg-[#3073c1] text-[snow] py-[3px] px-[10px] rounded-[3px]">مشاهده</Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -223,6 +251,41 @@ const CoursesPage=()=>{
                 <div className="w-[90%] md:w-[80%] border-b-2 border-[#3073c1]"></div>
                 <div className="w-full bg-transparent mb-0 pb-0">
                     <Footer/>
+                </div>
+            </div>
+
+            {/* مدال حذف */}
+            <div
+                className={`fixed inset-0 flex justify-center items-center z-50 
+                            bg-black/40 backdrop-blur-sm transition-opacity duration-300
+                            ${showModal ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+            >
+                <div
+                    dir='rtl'
+                    className={`bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md
+                                transform transition-all duration-300
+                                ${showModal ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}
+                >
+                    <h2 className="text-lg font-bold mb-4">آیا مطمئن هستید؟</h2>
+                    {selectedCourse && (
+                        <p className="mb-4">
+                            دوره {selectedCourse.title} از {getTeacherName(selectedCourse.teacherId)} به طور دائمی حذف خواهد شد.
+                        </p>
+                    )}
+                    <div className="flex justify-end gap-4">
+                        <button
+                            onClick={() => { setShowModal(false); setCourseToDeleteId(null); }}
+                            className="px-4 py-2 bg-gray-300 rounded cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-xl"
+                        >
+                            لغو
+                        </button>
+                        <button
+                            onClick={handleDeleteCourse}
+                            className="px-4 py-2 bg-red-500 text-white rounded cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-xl"
+                        >
+                            حذف
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

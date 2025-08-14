@@ -30,6 +30,7 @@ const Syllabus = (props) => {
     course,
     onPlayVideo,
     isTeacherOwner,
+    isAdmin,
     onAddEpisode,
     onAddSection,
     onDeleteSection,
@@ -232,7 +233,7 @@ const Syllabus = (props) => {
                     )
                 }
 
-                {isTeacherOwner && (
+                {(isTeacherOwner || isAdmin) && (
                   <>
                     {/* آیکون حذف */}
                     <i
@@ -371,7 +372,7 @@ const Syllabus = (props) => {
                       )
                     }
 
-                    {isTeacherOwner && (
+                    {(isTeacherOwner || isAdmin) && (
                       <div dir="rtl" className="relative flex gap-5">
                         {/* دکمه حذف */}
                         {!(confirmDeleteEpisode.sectionIndex === index && confirmDeleteEpisode.episodeIndex === subIndex) && (
