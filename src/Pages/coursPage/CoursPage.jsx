@@ -109,7 +109,8 @@ const CoursPage = () => {
   };
   
   const isTeacherOwner = user?.id === course.teacherId;
-  const isAdmin = user && user.type === "Admin";
+  const isAdmin = user?.type?.toLowerCase() === "admin";
+
 
   const handleDeleteSection = (sectionIndex) => {
     const newSyllabus = [...course.syllabus];
@@ -260,6 +261,7 @@ const CoursPage = () => {
             <Syllabus
               syllabus={course.syllabus}
               course={course}
+              isAdmin={isAdmin}
               onPlayVideo={playVideo}
               isTeacherOwner={isTeacherOwner}
               onAddSection={handleAddSection}
