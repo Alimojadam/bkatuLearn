@@ -12,7 +12,6 @@ const CardsTeachers=(props)=>{
 
     const isAdmin = user && user.type === "Admin";
 
-    // فیلتر کردن مدرسین بر اساس نوع
     const {
         filteredTeachers,
         handleDeleteTeacher,
@@ -22,15 +21,6 @@ const CardsTeachers=(props)=>{
         setTeacherToConvert,
         handleConvertToUser,
     }=props
-
-    // const handleDleteTheacher=(teacher)=>{
-    //     teacher.type="User"
-    // }
-
-
-    // const {
-    //     filteredTeacher,
-    // }=props
 
     return(
         <div className="w-full flex justify-center items-center sm:transition-all sm:duration-700 sm:ease-in-out">
@@ -68,7 +58,9 @@ const CardsTeachers=(props)=>{
 
                 ))}
             </ul>
-            {/* Modal تایید */}
+
+            
+            {/* Modal */}
             {showModal && teacherToConvert && (
                <div
                className={`fixed inset-0 flex justify-center items-center z-50 
