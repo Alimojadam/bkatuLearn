@@ -20,11 +20,12 @@ const CardCourses=(props)=>{
 
 
     return(
-        <div className={`w-full min-h-screen sm:transition-all sm:duration-700 mx-5 sm:ml-0 sm:ease-in-out grid grid-dir justify-center items-start grid-cols-1 
+        <div className={`w-full min-h-screen sm:transition-all sm:duration-700 sm:ease-in-out grid grid-dir justify-center items-start grid-cols-1 
+                        ${isAdmin ? "mx-5 sm:mx-0" : "mx-0"}
                         ${isAdmin || isMenuOpen ? "sm:grid-cols-2" : "sm:grid-cols-3"}
                         ${isMenuOpen ? "sm:w-[95%]" : "sm:w-[100%]"} gap-6 `}>
                     {filteredCards.length === 0 ? (
-                        <p className="text-center text-[#3073c1] text-[25px] w-full mt-[20px]">هیچ دوره‌ای یافت نشد</p>
+                        <p className="text-center text-[#3073c1] text-[25px] w-[350px] mt-[20px]">هیچ دوره‌ای یافت نشد</p>
                     ) : (
                         filteredCards.map((card) => (
                         <div dir='rtl' key={card.id} className="w-[350px] flex flex-col gap-[5px] p-1 bg-[snow] rounded-[10px] mt-[20px]">

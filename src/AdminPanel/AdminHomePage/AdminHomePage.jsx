@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../Pages/coursesContext";
 import Admin from "../../Pages/img/userIMG.jpg";
 import CoursesManagement from "../CoursesManagement/CoursesManagement";
+import TeachersManagement from "../TeachersManagement/TeachersManagement";
 
 
 const AdminPanel = () => {
@@ -51,15 +52,15 @@ const AdminPanel = () => {
         </button>
       )}
 
-      <div className="w-full flex flex-row-reverse justify-between gap-10 h-full bg-[#eef3f9] overflow-hidden">
+      <div className="w-full relative flex flex-row-reverse justify-between gap-10 h-full bg-[#eef3f9] overflow-hidden">
         {/* Sidebar */}
         <div
-          className={`
+          className={` fixed
             top-0 right-0 h-full bg-[#1E3A8A] flex flex-col gap-4 pb-5
             w-[85%]
             transform transition-transform duration-300 ease-in-out
             ${isOpen ? "translate-x-0" : "translate-x-full"}
-            sm:static sm:translate-x-0 sm:w-[30%]
+            sm:static sm:translate-x-0 sm:w-[30%] overflow-y-auto
             z-40
           `}
         >
@@ -146,8 +147,9 @@ const AdminPanel = () => {
         </div>
 
         {/* Content Area */}
-        <div className="w-0 sm:w-[70%] flex justify-start items-start bg-[#eef3f9] transition-all duration-300">
+        <div className="w-full sm:w-[70%] flex justify-center items-start bg-[#eef3f9] transition-all duration-300">
           {activeItem==="courses" && <CoursesManagement/>}
+          {activeItem==="teachers" && <TeachersManagement/>}
         </div>
       </div>
     </>
