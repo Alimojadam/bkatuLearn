@@ -15,6 +15,7 @@ export const UserInformation=[
      aboutMe : "",
      aboutTeacher : "",
      corsesId : [],
+     myRequests:[],
     },
 //     {
 //      id: 2,
@@ -99,6 +100,7 @@ export const UserInformation=[
      aboutMe : "",
      aboutTeacher : "",
      corsesId : [],
+     myRequests:[],
     },
     {
      id: 8,
@@ -113,6 +115,11 @@ export const UserInformation=[
      aboutMe : "!سلام من",
      aboutTeacher : "",
      corsesId : [],
+     myRequests:[
+        { RequestsId: 1, title: "آموزش React", status: "pending" },
+        { RequestsId: 2, title: "دوره طراحی وب", status: "approved" },
+        { RequestsId: 3, title: "آموزش فیگما", status: "rejected" },
+     ],
     },
     {
      id: 9,
@@ -127,6 +134,7 @@ export const UserInformation=[
      aboutMe : "",
      aboutTeacher : "",
      corsesId : [],
+     myRequests:[],
     },
 //     {
 //         id: 100,

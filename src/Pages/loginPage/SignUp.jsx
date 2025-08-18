@@ -81,6 +81,7 @@ const SignUp=()=>{
             aboutMe: "",
             aboutTeacher: "",
             corsesId: [],
+            myRequests:[],
         };
 
         try {
