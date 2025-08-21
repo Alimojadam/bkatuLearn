@@ -4,7 +4,7 @@ import { useUser } from "../../Pages/coursesContext";
 
 
 const RequestsComponent = () => {
-  const {user}=useUser();
+  const { user } = useUser();
   const Requests = user?.myRequests || [];
   
     // const Requests=[

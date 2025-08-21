@@ -5,6 +5,7 @@ import Admin from "../../Pages/img/userIMG.jpg";
 import CoursesManagement from "../CoursesManagement/CoursesManagement";
 import Requests from "../Requests/Requests";
 import TeachersManagement from "../TeachersManagement/TeachersManagement";
+import UsersManagement from "../UsersManagement/UsersManagement";
 
 
 const AdminPanel = () => {
@@ -148,6 +149,7 @@ const AdminPanel = () => {
           {activeItem==="courses" && <CoursesManagement/>}
           {activeItem==="teachers" && <TeachersManagement/>}
           {activeItem==="requests" && <Requests/>}
+          {activeItem==="users" && <UsersManagement/>}
         </div>
       </div>
     </>
