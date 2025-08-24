@@ -3,14 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../Pages/coursesContext";
 import Admin from "../../Pages/img/userIMG.jpg";
 import CoursesManagement from "../CoursesManagement/CoursesManagement";
+import Profil from "../Profile/Profil";
 import Requests from "../Requests/Requests";
 import TeachersManagement from "../TeachersManagement/TeachersManagement";
 import UsersManagement from "../UsersManagement/UsersManagement";
+import VideosManagement from "../VideosManagement/VideosManagement";
 
 
 const AdminPanel = () => {
 
-  const{setUser}=useUser();
+  const{user,setUser}=useUser();
   const navigate = useNavigate();
 
   const NavList = [
@@ -20,9 +22,6 @@ const AdminPanel = () => {
     { id: "requests", label: "درخواست‌ ها", iconClass: "fa-solid fa-inbox" },
     { id: "videos", label: "ویدیو ها", iconClass: "fa-solid fa-video" },
     { id: "messages", label: "پیام‌ها و گزارش‌ها", iconClass: "fa-solid fa-bell" },
-    { id: "analytics", label: "آمار و فعالیت کاربران", iconClass: "fa-solid fa-chart-line" },
-    { id: "storage", label: "فایل‌ها و فضای ذخیره‌سازی", iconClass: "fa-solid fa-database" },
-    { id: "security", label: "امنیت و کنترل دسترسی", iconClass: "fa-solid fa-shield-halved" },
     { id: "profile", label: "پروفایل و تنظیمات", iconClass: "fa-solid fa-user-cog" },
   ];
   
@@ -58,7 +57,7 @@ const AdminPanel = () => {
             w-[85%]
             transform transition-transform duration-300 ease-in-out
             ${isOpen ? "translate-x-0" : "translate-x-full"}
-            sm:static sm:translate-x-0 sm:w-[30%] overflow-y-auto
+             sm:translate-x-0 sm:w-[30%] overflow-y-auto
             z-40
           `}
         >
@@ -79,15 +78,15 @@ const AdminPanel = () => {
           <div className="mr-[40px] mt-[20px] flex flex-row-reverse justify-start items-center gap-8">
             <div className="w-[100px] h-[100px] rounded-[50%]">
               <img
-                src={Admin}
+                src={user.profileImg || Admin}
                 alt=""
                 className="w-full h-full rounded-full border border-[#eef3f9]"
               />
             </div>
             <div className="flex flex-col justify-center items-center gap-1">
-              <p className="text-[20px] text-[snow]">علی مجدم</p>
+              <p className="text-[20px] text-[snow]">{user.name}</p>
               <div className="border-b w-[120%] border-[#eef3f9]"></div>
-              <p className="text-[18px] text-[snow]">Admin</p>
+              <p className="text-[18px] text-[snow]">{user.studentNumber}</p>
             </div>
           </div>
 
@@ -145,11 +144,13 @@ const AdminPanel = () => {
         </div>
 
         {/* Content Area */}
-        <div className="w-full sm:w-[70%] flex justify-center items-start bg-[#eef3f9] transition-all duration-300">
+        <div className="w-full sm:mr-[32%] sm:w-[70%] flex justify-center items-start bg-[#eef3f9] transition-all duration-300">
           {activeItem==="courses" && <CoursesManagement/>}
           {activeItem==="teachers" && <TeachersManagement/>}
           {activeItem==="requests" && <Requests/>}
           {activeItem==="users" && <UsersManagement/>}
+          {activeItem==="profile" && <Profil/>}
+          {activeItem==="videos" && <VideosManagement/>}
         </div>
       </div>
     </>
