@@ -20,15 +20,15 @@ const CardCourses=(props)=>{
 
 
     return(
-        <div className={`w-full min-h-screen sm:transition-all sm:duration-700 sm:ease-in-out grid grid-dir justify-center items-start grid-cols-1 
+        <div className={`w-full min-h-screen sm:transition-all sm:duration-700 mt-[20px] sm:ease-in-out grid grid-dir justify-center items-start grid-cols-1 
                         ${isAdmin ? "mx-5 sm:mx-0" : "mx-0"}
                         ${isAdmin || isMenuOpen ? "sm:grid-cols-2" : "sm:grid-cols-3"}
-                        ${isMenuOpen ? "sm:w-[95%]" : "sm:w-[100%]"} gap-6 `}>
+                        ${isMenuOpen ? "sm:w-[95%]" : "sm:w-[100%]"} gap-5 `}>
                     {filteredCards.length === 0 ? (
                         <p className="text-center text-[#3073c1] text-[25px] w-[350px] mt-[20px]">هیچ دوره‌ای یافت نشد</p>
                     ) : (
                         filteredCards.map((card) => (
-                        <div dir='rtl' key={card.id} className="w-[350px] flex flex-col gap-[5px] p-1 bg-[snow] rounded-[10px] mt-[20px]">
+                        <div dir='rtl' key={card.id} className="w-[350px] flex flex-col gap-[5px] p-1 bg-[snow] rounded-[10px]">
                             <img src={card.image} alt={card.title} className="w-full h-40 object-cover rounded-[8px]" />
                             <div className="px-[8px] flex flex-col gap-[5px] p-1">
                                 <h3 className="text-[18px] text-[#222] font-bold mt-2 font-[1]">{card.title}</h3>
@@ -43,7 +43,7 @@ const CardCourses=(props)=>{
                                                 className='fas fa-trash text-red-500 text-[18px] cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-xl'
                                             ></i>
                                         )}
-                                        <Link to={`/CoursPage/${card.id}`} className="bg-[#3073c1] text-[snow] py-[3px] px-[10px] rounded-[3px]">مشاهده</Link>
+                                        <Link to={`/CoursPage/${card.id}`} className="bg-[#3073c1] text-[snow] py-[3px] px-[10px] rounded-[3px] transition-all duration-300 hover:scale-105 hover:shadow-md">مشاهده</Link>
                                     </div>
                                 </div>
                             </div>

@@ -75,7 +75,7 @@ const CommentsSection = () => {
         />
         <button
           onClick={handleAddComment}
-          className="mt-2 px-4 py-1 bg-[#3073c1] text-[snow] rounded-md cursor-pointer"
+          className="mt-2 px-4 py-1 bg-[#3073c1] text-[snow] rounded-md cursor-pointer "
         >
           ثبت
         </button>

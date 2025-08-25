@@ -190,7 +190,7 @@ const Syllabus = (props) => {
                       <>
                         <i
                           title="ویرایش فصل"
-                          className="fas fa-pencil text-[orange] cursor-pointer"
+                          className="fas fa-pencil text-[orange] cursor-pointer transition-all duration-300 hover:scale-115 hover:shadow-md"
                           onClick={() => {
                             setEditSectionIndex(index);
                             setEditSectionTitle(item.title);
@@ -238,7 +238,7 @@ const Syllabus = (props) => {
                     {/* آیکون حذف */}
                     <i
                       title="حذف فصل"
-                      className="fas fa-trash text-red-600 cursor-pointer"
+                      className="fas fa-trash text-red-600 cursor-pointer transition-all duration-300 hover:scale-115 hover:shadow-md"
                       onClick={() => setConfirmDeleteSectionIndex(index)}
                     ></i>
 
@@ -288,7 +288,7 @@ const Syllabus = (props) => {
                     <p className="text-[16px] text-[#3073c1]">{sub.subTitle}</p>
                     <div className="w-[15%] text-[16px] flex gap-[16px] items-center ml-[5px] text-[#3073c1]">
                       <i
-                        className="fas fa-play cursor-pointer"
+                        className="fas fa-play cursor-pointer transition-all duration-300 hover:scale-115 hover:shadow-md"
                         title='اجرا'
                         onClick={() => {
                           if (!sub.video) return;
@@ -306,7 +306,7 @@ const Syllabus = (props) => {
                           rel="noopener noreferrer"
                           title="دانلود جزوه"
                         >
-                          <i className="fas fa-paperclip cursor-pointer"></i>
+                          <i className="fas fa-paperclip cursor-pointer transition-all duration-300 hover:scale-115 hover:shadow-md"></i>
                         </a>
                       )}
 
@@ -314,7 +314,7 @@ const Syllabus = (props) => {
                       <>
                         <i
                           title="ویرایش"
-                          className="fas fa-pencil text-[orange] cursor-pointer"
+                          className="fas fa-pencil text-[orange] cursor-pointer transition-all duration-300 hover:scale-115 hover:shadow-md"
                           onClick={() => startEditEpisode(index, subIndex, sub)}
                         ></i>
 
@@ -378,7 +378,7 @@ const Syllabus = (props) => {
                         {!(confirmDeleteEpisode.sectionIndex === index && confirmDeleteEpisode.episodeIndex === subIndex) && (
                           <i
                             title="حذف قسمت"
-                            className="fas fa-trash text-red-600 cursor-pointer"
+                            className="fas fa-trash text-red-600 cursor-pointer transition-all duration-300 hover:scale-115 hover:shadow-md"
                             onClick={() => setConfirmDeleteEpisode({ sectionIndex: index, episodeIndex: subIndex })}
                           ></i>
                         )}

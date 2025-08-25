@@ -205,7 +205,7 @@ const CoursPage = () => {
                     isRegistered ? (
                       <p onClick={handleRegisterCourse} className="bg-transparent text-green-600 border border-[#3073c1] py-[3px] px-[10px] rounded-[3px] cursor-default">ثبت‌نام شده</p>
                     ) : (
-                      <p onClick={handleRegisterCourse} className="bg-[#3073c1] text-[snow] py-[3px] px-[20px] rounded-[3px] cursor-pointer">ثبت‌نام</p>
+                      <p onClick={handleRegisterCourse} className="bg-[#3073c1] text-[snow] py-[3px] px-[20px] rounded-[3px] cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-md">ثبت‌نام</p>
                     )
                   )
                 }

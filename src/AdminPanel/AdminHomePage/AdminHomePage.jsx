@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../Pages/coursesContext";
 import Admin from "../../Pages/img/userIMG.jpg";
 import CoursesManagement from "../CoursesManagement/CoursesManagement";
+import MessagesPage from "../MessagesPage/MessagesPage";
 import Profil from "../Profile/Profil";
 import Requests from "../Requests/Requests";
 import TeachersManagement from "../TeachersManagement/TeachersManagement";
@@ -150,6 +151,7 @@ const AdminPanel = () => {
           {activeItem==="requests" && <Requests/>}
           {activeItem==="users" && <UsersManagement/>}
           {activeItem==="profile" && <Profil/>}
+          {activeItem==="messages" && <MessagesPage/>}
           {activeItem==="videos" && <VideosManagement/>}
         </div>
       </div>
