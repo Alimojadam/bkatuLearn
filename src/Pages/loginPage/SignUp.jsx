@@ -23,11 +23,11 @@ const SignUp=()=>{
 
 
 
-    const [UserID,setUserID]=useState('');
+    const [name,setName]=useState('');
     const [password,setPassword]=useState('');
     const [ConfirmPassword,setConfirmPassword]=useState('')
-    const [Email, setEmail]=useState('');
-    const [studentNumber, setStudentNumber]=useState('');
+    const [email, setEmail]=useState('');
+    const [UserID, setUserID]=useState('');
 
     const handlePass = (e)=>{
         setPassword(e.target.value)
@@ -35,14 +35,14 @@ const SignUp=()=>{
     const handleConfirmPassword=(e)=>{
         setConfirmPassword(e.target.value)
     }
-    const handleUserID = (e)=>{
-        setUserID(e.target.value)
+    const handleSetName = (e)=>{
+        setName(e.target.value)
     }
     const handleEmail = (e)=>{
         setEmail(e.target.value)
     }
-    const handleStudentNumber=(e)=>{
-        setStudentNumber(e.target.value)
+    const handleSetUserID=(e)=>{
+        setUserID(e.target.value)
     }
 
 
@@ -50,7 +50,7 @@ const SignUp=()=>{
         e.preventDefault();
 
         // بررسی اینکه تمام فیلدها پر شده‌اند
-        if (!UserID || !studentNumber || !Email || !password || !ConfirmPassword) {
+        if (!name || !UserID || !email || !password || !ConfirmPassword) {
             setText("!لطفاً تمام فیلدها را پر کنید");
             return;
         }
@@ -67,68 +67,29 @@ const SignUp=()=>{
             return false;
         }
 
-        // ایجاد یک کاربر جدید با داده‌های وارد شده
-        const newUser = {
-            id: Date.now(),
-            name: UserID,
-            studentNumber,
-            type: "User",
-            profileImg: "",
-            email: Email,
-            password,
-            study: "",
-            university: "",
-            aboutMe: "",
-            aboutTeacher: "",
-            corsesId: [],
-            myRequests:[],
-        };
-
         try {
-            // ابتدا کاربران را از localStorage می‌خوانیم
-            let usersFromLocalStorage = JSON.parse(localStorage.getItem('UserInformation')) || [];
-
-            // ترکیب کاربران از localStorage و کاربران پیش‌تعریف شده در UserInformation
-            let allUsers = [...usersFromLocalStorage, ...UserInformation];
-
-            // بررسی وجود کاربر با شماره دانشجویی مشابه در تمامی کاربران
-            const userExists = allUsers.some(user => user.studentNumber === studentNumber);
-            if (userExists) {
-                setText("!این شماره دانشجویی قبلاً ثبت شده است");
-                return false;
-            }
-
-            // بررسی وجود کاربر با ایمیل مشابه در تمامی کاربران
-            const userEmail = allUsers.some(user => user.email === Email);
-            if (userEmail) {
-                setText("!این ایمیل قبلاً ثبت شده است");
-                return false;
-            }
-
-            // ارسال اطلاعات کاربر جدید سمت بکند و دریافت توکن
             
-            // const response = await axios.post('http://your-backend-url/api/users', newUser);
-            // if (response.status === 200) {
-            //     const { token } = response.data;
-                
-            //     // ذخیره توکن در localStorage برای احراز هویت در درخواست‌های بعدی
-            //     localStorage.setItem('authToken', token);
-            
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/user/register`, {name,UserID,password,email});
 
-                // افزودن کاربر جدید به لیست کاربران
-                allUsers.push(newUser);
+            if (response.status === 200 || response.status === 201) {
+                const { token } = response.data;
 
-                // ذخیره‌سازی لیست کاربران به روز شده در localStorage
-                localStorage.setItem('UserInformation', JSON.stringify(allUsers));
+        
                 
 
                 setText("ثبت‌نام با موفقیت انجام شد"); 
                 return true;
-            // } 
+
+            } 
         } catch (err) {
-            setText("!خطا در ارسال اطلاعات");
+            if (err.response && err.response.status === 409) {
+                setText("این شماره دانشجویی تکراری است");
+            } else {
+                setText("!خطا در ارسال اطلاعات");
+            }
             return false;
         }
+        
     };
 
     
@@ -155,13 +116,13 @@ const SignUp=()=>{
             <div className="login bg-[#eef3f9] sm:bg-[#3073c1] w-[100%] sm:w-[40%] h-[100%] flex justify-center items-center flex-col">
                 <div dir="rtl" className="form flex flex-col mb-4 justify-center items-start gap-[10px]">
                     <label htmlFor="username" className="text-[#3073c1] sm:text-[snow] mr-[10px]">نام و نام خانوادگی</label>
-                    <input type="text" className="w-[90%] h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" id="username" value={UserID} onChange={handleUserID}/>
+                    <input type="text" className="w-[90%] h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" id="username" value={name} onChange={handleSetName}/>
 
                     <label htmlFor="studentNumber" className="text-[#3073c1] sm:text-[snow] mr-[10px]">شماره دانشجویی</label>
-                    <input type="text" className="w-[90%] h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" id="studentNumber" value={studentNumber} onChange={handleStudentNumber}/>
+                    <input type="text" className="w-[90%] h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" id="studentNumber" value={UserID} onChange={handleSetUserID}/>
 
                     <label htmlFor="email" className="text-[#3073c1] sm:text-[snow] mr-[10px]">ایمیل</label>
-                    <input type="email" className="w-[90%] h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" id="email" value={Email} onChange={handleEmail}/>
+                    <input type="email" className="w-[90%] h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" id="email" value={email} onChange={handleEmail}/>
 
                     <label htmlFor="password" className="text-[#3073c1] sm:text-[snow] mr-[10px]">رمز عبور</label>
                     <div className="relative w-[90%]">

@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserInformation } from "../../Information/User";
@@ -18,70 +19,43 @@ const Login = () => {
     navigate('/SignUpPage');
   };
 
-  const SignInhandleClick = (e) => {
+  const SignInhandleClick = async (e) => {
     e.preventDefault();
-
-    const trimmedStudentNumber = studentNumber.trim(); // حذف فضای اضافی
-    const trimmedPassword = password.trim(); // حذف فضای اضافی
-
-    // ارسال اطلاعات به سرور برای احراز هویت
-    // try {
-    //   const response = await axios.post('http://your-backend-url/api/login', {
-    //     studentNumber: trimmedStudentNumber,
-    //     password: trimmedPassword,
-    // });
-    // if (response.status === 200) {
-    //     const { token, user } = response.data;  // فرض بر این است که سرور توکن و اطلاعات کاربر را ارسال می‌کند
-        
-    //     // ذخیره توکن در localStorage برای استفاده در درخواست‌های بعدی
-    //     localStorage.setItem('authToken', token);
-
-    //     // ذخیره اطلاعات کاربر در وضعیت global یا localStorage
-    //     localStorage.setItem('user', JSON.stringify(user));
-
-    //     // ذخیره کاربر فعلی در context
-    //     setUser(user);
-
-    //     // هدایت کاربر به صفحه مربوطه
-    //     if (user.type === "Admin") {
-    //       navigate("/AdminPanel");
-    //     } else {
-    //       navigate("/CoursesPage");
-    //     }
-    //   } else {
-    //     setError("!شماره دانشجویی یا رمز عبور اشتباه است");
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    //   setError("!خطا در ورود به سیستم");
-    // }
-
-    // خواندن داده‌های کاربران از localStorage
-    const users = JSON.parse(localStorage.getItem('UserInformation')) || [];
-    let allUsers = [...users, ...UserInformation];
-
-
-    // پیدا کردن کاربر با استفاده از شماره دانشجویی و رمز عبور
-    const foundUser = allUsers.find(
-      (user) =>
-        user.studentNumber.toString() === trimmedStudentNumber &&
-        user.password.toString() === trimmedPassword
-    );
-
-    if (foundUser) {
-      setUser(foundUser); // ذخیره کاربر فعلی در context (برای دسترسی در دیگر صفحات)
-      localStorage.setItem("user", JSON.stringify(foundUser)); // ذخیره کاربر واقعی در localStorage
-
-      // هدایت کاربر به صفحه مربوطه
-      if (foundUser.type === "Admin") {
-        navigate("/AdminPanel");
-      } else {
-        navigate("/CoursesPage");
+  
+    const trimmedStudentNumber = studentNumber.trim();
+    const trimmedPassword = password.trim();
+  
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/user/login`,
+        { UserID: trimmedStudentNumber, password: trimmedPassword },
+        { withCredentials: true } // حتما باید اضافه شود
+      );
+  
+      if (response.status === 200 || response.status === 201) {
+        const { user } = response.data;  // بک‌اند توکن را در کوکی می‌دهد، اینجا فقط کاربر می‌آید
+  
+        // ذخیره اطلاعات کاربر (نه توکن)
+        setUser(user);
+        localStorage.setItem("user", JSON.stringify(user));
+  
+        // هدایت کاربر
+        if (user.type === "Admin") {
+          navigate("/AdminPanel");
+        } else {
+          navigate("/CoursesPage");
+        }
       }
-    } else {
-      setError("!شماره دانشجویی یا رمز عبور اشتباه است");
+    } catch (err) {
+      console.error(err);
+      if (err.response && err.response.status === 401) {
+        setError("!شماره دانشجویی یا رمز عبور اشتباه است");
+      } else {
+        setError("!خطا در ورود به سیستم");
+      }
     }
   };
+  
 
   return (
     <div className="loginPage pb-4 gap-8 sm:pb-0 sm:gap-0 bg-[#eef3f9] flex flex-col sm:flex-row justify-center items-center w-[100%] min-h-screen sm:h-[100vh]">
