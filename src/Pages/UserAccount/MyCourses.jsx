@@ -11,7 +11,9 @@ const MyCourses=()=>{
 
     const {user} = useUser();
 
-    const registeredCourses = cards.filter((card) => user.corsesId.includes(card.id));
+    const registeredCourses = cards.filter((card) => 
+    user?.coursesId?.includes(card.id)
+    );
     return(
         <div className="flex justify-center sm:mr-[50px] items-center w-full sm:w-[90%] bg-transparent">
             <ul className="w-full justify-start items-start flex flex-col gap-5 pb-[15px]">

@@ -10,6 +10,7 @@ const Profil=()=>{
 
 
     const {user}=useUser();
+    console.log(user)
     return(
         <div className="relative flex flex-col justify-start items-end gap-20 mt-[7vh] w-full w-[90%] sm:w-[60%] sm:h-[85vh] bg-transparent border border-2 border-[#3073c1] rounded-[10px] shadow-xl">
             <div className="absolute flex flex-col gap-3 w-[150px] h-[150px] rounded-[50%] left-1/2 -translate-x-1/2 top-[-11vh]">

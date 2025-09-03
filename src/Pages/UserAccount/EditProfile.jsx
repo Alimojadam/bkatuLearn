@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { UserInformation } from "../../Information/User";
 import { useUser } from "../coursesContext";
@@ -39,7 +40,7 @@ const EditProfile = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.fullName.trim() || !formData.email.trim()) {
@@ -48,22 +49,51 @@ const EditProfile = () => {
       return;
     }
 
-    const updatedUser = {
-      ...user,
-      name: formData.fullName,
-      email: formData.email,
-      studentNumber: formData.studentNumber,
-      study: formData.study,
-      university: formData.university,
-      aboutMe: formData.aboutMe,
-      profileImg: profileImage,
-    };
+    try{
 
-    setUser(updatedUser);
-    localStorage.setItem("user", JSON.stringify(updatedUser));
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/user/edit`,
+        { 
+          profile : profileImage,
+          name : formData.fullName ,
+          email : formData.email, 
+          study : formData.study, 
+          university : formData.university, 
+          aboutMe : formData.aboutMe,
+        },
+        { withCredentials: true } // حتما باید اضافه شود
+      );
+      if (response.status === 200 || response.status === 201) {
 
-    setSuccessMessage("اطلاعات با موفقیت ذخیره شدند ✅");
-    setTimeout(() => setSuccessMessage(""), 3000);
+        setUser(prevUser => ({
+          ...prevUser,
+          ...response.data.user,
+        }));
+        setSuccessMessage("اطلاعات با موفقیت ذخیره شدند ✅");
+        setTimeout(() => setSuccessMessage(""), 3000);
+      }
+
+    }catch(err){
+      if (err.response && err.response.status === 401) {
+        setSuccessMessage("خطا در ارسال اظلاعات")
+        setTimeout(() => setSuccessMessage(""), 3000);
+      }
+    }
+
+    // const updatedUser = {
+    //   ...user,
+    //   name: formData.fullName,
+    //   email: formData.email,
+    //   studentNumber: formData.studentNumber,
+    //   study: formData.study,
+    //   university: formData.university,
+    //   aboutMe: formData.aboutMe,
+    //   profileImg: profileImage,
+    // };
+
+    // setUser(updatedUser);
+
+    
   };
 
   return (
@@ -87,6 +117,7 @@ const EditProfile = () => {
           <input
             type="file"
             accept="image/*"
+            name="profileImage"
             onChange={handleImageChange}
             className="bg-transparent border border-[#3073c1] rounded-lg px-4 py-2 cursor-pointer text-[#444]"
           />

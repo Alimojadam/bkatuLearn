@@ -1,9 +1,10 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserInformation } from "../../Information/User";
-import { useUser } from "../coursesContext";  // فرض بر این است که از این hook برای ذخیره‌سازی داده‌های کاربر استفاده می‌کنید.
+import { user,useUser } from "../coursesContext";  // فرض بر این است که از این hook برای ذخیره‌سازی داده‌های کاربر استفاده می‌کنید.
 import './Login.css';
+import Userimg from "../img/userIMG.jpg"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,42 +13,53 @@ const Login = () => {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const { setUser } = useUser();  // فرض بر این است که این hook کاربر فعلی را در context ذخیره می‌کند.
+  const { user, setUser } = useUser(); // ✅ درست
+ // فرض بر این است که این hook کاربر فعلی را در context ذخیره می‌کند.
+  
 
   const SignUphandleClick = (e) => {
     e.preventDefault();
     navigate('/SignUpPage');
   };
 
+  useEffect(() => {
+    if (user?.type) {
+      navigate(user.type === "Admin" ? "/AdminPanel" : "/CoursesPage");
+    }
+  }, [user, navigate]);
+
   const SignInhandleClick = async (e) => {
     e.preventDefault();
   
     const trimmedStudentNumber = studentNumber.trim();
     const trimmedPassword = password.trim();
-  
+    
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/user/login`,
         { UserID: trimmedStudentNumber, password: trimmedPassword },
         { withCredentials: true } // حتما باید اضافه شود
       );
-  
+      console.log(response);
+
+      
       if (response.status === 200 || response.status === 201) {
-        const { user } = response.data;  // بک‌اند توکن را در کوکی می‌دهد، اینجا فقط کاربر می‌آید
-  
-        // ذخیره اطلاعات کاربر (نه توکن)
-        setUser(user);
-        localStorage.setItem("user", JSON.stringify(user));
-  
-        // هدایت کاربر
-        if (user.type === "Admin") {
-          navigate("/AdminPanel");
-        } else {
-          navigate("/CoursesPage");
-        }
+        const newUser=response.data.user
+
+        setUser({
+          ...user,
+          coursesId : newUser.CourseId,
+          name: newUser.name,
+          studentNumber : newUser.UserID ,
+          type : newUser.role,
+          profileImg : newUser.profilePic || Userimg,
+          email : newUser.email,
+        });
+        console.log(user)
+          
+        
       }
     } catch (err) {
-      console.error(err);
       if (err.response && err.response.status === 401) {
         setError("!شماره دانشجویی یا رمز عبور اشتباه است");
       } else {

@@ -86,6 +86,7 @@ const SignUp=()=>{
                 setText("این شماره دانشجویی تکراری است");
             } else {
                 setText("!خطا در ارسال اطلاعات");
+                console.log(err.message)
             }
             return false;
         }
