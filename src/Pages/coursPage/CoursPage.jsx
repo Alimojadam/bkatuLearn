@@ -7,36 +7,68 @@ import Syllabus from './Syllabus';
 import TeacherInfoPage from './TeacherInfoPage';
 import { cards } from './CardsInfo';
 import { useUser } from '../coursesContext';
+import axios from 'axios';
 
 const CoursPage = () => {
   const { id } = useParams();
-  const [course, setCourse] = useState(cards.find(c => c.id === parseInt(id)));
   const { user, setUser } = useUser();
-
+  
+  const [course, setCourse] = useState({});
   const [isEditingPrice, setIsEditingPrice] = useState(false);
-  const [newPrice, setNewPrice] = useState(course.price);
+  const [newPrice, setNewPrice] = useState(""); // مقدار اولیه رشته خالی
 
-    // const [courses, setCourses] = useState([]); // برای ذخیره دوره‌ها
-    // const [loading, setLoading] = useState(true); // برای نمایش وضعیت بارگذاری
-    // const [error, setError] = useState(null); // برای ذخیره خطاها
 
-//     // درخواست برای دریافت داده‌ها
-//   useEffect(() => {
-//     // درخواست برای دریافت دوره‌ها
-//     const fetchCourses = async () => {
-//       try {
-//         const courseResponse = await axios.get('https://your-api-url.com/api/courses');
-//         setCourses(courseResponse.data); // ذخیره داده‌ها در وضعیت
-//       } catch (error) {
-//         setError('خطا در بارگذاری دوره‌ها');
-//       }
-//     };
+  const [check , setCheck]=useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/user/is-saved`,
+          {courseId : id},
+          { withCredentials: true } // اگر کوکی یا توکن نیاز است
+        );
+        console.log(response.data.saved)
+        if (response.status === 200) {
+          setCheck(response.data.saved)
+        }
+      } catch (error) {
+        console.error("خطا در دریافت اطلاعات:", error);
+      }
+    };
 
-//     // اجرای درخواست‌ها
+    fetchData();
+  }, []);
 
-//     fetchUsers();
-//     setLoading(false); // وضعیت بارگذاری را به false تغییر می‌دهیم
-//   }, []); // با بارگذاری کامپوننت اینبار اجرا می‌شود
+
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/course/${id}`);
+        if (response.status === 200) {
+          const c = response.data; // حالا response.data یک آبجکت واحد است
+          setCourse({
+            id: c._id,
+            teacherId : c.publisher._id,
+            title: c.title || "بدون عنوان",
+            price: c.price ? c.price : "رایگان!",
+            teacher: c.publisher?.name || "ناشناس",
+            syllabus: c.seasons || [],
+            aboutCourse: c.description || "",
+            aboutTeacherCourse: c.publisher.aboutTeacher || "",
+            video: c.video || "",
+          });
+          setNewPrice(c.price || "");
+        }
+      } catch (err) {
+        console.error("Error fetching course:", err);
+      }
+    };
+    fetchCourse();
+  }, [id]);
+  
+  
+  
 
   const [activeTab, setActiveTab] = useState(() => {
     if (window.innerWidth < 640) {
@@ -54,9 +86,16 @@ const CoursPage = () => {
 
   }
 
-  const [isRegistered, setIsRegistered] = useState(() => {
-    return user?.corsesId.includes(course?.id);
-  });
+  const [isRegistered, setIsRegistered] = useState(null);
+  useEffect(() => {
+    if (user?.coursesId && course?.id) {
+      setIsRegistered(user.coursesId.includes(course.id));
+    } else {
+      setIsRegistered(false); // اگر داده آماده نیست، false نمایش بده
+    }
+  }, [user, course]);
+  
+  
 
   const [videoSrc, setVideoSrc] = useState(course ? course.video : '');
 
@@ -80,21 +119,35 @@ const CoursPage = () => {
     return <div>دوره پیدا نشد!</div>;
   }
 
-  const handleRegisterCourse = () => {
-    if (!user || user.type === "Admin" ) {
+  const handleRegisterCourse = async () => {
+    if (!user || user.type === "Admin") {
       alert("ابتدا وارد حساب کاربری خود شوید");
       return;
     }
   
-    if (!user.corsesId.includes(course.id)) {
-      const updatedUser = {
-        ...user,
-        corsesId: [...user.corsesId, course.id],
-      };
-      setUser(updatedUser);
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      setIsRegistered(true);
-      alert("ثبت‌نام با موفقیت انجام شد!");
+    const userCourses = Array.isArray(user.corsesId) ? user.corsesId : [];
+  
+    if (!userCourses.includes(course.id)) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/user/save/${course.id}`,
+          { },
+          {withCredentials: true},
+        );
+        if (response.status === 200) {
+          const updatedUser = {
+            ...user,
+            corsesId: [...userCourses, course.id],
+          };
+          setUser(updatedUser); // کانتکست به‌روز بشه
+          setIsRegistered(true);
+          alert("ثبت‌نام با موفقیت انجام شد!");
+        }
+      } catch (err) {
+        console.error("خطا در ثبت‌نام:", err);
+        console.log(err.response)
+        alert("مشکلی پیش آمد. دوباره تلاش کنید.");
+      }
     } else {
       alert("شما قبلاً ثبت‌نام کرده‌اید.");
     }
@@ -141,9 +194,9 @@ const CoursPage = () => {
             مرورگر شما ویدیو را پشتیبانی نمی‌کند.
           </video>
           <div className="w-[70%] sm:w-[50%] flex flex-col gap-[10px] items-end ">
-            <p className="text-right font-[1] text-[#111]">موضوع : {course.title}</p>
+            <p dir='rtl' className="text-right font-[1] text-[#111]">موضوع : {course.title}</p>
             <div className="w-full flex flex-col sm:flex-row-reverse justify-between items-end gap-1 sm:gap-0 sm:items-center">
-              <p className="text-right text-[#111]">قیمت : <span className='text-[#3073c1]'>{course.price} تومان</span></p>
+              <p dir='rtl' className="text-right text-[#111]">قیمت : <span className='text-[#3073c1]'>{course.price}</span></p>
               {isTeacherOwner && (
                 isEditingPrice ? (
                   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-all duration-300 ease-in-out">
@@ -193,7 +246,7 @@ const CoursPage = () => {
 
             </div>
             <div className={`flex ${isTeacherOwner? "flex-col" : "flex-row-reverse"} sm:flex-row-reverse justify-between items-end sm:items-center gap-1 sm:gap-0 w-[100%]`}>
-              <p className="font-[1]  text-[#111]">مدرس : {course.teacher}</p>
+              <p dir='rtl' className="font-[1]  text-[#111]">مدرس : {course.teacher}</p>
               <div className=" flex justify-center items-center">
                 {isTeacherOwner ?
                   (
@@ -202,8 +255,8 @@ const CoursPage = () => {
                   )
                   :
                   (
-                    isRegistered ? (
-                      <p onClick={handleRegisterCourse} className="bg-transparent text-green-600 border border-[#3073c1] py-[3px] px-[10px] rounded-[3px] cursor-default">ثبت‌نام شده</p>
+                    check ? (
+                      <p onClick={handleRegisterCourse} className="bg-transparent text-green-600 border border-green-600 py-[3px] px-[10px] rounded-[3px] cursor-default">ثبت‌نام شده</p>
                     ) : (
                       <p onClick={handleRegisterCourse} className="bg-[#3073c1] text-[snow] py-[3px] px-[20px] rounded-[3px] cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-md">ثبت‌نام</p>
                     )

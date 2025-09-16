@@ -1,7 +1,8 @@
 // EditCoursePage.jsx
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { cards } from '../../Pages/coursPage/CardsInfo';
+// import { cards } from '../../Pages/coursPage/CardsInfo';
 
 const EditeCourse = () => {
   const { id } = useParams();
@@ -10,14 +11,37 @@ const EditeCourse = () => {
 
   const [course, setCourse] = useState(null);
 
+  // useEffect(() => {
+  //   const foundCourse = cards.find(c => c.id === courseId);
+  //   if (foundCourse) {
+  //     setCourse(foundCourse);
+  //   } else {
+  //     alert("دوره پیدا نشد!");
+  //   }
+  // }, [courseId]);
   useEffect(() => {
-    const foundCourse = cards.find(c => c.id === courseId);
-    if (foundCourse) {
-      setCourse(foundCourse);
-    } else {
-      alert("دوره پیدا نشد!");
-    }
-  }, [courseId]);
+    const fetchCourse = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/course/${id}`);
+        if (response.status === 200) {
+          const c = response.data; // حالا response.data یک آبجکت واحد است
+          setCourse({
+            id: c._id,
+            title: c.title || "بدون عنوان",
+            price: c.price ? c.price : "رایگان!",
+            teacher: c.publisher?.name || "ناشناس",
+            syllabus: c.seasons || [],
+            aboutCourse: c.description || "",
+            aboutTeacherCourse: c.publisher.aboutTeacher || "",
+            video: c.video || "",
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching course:", err);
+      }
+    };
+    fetchCourse();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

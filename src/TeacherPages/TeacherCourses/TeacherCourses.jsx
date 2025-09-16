@@ -11,10 +11,42 @@ const TeacherCourses=()=>{
     const teacherCourses = teachers.find((t) => t.id === teacher.id)?.courses || [];
 
     const navigate=useNavigate();
-  const handleNavigate=(e,id)=>{
-    e.preventDefault();
-    navigate(`/CoursPage/${id}`)
-  }
+    const handleNavigate=(e,id)=>{
+      e.preventDefault();
+      navigate(`/CoursPage/${id}`)
+    }
+
+    // useEffect(() => {
+    //   const fetchCards = async () => {
+    //     try {
+    //   const response = await axios.get(
+    //     `${process.env.REACT_APP_API_URL}/api/user/teacher/${id}/courses`
+    //   );
+    //   if (response.status === 200 || response.status === 201) {
+    //       console.log(response.data)
+    //     const teacher = response.data.teacher;
+    //     const courses = response.data.courses;
+    //     setTeacher({
+    //       image: teacher.profilePic,
+    //       NomberOFactiveCourses: courses.length,
+    //       name: teacher.name,
+    //       study: teacher.study,
+    //       university: teacher.university,
+    //       aboutTeacher: teacher.aboutTeacher,
+    //       courses: teacher.courses || [],
+    //       id: teacher._id,
+    //     });
+    //     setCourses(
+    //       courses
+    //     )
+    //   }
+    //     } catch (err) {
+    //       console.error("Error fetching courses:", err);
+    //     }
+    //   };
+  
+    //   fetchCards();
+    // },[]);
 
     return(
         <div className="w-full sm:w-5xl bg-[snow] rounded-3xl shadow-lg p-4 sm:p-6 mt-4">

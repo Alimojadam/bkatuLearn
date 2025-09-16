@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useUser } from "../coursesContext";
@@ -43,11 +44,27 @@ const UserAccount = () => {
     { id: 8, title: "خروج از حساب کاربری", icon: "fas fa-sign-out-alt" },
   ];
 
-  const handleIsActive = (id) => {
+  const handleIsActive = async (id) => {
     if (id === 8) {
-      // localStorage.removeItem("user");
-      setUser(null);
-      setLogout(true);
+
+
+      try{
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/user/logout`,
+          {},
+          { withCredentials: true } // حتما باید اضافه شود
+        );
+        if (response.status === 200 || response.status === 201) {
+          setUser(null);
+          setLogout(true);
+          navigate("/")
+
+        }
+      }catch (err) {
+        console.error("Logout error:", err);
+      }
+      
+
     }else if(id===7){
       navigate("/CoursesPage")
     }else {

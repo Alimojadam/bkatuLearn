@@ -1,5 +1,5 @@
 import { useUser } from "../../Pages/coursesContext";
-import student from "../../Pages/img/userIMG.jpg";
+import student from "../../Pages/img/userIMG.png";
 
 
 

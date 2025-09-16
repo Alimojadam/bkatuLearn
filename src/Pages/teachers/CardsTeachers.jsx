@@ -1,4 +1,5 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../coursesContext";
 import { teachers } from "./TeacherInfo";
@@ -11,6 +12,38 @@ const CardsTeachers=(props)=>{
     const {user}=useUser()
 
     const isAdmin = user && user.type === "Admin";
+
+    
+        
+
+    
+  const [teachers, setTeachers] = useState([]);
+
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/user/all-teachers`
+        );
+        if (response.status === 200 || response.status === 201) {
+          setTeachers(
+            response.data.teachers.map((t) => ({
+              image: t.profilePic,
+              NomberOFactiveCourses: t.coursesCount,
+              name: t.name,
+              study: t.study,
+              id: t._id,
+              activeCourses: t.activeCourses || "", // اگر بک‌اند داره
+            }))
+          );
+        }
+      } catch (err) {
+        console.error("Error fetching teachers:", err);
+      }
+    };
+
+    fetchTeachers();
+  }, []);
 
     const {
         filteredTeachers,
@@ -27,7 +60,7 @@ const CardsTeachers=(props)=>{
             <ul dir="rtl" className={`w-full grid grid-cols-1 justify-center items-center gap-10 sm:gap-[50px]
                 ${isAdmin ? "sm:grid-cols-2 pt-[120px] sm:pt-0 mr-5" : "sm:grid-cols-3 pt-[120px]"}
             `}>
-                {filteredTeachers.map((teacher,index)=>(
+                {teachers.map((teacher,index)=>(
 
                 <li key={index} className="flex w-[350px] h-[150px] bg-[#eef3f9] justify-between items-center relative border border-[#3073c1] rounded-r-[20px]">
                     <div className=" flex item-center justify-center items-center h-full border-l border-[#3073c1] w-[30%]">
@@ -50,7 +83,7 @@ const CardsTeachers=(props)=>{
                         </div>
                         <div className="w-full border-b border-[#3073c1]"></div>
                         <div className="w-full h-[35%] flex justify-between items-center px-3 ">
-                            <pre dir='rtl' className="text-start text-[#3073c1] text-[15px] flex">{teacher.NomberOFactiveCourses} {teacher.activeCourses}</pre>
+                            <pre dir='rtl' className="text-start text-[#3073c1] text-[15px] flex">دوره فعال : {teacher.NomberOFactiveCourses} </pre>
                             <Link to={`/AboutTeacher/${teacher.id}`} className="text-[#3073c1] border border-[#3073c1] px-2 rounded-[5px] text-end text-[17px] pb-[2px] hover:scale-105 hover:shadow-md transition-all duration-300 transform">مشاهده</Link>
                         </div>
                     </div>

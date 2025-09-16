@@ -5,20 +5,39 @@ import { useUser } from "../coursesContext";
 
 const EditProfile = () => {
 
-  let {user,setUser}=useUser();
-
+  const { user, setUser, loading } = useUser();
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        fullName: user.name,
+        email: user.email,
+        studentNumber: user.studentNumber,
+        study: user.study,
+        university: user.university,
+        aboutMe: user.aboutMe,
+      });
+      setProfileImage(user.profileImg || "");
+      setPreviewImage(user.profileImg || "");
+    }
+  }, [user]);
+  
   const [formData, setFormData] = useState({
-    fullName: user.name,
-    email: user.email,
-    studentNumber: user.studentNumber,
-    study: user.study || "",
-    university: user.university || "",
-    aboutMe: user.aboutMe || "",
+    fullName: "",
+    email: "",
+    studentNumber: "",
+    study: "",
+    university: "",
+    aboutMe: "",
   });
-
-  const [profileImage, setProfileImage] = useState(user.profileImg || "");
-  const [previewImage, setPreviewImage] = useState(user.profileImg || "");
+  const [profileImage, setProfileImage] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
+  
+  
+  
   const [successMessage, setSuccessMessage] = useState("");
+    if (loading) return <p>در حال بارگذاری...</p>;
+    if (!user) return <p>کاربری یافت نشد!</p>;
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,70 +50,84 @@ const EditProfile = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result);
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setPreviewImage(URL.createObjectURL(file)); // پیش‌نمایش
+      setProfileImage(file); // فایل واقعی برای ارسال
     }
   };
-
+  
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!formData.fullName.trim() || !formData.email.trim()) {
       setSuccessMessage("همه فیلدهای الزامی باید پر شوند ❌");
       setTimeout(() => setSuccessMessage(""), 3000);
       return;
     }
-
-    try{
-
-      const response = await axios.put(
+  
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.fullName);
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("study", formData.study || "");
+      formDataToSend.append("university", formData.university || "");
+      formDataToSend.append("aboutMe", formData.aboutMe || "");
+  
+      if (profileImage && profileImage instanceof File) {
+        formDataToSend.append("profile", profileImage);
+      }
+  
+      const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/user/edit`,
-        { 
-          profile : profileImage,
-          name : formData.fullName ,
-          email : formData.email, 
-          study : formData.study, 
-          university : formData.university, 
-          aboutMe : formData.aboutMe,
-        },
-        { withCredentials: true } // حتما باید اضافه شود
+        formDataToSend,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true
+        }
       );
-      if (response.status === 200 || response.status === 201) {
-
-        setUser(prevUser => ({
-          ...prevUser,
-          ...response.data.user,
-        }));
-        setSuccessMessage("اطلاعات با موفقیت ذخیره شدند ✅");
-        setTimeout(() => setSuccessMessage(""), 3000);
-      }
-
-    }catch(err){
-      if (err.response && err.response.status === 401) {
-        setSuccessMessage("خطا در ارسال اظلاعات")
-        setTimeout(() => setSuccessMessage(""), 3000);
-      }
+  
+      const updatedUser = {
+        ...user,
+        name: formData.fullName,
+        email: formData.email,
+        study: formData.study,
+        university: formData.university,
+        aboutMe: formData.aboutMe,
+        profileImg: profileImage instanceof File ? URL.createObjectURL(profileImage) : user.profileImg,
+      };
+      
+      setUser(updatedUser);
+      
+      // فرم هم با همین داده آپدیت بشه:
+      setFormData({
+        fullName: updatedUser.name,
+        email: updatedUser.email,
+        studentNumber: updatedUser.studentNumber,
+        study: updatedUser.study,
+        university: updatedUser.university,
+        aboutMe: updatedUser.aboutMe,
+      });
+      
+      setPreviewImage(updatedUser.profileImg);
+      
+      
+      setPreviewImage(response.data.user?.profile || "");
+      setProfileImage(null); // اگه میخوای فایل انتخاب شده پاک بشه
+      
+      
+      setSuccessMessage("اطلاعات با موفقیت ذخیره شدند ✅");
+      setTimeout(() => setSuccessMessage(""), 3000);
+  
+    } catch (err) {
+      console.error("Axios Error:", err.response?.data || err);
+      setSuccessMessage("خطا در ارسال اطلاعات ❌");
+      setTimeout(() => setSuccessMessage(""), 3000);
     }
-
-    // const updatedUser = {
-    //   ...user,
-    //   name: formData.fullName,
-    //   email: formData.email,
-    //   studentNumber: formData.studentNumber,
-    //   study: formData.study,
-    //   university: formData.university,
-    //   aboutMe: formData.aboutMe,
-    //   profileImg: profileImage,
-    // };
-
-    // setUser(updatedUser);
-
-    
   };
+  
+  
+  
+  
 
   return (
     <div

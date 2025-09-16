@@ -2,19 +2,19 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserInformation } from "../../Information/User";
-import { user,useUser } from "../coursesContext";  // فرض بر این است که از این hook برای ذخیره‌سازی داده‌های کاربر استفاده می‌کنید.
+// import { user,useUser } from "../coursesContext";  // فرض بر این است که از این hook برای ذخیره‌سازی داده‌های کاربر استفاده می‌کنید.
 import './Login.css';
 import Userimg from "../img/userIMG.jpg"
+import { useUser } from "../coursesContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [studentNumber, setStudentNumber] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
   const navigate = useNavigate();
-  const { user, setUser } = useUser(); // ✅ درست
- // فرض بر این است که این hook کاربر فعلی را در context ذخیره می‌کند.
+  const { user, setUser } = useUser();
+
   
 
   const SignUphandleClick = (e) => {
@@ -22,11 +22,6 @@ const Login = () => {
     navigate('/SignUpPage');
   };
 
-  useEffect(() => {
-    if (user?.type) {
-      navigate(user.type === "Admin" ? "/AdminPanel" : "/CoursesPage");
-    }
-  }, [user, navigate]);
 
   const SignInhandleClick = async (e) => {
     e.preventDefault();
@@ -42,19 +37,28 @@ const Login = () => {
       );
       console.log(response);
 
+
+
       
       if (response.status === 200 || response.status === 201) {
-        const newUser=response.data.user
+        const userData = {
+          coursesId: response.data.user.CourseId,
+          name: response.data.user.name,
+          studentNumber: response.data.user.UserID,
+          type: response.data.user.role,
+          profileImg: response.data.user.profilePic || Userimg,
+          email: response.data.user.email,
+          study: response.data.user.study,
+          university: response.data.user.university,
+          aboutMe: response.data.user.aboutMe,
+          reqToTeach : response.data.user.requestTeacher,
+        };
+      
+        setUser(userData);
+      
+        navigate(response.data.user.role === "Admin" ? "/AdminPanel" : "/CoursesPage");
+      
 
-        setUser({
-          ...user,
-          coursesId : newUser.CourseId,
-          name: newUser.name,
-          studentNumber : newUser.UserID ,
-          type : newUser.role,
-          profileImg : newUser.profilePic || Userimg,
-          email : newUser.email,
-        });
         console.log(user)
           
         

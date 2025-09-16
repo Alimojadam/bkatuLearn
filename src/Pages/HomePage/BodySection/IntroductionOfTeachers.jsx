@@ -1,7 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { textContext } from './context';
-import { teachers } from '../../teachers/TeacherInfo';
+// import { teachers } from '../../teachers/TeacherInfo';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import user from "../../img/png.png"
 
 const IntroductionOfTeachers=()=>{
 
@@ -16,6 +18,33 @@ const IntroductionOfTeachers=()=>{
             setIsMobile(false);
         }  
     });
+    const [teachers, setTeachers] = useState([]);
+
+    useEffect(() => {
+        const fetchTeachers = async () => {
+            try {
+                const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}/api/user/all-teachers`
+                );
+                if (response.status === 200 || response.status === 201) {
+                setTeachers(
+                    response.data.teachers.map((t) => ({
+                    image: t.profilePic,
+                    NomberOFactiveCourses: t.coursesCount,
+                    name: t.name,
+                    study: t.study,
+                    id: t._id,
+                    activeCourses: t.activeCourses || "", // اگر بک‌اند داره
+                    }))
+                );
+                }
+            } catch (err) {
+                console.error("Error fetching teachers:", err);
+            }
+        };
+
+        fetchTeachers();
+    }, []);
     
 
 
@@ -31,7 +60,7 @@ const IntroductionOfTeachers=()=>{
                             <path d="M0,100 C100,250 100,-20 300,50 L300,0 L0,0 Z100 path" stroke-linecap="round" fill={bgColor} />
                             </svg>
                             <div className="teacher-img flex item-center justify-center mt-[1px]">
-                            <img src={teacher.image} alt=""/>
+                            <img src={teacher.image || user} alt=""/>
                             </div>
                             <svg viewBox="0 0 290 200" className="absolute top-[84px] svg-img" fill="transparent">
                             <path d="M0,100 C100,250 100,-20 300,50 L300,0 ,0 Z100 " fill="transparent"   />
@@ -40,7 +69,7 @@ const IntroductionOfTeachers=()=>{
                             <div className="teacher-body flex flex-col justify-start items-start mr-[5px] mb-[5px] gap-[5px] px-[2px]">
                                 <h4 className="text-[#edd400] text-end text-[19px] mt-[5px] z-19">{teacher.name}</h4>
                                 <p className="text-end text-[15px] text-gray-200 text-justify leading-tight">{teacher.study}</p>
-                                <pre className="text-end text-[15px] text-gray-200 flex">{teacher.NomberOFactiveCourses} {teacher.activeCourses}</pre>
+                                <pre className="text-end text-[15px] text-gray-200 flex">دوره فعال : {teacher.NomberOFactiveCourses}</pre>
                                 <Link to={`/AboutTeacher/${teacher.id}`} className=" mr-[55%] text-start text-[17px] text-[snow] border-b border-[snow] pb-[2px]">مشاهده</Link>
                             </div>
                         </li>

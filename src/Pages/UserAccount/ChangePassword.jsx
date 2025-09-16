@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { UserInformation } from "../../Information/User";
 import { useUser } from "../coursesContext";
@@ -26,9 +27,8 @@ const ChangePassword = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
   
     if (
       !formData.currentPassword.trim() ||
@@ -38,12 +38,6 @@ const ChangePassword = () => {
       setMessage({ text: "لطفاً همه فیلدها را پر کنید ❌", type: "error" });
       return;
     }
-  
-    if (formData.currentPassword !== String(user.password)) {
-      setMessage({ text: "رمز فعلی نادرست است ❌", type: "error" });
-      return;
-    }
-  
     // ⬅️ بررسی طول رمز جدید
     if (formData.newPassword.length < 8 || formData.newPassword.length > 12) {
       setMessage({ text: "رمز عبور باید بین ۸ تا ۱۲ کاراکتر باشد ❌", type: "error" });
@@ -54,18 +48,23 @@ const ChangePassword = () => {
       setMessage({ text: "رمز جدید و تکرار آن مطابقت ندارند ❌", type: "error" });
       return;
     }
-  
-      // ذخیره در context (و احتمالا localStorage یا API)
-    const updatedUser = { ...user, password: Number(formData.newPassword) };
-    setUser(updatedUser);
-    localStorage.setItem("user", JSON.stringify(updatedUser)); 
-    setMessage({ text: "رمز عبور با موفقیت تغییر یافت ✅", type: "success" });
-  
-    setFormData({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
+    try{
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/user/change-password`,
+        { password: formData.currentPassword,
+          newPassword : formData.newPassword,
+        },
+        { withCredentials: true } // حتما باید اضافه شود
+      );
+      setMessage({ text: "رمز عبور با موفقیت تغییر یافت ✅", type: "success" });
+
+    }catch(err){
+      if (err.response.status==401) {
+        setMessage({ text: "رمز فعلی نادرست است ❌", type: "error" });
+        return;
+      }
+
+    }
   
     setTimeout(() => setMessage({ text: "", type: "" }), 3000);
   };

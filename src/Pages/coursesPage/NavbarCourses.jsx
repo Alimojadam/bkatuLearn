@@ -1,5 +1,5 @@
 import logo from '../img/logo_header.png';
-import userImg from '../img/userIMG.jpg';
+import userImg from '../img/userIMG.png';
 import '../coursesPage/CoursesPage.css';
 import { useState } from 'react';
 import { useSearch, useUser } from '../../Pages/coursesContext';
@@ -90,7 +90,7 @@ const NavbarCourses = () => {
             <p className="text-[snow] text-[17px]">داشبورد</p>
             <div className="w-[42px] h-[42px] rounded-[50%] bg-[snow] bg-cover bg-no-repeat">
               <img
-                src={userImg}
+                src={user.profileImg || userImg}
                 alt=""
                 className="w-full h-full object-cover rounded-[50%]"
               />

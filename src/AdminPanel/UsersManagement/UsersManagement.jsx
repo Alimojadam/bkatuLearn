@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { UserInformation } from "../../Information/User";
-import Admin from "../../Pages/img/userIMG.jpg";
+import Admin from "../../Pages/img/userIMG.png";
 import { Link } from "react-router-dom";
 import { useSearch } from "../../Pages/coursesContext";
 import logo from '../../Pages/img/logo_header.png';

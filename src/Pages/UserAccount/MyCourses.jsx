@@ -1,6 +1,8 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../coursesContext";
-import { cards } from "../coursPage/CardsInfo";
+// import { cards } from "../coursPage/CardsInfo";
 
 
 
@@ -9,15 +11,43 @@ import { cards } from "../coursPage/CardsInfo";
 
 const MyCourses=()=>{
 
-    const {user} = useUser();
+    // const {user} = useUser();
+    
 
-    const registeredCourses = cards.filter((card) => 
-    user?.coursesId?.includes(card.id)
-    );
+    const [savedCourseIds, setSavedCourseIds] = useState([]);
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+          try {
+            const response = await axios.get(
+              `${process.env.REACT_APP_API_URL}/api/user/course/saved`,
+              { withCredentials: true } // اگر کوکی یا session استفاده می‌کنید
+            );
+            console.log(response.data); // بررسی داده‌های دریافتی
+            if (response.status === 200 && response.data) {
+              setSavedCourseIds(
+                response.data.map(course => ({
+                  image: course.thumbnailURL,
+                  id: course._id,
+                  title: course.title,
+                  teacher: course.publisher.name,
+                }))
+              );
+            }
+          } catch (err) {
+            console.error("Error fetching course:", err);
+          }
+        };
+      
+        fetchCourses();
+      }, []);
+      
+
+    
     return(
         <div className="flex justify-center sm:mr-[50px] items-center w-full sm:w-[90%] bg-transparent">
             <ul className="w-full justify-start items-start flex flex-col gap-5 pb-[15px]">
-                {registeredCourses.map((card)=>(
+                {savedCourseIds.map((card)=>(
                     <li className="flex flex-row-reverse justify-end items-center w-full h-[140px] sm:h-[200px] border-2 border-[#3073c1] rounded-[10px]">
                         <div className="border-l-2 border-[#3073c1] h-full w-[42%] rounded-r-[10px]">
                             <img src={card.image} className="w-full h-full object-cover rounded-r-[8px]" alt="" />

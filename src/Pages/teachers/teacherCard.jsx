@@ -6,7 +6,7 @@ import { textContext } from '../HomePage/BodySection/context';
 
 
 
-const TeacherCard=({teachers})=>{
+const TeacherCard=()=>{
 
 
 
@@ -17,7 +17,36 @@ const TeacherCard=({teachers})=>{
     const aboutTeacherHandleClick = (e) => {
         e.preventDefault();
         aboutTeacher(`/AboutTeacher/${teachers.id}`);
+
     };
+    const [teachers, setTeachers] = useState([]);
+
+    useEffect(() => {
+        const fetchTeachers = async () => {
+            try {
+                const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}/api/user/all-teachers`
+                );
+                if (response.status === 200 || response.status === 201) {
+                setTeachers(
+                    response.data.teachers.map((t) => ({
+                    image: t.profilePic,
+                    NomberOFactiveCourses: t.coursesCount,
+                    name: t.name,
+                    study: t.study,
+                    id: t._id,
+                    activeCourses: t.activeCourses || "", // اگر بک‌اند داره
+                    }))
+                );
+                }
+            } catch (err) {
+                console.error("Error fetching teachers:", err);
+            }
+        };
+
+        fetchTeachers();
+    }, []);
+
 
     return(
         <>

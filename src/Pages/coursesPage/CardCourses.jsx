@@ -1,9 +1,40 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 
 
 
 const CardCourses=(props)=>{
+
+    const [Cards, setCards] = useState([]);
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/course?page=1`)
+
+        if (response.status === 200 || response.status === 201) {
+            console.log(response.data.courses)
+            setCards(
+                response.data.courses.map((t) => ({
+                  id: t._id,
+                  image: t.thumbnailURL,
+                  title: t.title,
+                  teacherId: t.publisher,
+                  teacherName : t.publisher.name,
+                  price: t.price ? t.price : "رایگان!" ,
+                }))
+              );
+              
+        }
+      } catch (err) {
+        console.error("Error fetching courses:", err);
+      }
+    };
+
+    fetchCards();
+  },[]);
 
     const {
         isMenuOpen,
@@ -24,15 +55,15 @@ const CardCourses=(props)=>{
                         ${isAdmin ? "mx-5 sm:mx-0" : "mx-0"}
                         ${isAdmin || isMenuOpen ? "sm:grid-cols-2" : "sm:grid-cols-3"}
                         ${isMenuOpen ? "sm:w-[95%]" : "sm:w-[100%]"} gap-5 `}>
-                    {filteredCards.length === 0 ? (
+                    {Cards.length === 0 ? (
                         <p className="text-center text-[#3073c1] text-[25px] w-[350px] mt-[20px]">هیچ دوره‌ای یافت نشد</p>
                     ) : (
-                        filteredCards.map((card) => (
+                        Cards.map((card) => (
                         <div dir='rtl' key={card.id} className="w-[350px] flex flex-col gap-[5px] p-1 bg-[snow] rounded-[10px]">
                             <img src={card.image} alt={card.title} className="w-full h-40 object-cover rounded-[8px]" />
                             <div className="px-[8px] flex flex-col gap-[5px] p-1">
                                 <h3 className="text-[18px] text-[#222] font-bold mt-2 font-[1]">{card.title}</h3>
-                                <p className="text-[15px] font-[1]">مدرس: {getTeacherName(card.teacherId)}</p>
+                                <p className="text-[15px] font-[1]">مدرس: {card.teacherName}</p>
                                 <div className="flex justify-between items-center">
                                 <p className="text-[#3073c1] font-semibold ">{card.price}</p>
                                 <div className="flex justify-center items-center gap-5">

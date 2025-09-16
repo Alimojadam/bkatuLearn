@@ -120,7 +120,7 @@ const Syllabus = (props) => {
   
 
   return (
-    <div className="min-h-screen overflow-hidden p-10 flex flex-col justify-center items-end text-right gap-[20px]">
+    <div className="min-h-screen overflow-hidden p-10 flex flex-col justify-start items-end text-right gap-[20px]">
       <h2 className="hidden sm:block text-[22px] text-[snow] font-bold mb-4 p-2 border-b border-[#eef3f9]">{course.title}</h2>
 
       {isTeacherOwner && (
@@ -173,7 +173,7 @@ const Syllabus = (props) => {
       <ul className="w-full sm:w-[95%] sm:pr-6 space-y-2 flex flex-col justify-center items-center sm:items-end gap-[15px]">
         {syllabus.map((item, index) => (
           <li
-            key={index}
+            key={item.id}
             className={`p-[5px] flex flex-col justify-center items-end border border-[#3073c1] sm:border-none w-full bg-[snow] rounded-[5px]
               transition-opacity duration-300 ease-in-out
               ${fadeDeleteSectionIndex === index ? 'opacity-0 max-h-0 overflow-hidden' : 'opacity-100'}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../Pages/coursesContext";
-import Admin from "../../Pages/img/userIMG.jpg";
+import Admin from "../../Pages/img/userIMG.png";
 import CoursesManagement from "../CoursesManagement/CoursesManagement";
 import MessagesPage from "../MessagesPage/MessagesPage";
 import Profil from "../Profile/Profil";

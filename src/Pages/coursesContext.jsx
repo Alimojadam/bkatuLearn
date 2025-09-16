@@ -1,5 +1,7 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import Userimg from "./img/userIMG.png"
+
 
 const SearchContext = createContext();
 
@@ -20,31 +22,41 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [newUser, setNewUser] = useState(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/user/me`,
+          { withCredentials: true }
+        );
 
-useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/user/me`, { withCredentials: true });
-      setNewUser(res.data);
-      setUser({
-        ...user,
-        coursesId: res.data.CourseId,
-        name: res.data.name,
-        studentNumber: res.data.UserID,
-        type: res.data.role,
-        profileImg: res.data.profilePic,
-        email: res.data.email,
-      });
-    } catch (err) {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-  fetchUser();
-}, []);
+        const u = response.data?.user;
 
+        if (u) {
+          setUser({
+            coursesId: u?.CourseId,
+            name: u?.name,
+            studentNumber: u?.UserID,
+            type: u?.role || "",
+            profileImg: u?.profilePic || Userimg,
+            email: u?.email,
+            study: u?.study,
+            university: u?.university,
+            aboutMe: u?.aboutMe,
+            reqToTeach : response.data.user.requestTeacher,
+          });
+        } else {
+          setUser(null);
+        }
+      } catch (err) {
+        console.error("fetchUser error:", err);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser, loading }}>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { UserInformation } from "../../Information/User";
-import Admin from "../../Pages/img/userIMG.jpg";
+import Admin from "../../Pages/img/userIMG.png";
 
 
 
