@@ -35,13 +35,13 @@ const Login = () => {
         { UserID: trimmedStudentNumber, password: trimmedPassword },
         { withCredentials: true } // حتما باید اضافه شود
       );
-      console.log(response);
 
 
 
       
       if (response.status === 200 || response.status === 201) {
         const userData = {
+          id : response.data.user._id,
           coursesId: response.data.user.CourseId,
           name: response.data.user.name,
           studentNumber: response.data.user.UserID,
@@ -51,6 +51,7 @@ const Login = () => {
           study: response.data.user.study,
           university: response.data.user.university,
           aboutMe: response.data.user.aboutMe,
+          aboutTeacher : response.data.user.aboutTeacher || "",
           reqToTeach : response.data.user.requestTeacher,
         };
       
@@ -58,8 +59,6 @@ const Login = () => {
       
         navigate(response.data.user.role === "Admin" ? "/AdminPanel" : "/CoursesPage");
       
-
-        console.log(user)
           
         
       }

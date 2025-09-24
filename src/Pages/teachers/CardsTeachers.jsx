@@ -118,7 +118,7 @@ const CardsTeachers=(props)=>{
                                 لغو
                             </button>
                             <button
-                                onClick={handleConvertToUser}
+                                onClick={handleConvertToUser(teacherToConvert.id)}
                                 className="px-4 py-2 bg-red-500 text-white rounded cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-xl"
                             >
                                 تایید

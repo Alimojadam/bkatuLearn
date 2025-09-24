@@ -91,7 +91,7 @@ const AboutTeacher = () => {
                             <ul className="flex flex-col gap-5 w-[90%]" >
                                 {courses.map(course => (
                                     num++,
-                                    <li dir="rtl" onClick={() => handleSetNavigate(course.id)} key={course.id} className="w-full bg-[snow] flex justify-start items-center mr-[5px] rounded-[5px] pr-[10px] py-[8px] border border-[#3073c1] sm:border-none text-[#3073c1] text-[18px] cursor-pointer hover:scale-105 hover:shadow-md transition-all duration-300 transform">
+                                    <li dir="rtl" onClick={() => handleSetNavigate(course._id)} key={course.id} className="w-full bg-[snow] flex justify-start items-center mr-[5px] rounded-[5px] pr-[10px] py-[8px] border border-[#3073c1] sm:border-none text-[#3073c1] text-[18px] cursor-pointer hover:scale-105 hover:shadow-md transition-all duration-300 transform">
                                         <p className="w-full h-full flex justify-start items-center"> {num} - {course.title} </p>
                                     </li>
                                 ))}

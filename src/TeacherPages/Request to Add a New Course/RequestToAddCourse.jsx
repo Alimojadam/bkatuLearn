@@ -1,76 +1,91 @@
-import React, { useEffect, useState } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 
 const RequestToAddCourse = () => {
   const [courseName, setCourseName] = useState("");
-  const [courseImage, setCourseImage] = useState(null);
-  const [introVideo, setIntroVideo] = useState(null);
-  const [teacherIntro, setTeacherIntro] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
-
+  const [courseImage, setCourseImage] = useState(null);
   const [errors, setErrors] = useState({});
-
   const [successMessage, setSuccessMessage] = useState("");
+  const imageInputRef = useRef(null);
+  const [introVideo, setIntroVideo] = useState(null);
   const [visible, setVisible] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const newErrors = {};
-
-    // اعتبارسنج
+  
+    // اعتبارسنجی معمول
     if (!courseName.trim()) newErrors.courseName = "نام دوره الزامی است.";
-    if (!introVideo) newErrors.introVideo = "ویدیوی معرفی دوره الزامی است.";
-    if (!teacherIntro.trim()) newErrors.teacherIntro = "لطفاً درباره خودتان توضیح دهید.";
     if (!courseDescription.trim()) newErrors.courseDescription = "توضیحات دوره الزامی است.";
-
+    if (!courseImage) newErrors.courseImage = "آپلود تصویر دوره الزامی است.";
+  
     setErrors(newErrors);
-
+  
     if (Object.keys(newErrors).length > 0) return;
+  
+    try {
+      // ارسال فایل‌ها مشابه کد پروفایل
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", courseName);
+      if (courseImage && courseImage instanceof File) {
+        formDataToSend.append("thumbnail", courseImage);
+      }
+      // if (introVideo && introVideo instanceof File) {
+      //   formDataToSend.append("introVideo", introVideo);
+      // }
+      // formDataToSend.append("teacherIntro", teacherIntro);
+      formDataToSend.append("description", courseDescription);
+  
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/course/create`,
+        formDataToSend,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
+      );
+  
+      if (response.status === 200 || response.status === 201) {
+        setSuccessMessage("دوره با موفقیت ایجاد شد ✅");
+        setVisible(true); // ← اضافه شد
+        setTimeout(() => setSuccessMessage(""), 3000);
 
-    const formData = new FormData();
-    formData.append("courseName", courseName);
-    if (courseImage) formData.append("courseImage", courseImage);
-    formData.append("introVideo", introVideo);
-    formData.append("teacherIntro", teacherIntro);
-    formData.append("courseDescription", courseDescription);
-
-    // console.log("ارسال شد:");
-    // for (let pair of formData.entries()) {
-    //   console.log(pair[0] + ": ", pair[1]);
-    // }
-
-    // نمایش پیام موفقیت و شروع انیمیشن fade-in
-    setSuccessMessage(
-      "درخواست شما با موفقیت ثبت شد و بعد از تایید میتونید شروع به تدریس کنید ✅"
-    );
-    setVisible(true);
+        // ریست فرم
+        setCourseName("");
+        setCourseDescription("");
+        setCourseImage(null);
+        if (imageInputRef.current) imageInputRef.current.value = "";
+      }
+    } catch (err) {
+      console.error("Axios Error:", err.response?.data || err);
+      setSuccessMessage("خطا در ایجاد دوره ❌");
+      setTimeout(() => setSuccessMessage(""), 3000);
+    }
+  
     setErrors({});
-
-    // پاک کردن فرم
-    setCourseName("");
-    setCourseImage(null);
-    setIntroVideo(null);
-    setTeacherIntro("");
-    setCourseDescription("");
   };
+  
+  
 
-  // fade out و حذف پیام بعد از زمان مشخص
   useEffect(() => {
     if (!successMessage) return;
-
+  
     const fadeOutTimeout = setTimeout(() => {
       setVisible(false);
     }, 5000); // بعد ۵ ثانیه fade out
-
+  
     const removeTimeout = setTimeout(() => {
       setSuccessMessage("");
     }, 6000); // بعد ۶ ثانیه حذف کامل پیام
-
+  
     return () => {
       clearTimeout(fadeOutTimeout);
       clearTimeout(removeTimeout);
     };
   }, [successMessage]);
+  
 
   return (
     <div className="flex flex-col justify-center items-center mt-5 sm:mt-0 w-full bg-[snow]">
@@ -89,7 +104,7 @@ const RequestToAddCourse = () => {
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 justify-start items-center py-[15px] w-[90%] sm:w-[70%] bg-transparent my-[20px]"
       >
-        <h3 className="text-[#2c5282] text-[22px]">درخواست افزودن دوره</h3>
+        <h3 className="text-[#2c5282] text-[22px]">افزودن دوره جدید</h3>
 
         {/* نام دوره */}
         <div className="w-[95%] mt-2 flex flex-col gap-2 justify-center items-start">
@@ -114,11 +129,12 @@ const RequestToAddCourse = () => {
         {/* عکس دوره */}
         <div className="w-[95%] mt-2 flex flex-col gap-2 justify-center items-start">
           <label htmlFor="courseImage" className="text-[#222] text-[18px]">
-            افزودن عکس برای دوره (اختیاری)
+            افزودن عکس برای دوره
           </label>
           <input
             id="courseImage"
             type="file"
+            ref={imageInputRef}
             accept="image/*"
             onChange={(e) => setCourseImage(e.target.files[0])}
             className="w-full px-[5px] h-[35px] border border-[#3073c1] outline-none rounded-[5px] cursor-pointer"
@@ -145,25 +161,6 @@ const RequestToAddCourse = () => {
           />
           {errors.introVideo && (
             <span className="text-red-500 text-sm">{errors.introVideo}</span>
-          )}
-        </div>
-
-        <div className="w-[100%] sm:w-[120%] border-b border-[#3073c1] mt-3"></div>
-
-        {/* معرفی مدرس */}
-        <div className="w-[95%] mt-2 flex flex-col gap-2 justify-center items-start">
-          <label htmlFor="teacherIntro" className="text-[#222] text-[18px]">
-            توضیحاتی در مورد خودتان در این دوره
-          </label>
-          <textarea
-            id="teacherIntro"
-            value={teacherIntro}
-            onChange={(e) => setTeacherIntro(e.target.value)}
-            placeholder="مثال: سلام! من علی رضایی هستم، مدرس دوره جاوااسکریپت. سال‌هاست که عاشق برنامه‌نویسی‌ام و مخصوصاً جاوااسکریپت رو خیلی دوست دارم. از وقتی که با این زبان شروع کردم، فهمیدم چقدر می‌تونه دنیای وب رو جذاب‌تر و ساده‌تر کنه. توی این دوره سعی کردم همه چیز رو به زبون ساده و خودمونی آموزش بدم، بدون اینکه خسته‌کننده باشه. کلی پروژه عملی داریم که باهاشون می‌تونی هم یاد بگیری هم تمرین کنی. هدفم اینه که....."
-            className="w-full text-justify px-[5px] py-[5px] h-[200px] border border-[#3073c1] outline-none rounded-[5px] resize-none"
-          />
-          {errors.teacherIntro && (
-            <span className="text-red-500 text-sm">{errors.teacherIntro}</span>
           )}
         </div>
 

@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../Pages/coursesContext";
 import { teachers } from "../../Pages/teachers/TeacherInfo";
@@ -6,9 +8,10 @@ import { teachers } from "../../Pages/teachers/TeacherInfo";
 const TeacherCourses=()=>{
 
     const { user } = useUser();
+    const [Courses , setCourses]=useState([])
 
-    const teacher = user;
-    const teacherCourses = teachers.find((t) => t.id === teacher.id)?.courses || [];
+    // const teacher = user;
+    const teacherCourses =0;
 
     const navigate=useNavigate();
     const handleNavigate=(e,id)=>{
@@ -16,45 +19,37 @@ const TeacherCourses=()=>{
       navigate(`/CoursPage/${id}`)
     }
 
-    // useEffect(() => {
-    //   const fetchCards = async () => {
-    //     try {
-    //   const response = await axios.get(
-    //     `${process.env.REACT_APP_API_URL}/api/user/teacher/${id}/courses`
-    //   );
-    //   if (response.status === 200 || response.status === 201) {
-    //       console.log(response.data)
-    //     const teacher = response.data.teacher;
-    //     const courses = response.data.courses;
-    //     setTeacher({
-    //       image: teacher.profilePic,
-    //       NomberOFactiveCourses: courses.length,
-    //       name: teacher.name,
-    //       study: teacher.study,
-    //       university: teacher.university,
-    //       aboutTeacher: teacher.aboutTeacher,
-    //       courses: teacher.courses || [],
-    //       id: teacher._id,
-    //     });
-    //     setCourses(
-    //       courses
-    //     )
-    //   }
-    //     } catch (err) {
-    //       console.error("Error fetching courses:", err);
-    //     }
-    //   };
+    useEffect(() => {
+      const fetchCards = async () => {
+        try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/user/teacher/my-courses`,
+        { withCredentials: true }
+      );
+      if (response.status === 200 || response.status === 201) {
+          console.log(response.data)
+        setCourses(
+          response.data.map((t) => ({
+            id: t._id,
+            title: t.title,
+          }))
+        )
+      }
+        } catch (err) {
+          console.error("Error fetching courses:", err);
+        }
+      };
   
-    //   fetchCards();
-    // },[]);
+      fetchCards();
+    },[]);
 
     return(
         <div className="w-full sm:w-5xl bg-[snow] rounded-3xl shadow-lg p-4 sm:p-6 mt-4">
-            {teacherCourses.length === 0 ? (
+            {Courses.length === 0 ? (
               <p className="text-gray-500 text-center text-lg mt-10">هنوز دوره‌ای اضافه نکرده‌اید.</p>
             ) : (
               <ul className="w-full flex flex-col gap-4 justify-center items-start">
-                {teacherCourses.map((course, index) => (
+                {Courses.map((course, index) => (
                   <li
                     key={index}
                     className="w-full flex justify-between items-center border border-[#2c5282] rounded-xl p-3 sm:p-5 shadow hover:shadow-lg transition-shadow bg-[#f9fafb]"

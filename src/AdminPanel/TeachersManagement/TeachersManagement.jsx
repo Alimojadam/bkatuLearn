@@ -4,6 +4,7 @@ import { teachers } from "../../Pages/teachers/TeacherInfo";
 import logo from '../../Pages/img/logo_header.png';
 import CardsTeachers from "../../Pages/teachers/CardsTeachers";
 import { useState } from "react";
+import axios from "axios";
 
 
 
@@ -29,22 +30,41 @@ const TeachersManagement=()=>{
         teacher.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // نمایش Modal تایید
     const handleShowModal = (teacher) => {
-        setTeacherToConvert(teacher);
+        setTeacherToConvert(teacher); // ذخیره استاد در state
         setShowModal(true);
-    };
+      };
 
     // تبدیل استاد به کاربر عادی
-    const handleConvertToUser = () => {
+    const handleConvertToUser = async () => {
         if (!teacherToConvert) return;
-        const updatedTeachers = teachersList.map((t) =>
-            t.id === teacherToConvert.id ? { ...t, type: "User" } : t
-        );
-        setTeachersList(updatedTeachers); // فقط state را آپدیت کنید، بدون filter
-        setShowModal(false);
-        setTeacherToConvert(null);
+    
+        const teacherId = teacherToConvert.id || teacherToConvert._id;
+    
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/admin/demote-teacher/${teacherId}`,
+                {},
+                { withCredentials: true }
+            );
+    
+            if (response.status === 200 || response.status === 201) {
+                alert("استاد به کاربر عادی تبدیل شد");
+    
+                // آپدیت state محلی
+                const updatedTeachers = teachersList.map((t) =>
+                    (t.id || t._id) === teacherId ? { ...t, type: "User" } : t
+                );
+                setTeachersList(updatedTeachers);
+            }
+        } catch (err) {
+            console.error(err.response || err);
+        } finally {
+            setShowModal(false);
+            setTeacherToConvert(null);
+        }
     };
+    
 
     
     

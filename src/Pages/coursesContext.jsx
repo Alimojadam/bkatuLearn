@@ -34,6 +34,7 @@ export const UserProvider = ({ children }) => {
 
         if (u) {
           setUser({
+            id : u?._id,
             coursesId: u?.CourseId,
             name: u?.name,
             studentNumber: u?.UserID,
@@ -43,6 +44,7 @@ export const UserProvider = ({ children }) => {
             study: u?.study,
             university: u?.university,
             aboutMe: u?.aboutMe,
+            aboutTeacher : u?.aboutTeacher || "",
             reqToTeach : response.data.user.requestTeacher,
           });
         } else {

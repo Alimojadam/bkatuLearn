@@ -1,13 +1,38 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const Requests = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
-  const [requestsData, setRequestsData] = useState([
-    { type: "UnderReview", name: "علی", title: "افزودن دوره جدید" },
-    { type: "Rejected", name: "ممد", title: "افزودن ویدیو جدید" },
-    { type: "Accepted", name: "امیر", title: "تدریس" },
-  ]);
+  const [requestsData, setRequestsData] = useState([]);
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/admin/request-teacher`,
+          { withCredentials: true }
+        );
+          console.log(response.data)
+        if (response.status === 200 || response.status === 201) {
+          const updatedData = response.data.requests.map(item => ({
+            ...item,
+            type: item.status,
+            name: item.user.name,
+            title: item.subject,
+            id : item._id,
+          }));
+          setRequestsData(updatedData);
+        }
+      } catch (err) {
+        console.log(err.response);
+      }
+    };
+  
+    fetchRequests();
+  }, []);
+  
+
 
   const getStatus = (type) => {
     switch (type) {
@@ -48,7 +73,7 @@ const Requests = () => {
     }
   };
 
-  const handleRequest = (item, index) => {
+  const handleRequest = (item,id, index) => {
     setSelectedRequest({ ...item, index });
     setModalOpen(true);
   };
@@ -58,25 +83,57 @@ const Requests = () => {
     setTimeout(() => setSelectedRequest(null), 300); // بعد از انیمیشن پاک بشه
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async (id) => {
     if (!selectedRequest) return;
-    const updated = [...requestsData];
-    updated[selectedRequest.index].type = "Accepted";
-    setRequestsData(updated);
-    handleClose();
+  
+    try {
+      // ارسال درخواست به بک‌اند
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/admin/approve-request/${id}`, 
+        { },  // یا هر نام فیلد که بک‌اند قبول می‌کند
+        { withCredentials: true }
+      );
+  
+      if (response.status === 200 || response.status === 201) {
+        // آپدیت state محلی بعد از موفقیت
+        const updated = [...requestsData];
+        updated[selectedRequest.index].type = "Accepted";
+        setRequestsData(updated);
+        handleClose();
+      }
+    } catch (err) {
+      console.error("Error confirming request:", err.response?.data || err);
+      alert("خطا در تایید درخواست ❌");
+    }
   };
+  
 
-  const handleReject = () => {
+  const handleReject = async (id) => {
     if (!selectedRequest) return;
-    const updated = [...requestsData];
-    updated[selectedRequest.index].type = "Rejected";
-    setRequestsData(updated);
-    handleClose();
+  
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/admin/decline-request/${id}`,
+        {},
+        { withCredentials: true }
+      );
+  
+      if (response.status === 200 || response.status === 201) {
+        const updated = [...requestsData];
+        updated[selectedRequest.index].type = "Rejected";
+        setRequestsData(updated);
+        handleClose();
+      }
+    } catch (err) {
+      console.error("Error rejecting request:", err.response?.data || err);
+      alert("خطا در رد کردن درخواست ❌");
+    }
   };
+  
 
   const renderModalContent = () => {
     if (!selectedRequest) return null;
-    const { type, name, title } = selectedRequest;
+    const { type, name, title , id } = selectedRequest;
 
     if (type === "Accepted") {
       return (
@@ -134,13 +191,13 @@ const Requests = () => {
             </div>
             <div className="flex justify-center items-center gap-3">
               <button
-                onClick={handleReject}
+                onClick={()=>handleReject(selectedRequest.id)}
                 className="px-4 py-2 bg-red-500 text-[snow] rounded cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-xl"
               >
                 رد
               </button>
               <button
-                onClick={handleConfirm}
+                onClick={() => handleConfirm(selectedRequest.id)}
                 className="px-4 py-2 bg-green-700 text-[snow] rounded cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-xl"
               >
                 تایید
@@ -163,7 +220,7 @@ const Requests = () => {
         {requestsData.map((item, index) => (
           <li
             key={index}
-            onClick={() => handleRequest(item, index)}
+            onClick={() => handleRequest(item,item._id, index)}
             className={`flex justify-between items-center text-[16px] sm:text-[18px] border rounded-[5px] py-2 px-3 w-full sm:w-[95%] cursor-pointer transition-all duration-500 hover:scale-110 hover:shadow-xl ${getBorderColor(
               item.type
             )}`}

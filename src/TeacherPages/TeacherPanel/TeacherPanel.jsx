@@ -16,7 +16,7 @@ const TeacherPanel=()=>{
             {/* کارت اطلاعات مدرس */}
             <div className="w-[95%] sm:w-5xl bg-[snow] p-6 rounded-3xl shadow-lg border border-[#2c5282] flex flex-col sm:flex-row gap-6 items-start justify-center">
                 <img
-                    src={student || "/default-profile.png"}
+                    src={teacher.profileImg || student}
                     alt="teacher"
                     className="w-36 h-36 rounded-full object-cover border-4 border-[#2c5282]"
                 />

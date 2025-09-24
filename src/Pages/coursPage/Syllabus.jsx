@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const Syllabus = (props) => {
+  const { id } = useParams();
   const [openIndex, setOpenIndex] = useState(null);
   const [newEpisodeTitle, setNewEpisodeTitle] = useState("");
   const [newEpisodeVideo, setNewEpisodeVideo] = useState(null);
@@ -24,6 +27,13 @@ const Syllabus = (props) => {
   const [editEpisodeVideo, setEditEpisodeVideo] = useState(null);
   const [editEpisodeFile, setEditEpisodeFile] = useState(null);
 
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const videoInputRef = React.useRef(null);
+  const pdfInputRef = React.useRef(null);
+
+
 
   const {
     syllabus = [],
@@ -37,51 +47,150 @@ const Syllabus = (props) => {
     onDeleteEpisode,
   } = props;
 
-  const toggleIndex = (index) => {
+  
+
+  const toggleIndex = (index , id) => {
     setOpenIndex(openIndex === index ? null : index);
     setTargetSectionIndex(index);
-  };
-
-  const handleAddEpisode = () => {
-    if (!newEpisodeTitle || !newEpisodeVideo || targetSectionIndex === null) return;
-
-    const newEpisode = {
-      subTitle: newEpisodeTitle,
-      video: newEpisodeVideo,
-      file: newEpisodeFile,
-    };
-
-    onAddEpisode(targetSectionIndex, newEpisode);
     setNewEpisodeTitle("");
-    setNewEpisodeVideo(null);
-    setNewEpisodeFile(null);
+      setNewEpisodeVideo(null);
+      setNewEpisodeFile(null);
+      setProgress(0);
+      
+      if (videoInputRef.current) videoInputRef.current.value = "";
+      if (pdfInputRef.current) pdfInputRef.current.value = "";
   };
+  
 
-  const handleAddSection = () => {
+
+  
+  const handleAddEpisode = async (seasonId) => {
+    if (!newEpisodeTitle || !newEpisodeVideo || targetSectionIndex === null) {
+      return alert("عنوان و ویدیو الزامی است");
+    }
+  
+    try {
+      setUploading(true);
+      setProgress(0);
+  
+      const formData = new FormData();
+      formData.append("title", newEpisodeTitle);
+  
+      if (newEpisodeVideo instanceof File) {
+        formData.append("video", newEpisodeVideo);
+      }
+  
+      if (newEpisodeFile instanceof File) {
+        formData.append("pdf", newEpisodeFile);
+      }
+  
+      // ارسال مستقیم فرم‌دیتا به سرور
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/video/upload/${seasonId}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+          onUploadProgress: (e) => setProgress(Math.round((e.loaded * 100) / e.total))
+        }
+      );
+  
+      const newEpisode = response.data.newVideo;
+
+      console.log(response.data)
+  
+      // اضافه کردن مستقیم اپیزود به UI
+      onAddEpisode(targetSectionIndex, newEpisode);
+  
+      // ریست کردن state ها و inputها
+      setNewEpisodeTitle("");
+      setNewEpisodeVideo(null);
+      setNewEpisodeFile(null);
+      setProgress(0);
+  
+      if (videoInputRef.current) videoInputRef.current.value = "";
+      if (pdfInputRef.current) pdfInputRef.current.value = "";
+  
+      alert("اپیزود با موفقیت اضافه شد!");
+    } catch (err) {
+      console.error("خطا در آپلود اپیزود:", err.response?.data || err);
+      alert("آپلود موفقیت‌آمیز نبود");
+    } finally {
+      setUploading(false);
+    }
+  };
+  
+  
+  
+  
+  
+  
+
+  const handleAddSection = async () => {
+
     if (!newSectionTitle.trim()) return;
-    onAddSection(newSectionTitle.trim());
-    setNewSectionTitle("");
-    setAddingNewSection(false);
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/season/create/${id}`,
+        {
+          title:newSectionTitle,
+        },
+        { withCredentials: true }
+      );
+      if(response.status==200 || response.status==201){
+        onAddSection(newSectionTitle.trim());
+        setNewSectionTitle("");
+        setAddingNewSection(false);
+      }
+    }catch(err){
+      console.log(err.response)
+    }
   };
 
   // New helper functions for smooth delete animations
-  const handleConfirmDeleteSection = (index) => {
+  const handleConfirmDeleteSection = async (index) => {
     setFadeDeleteSectionIndex(index);
     setTimeout(() => {
       onDeleteSection(index);
       setConfirmDeleteSectionIndex(null);
       setFadeDeleteSectionIndex(null);
     }, 300); // duration of fade out
+    try {
+      const response = await axios.delete(
+        `${process.env.REACT_APP_API_URL}/api/season/delete/${index}`,
+        { withCredentials: true }
+        );
+      if(response.status===200 || response.status===201){
+        alert("removed")
+        
+      }
+    }catch(err){
+      console.log(err.response)
+    }
   };
 
-  const handleConfirmDeleteEpisode = (sectionIndex, episodeIndex) => {
+  const handleConfirmDeleteEpisode = async (sectionIndex, episodeIndex, id) => {
     setFadeDeleteEpisode({ sectionIndex, episodeIndex });
+  
     setTimeout(() => {
-      onDeleteEpisode(sectionIndex, episodeIndex);
       setConfirmDeleteEpisode({ sectionIndex: null, episodeIndex: null });
       setFadeDeleteEpisode({ sectionIndex: null, episodeIndex: null });
     }, 300);
+    
+    try {
+      const response = await axios.delete(
+        `${process.env.REACT_APP_API_URL}/api/video/${id}`,
+        { withCredentials: true }
+        );
+        if (response.status === 200 || response.status === 201) {
+          alert("اپیزود حذف شد");
+          onDeleteEpisode(sectionIndex, episodeIndex);
+      }
+    } catch (err) {
+      console.error("خطا در حذف اپیزود:", err.response?.data || err);
+    }
   };
+  
 
 
   const startEditEpisode = (sectionIndex, episodeIndex, episode) => {
@@ -91,32 +200,129 @@ const Syllabus = (props) => {
     setEditEpisodeFile(null);
   };
   
-  const handleUpdateSectionTitle = () => {
+  const handleUpdateSectionTitle = async (id) => {
     if (!editSectionTitle.trim()) return;
-    const updated = [...syllabus];
-    updated[editSectionIndex].title = editSectionTitle;
-    props.onUpdateSyllabus(updated);
-    setEditSectionIndex(null);
-    setEditSectionTitle("");
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/season/edit/${id}`,
+        {
+          title:editSectionTitle,
+        },
+        { withCredentials: true }
+      );
+      if(response.status==200 || response.status==201){
+        setEditSectionIndex(null);
+        setEditSectionTitle("");
+        const updated = [...syllabus];
+        updated[editSectionIndex].title = editSectionTitle;
+        props.onUpdateSyllabus(updated);
+      }
+    }catch(err){
+      console.log(err.response)
+    }
   };
   
-  const handleEditEpisode = () => {
+  const handleEditEpisode = async (id) => {
+    console.log(id)
     const { sectionIndex, episodeIndex } = editingEpisode;
   
-    const updatedEpisode = {
-      subTitle: editEpisodeTitle,
-      video: editEpisodeVideo || syllabus[sectionIndex].subtopics[episodeIndex].video,
-      file: editEpisodeFile || syllabus[sectionIndex].subtopics[episodeIndex].file,
-    };
+    try {
+      setUploading(true);
+      setProgress(0);
+      const formData = new FormData();
+      formData.append("title", editEpisodeTitle.trim());
   
-    props.onEditEpisode(sectionIndex, episodeIndex, updatedEpisode);
+      if (editEpisodeVideo instanceof File) {
+        formData.append("video", editEpisodeVideo);
+      }
   
-    setEditingEpisode({ sectionIndex: null, episodeIndex: null });
-    setEditEpisodeTitle("");
-    setEditEpisodeVideo(null);
-    setEditEpisodeFile(null);
+      if (editEpisodeFile instanceof File) {
+        formData.append("pdf", editEpisodeFile);
+      }
+  
+      // بررسی اینکه حداقل یکی از فیلدها پر باشد
+      if (
+        !editEpisodeTitle.trim() &&
+        !(editEpisodeVideo instanceof File) &&
+        !(editEpisodeFile instanceof File)
+      ) {
+        alert("حداقل یکی از فیلدها باید پر باشد");
+        return;
+      }
+  
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/video/edit/${id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+          onUploadProgress: (e) => setProgress(Math.round((e.loaded * 100) / e.total))
+        }
+      );
+        console.log(response.status)
+        console.log(response.data.video)
+      if (response.status === 200 || response.status === 201) {
+        const updatedEpisode=response.data.video
+          
+        props.onEditEpisode(sectionIndex, episodeIndex, updatedEpisode);
+          
+          // reset states
+        alert("ویرایش انجام شد");
+        setEditingEpisode({ sectionIndex: null, episodeIndex: null });
+        setEditEpisodeTitle("");
+        setEditEpisodeVideo(null);
+        setEditEpisodeFile(null);
+        setProgress(0)
+
+        if (videoInputRef.current) videoInputRef.current.value = "";
+        if (pdfInputRef.current) pdfInputRef.current.value = "";
+      }
+    } catch (err) {
+      console.log(err.response || err);
+    } finally {
+      setUploading(false);
+    }
   };
   
+  
+  
+
+ // تابع برای پخش ویدیو
+ const onPlayVideoById = async (videoId) => {
+  if (!videoId) {
+    console.error("videoId is undefined");
+    return;
+  }
+  console.log("Video ID:", videoId);
+
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/video/${videoId}`,
+      { withCredentials: true }
+    );
+
+    if (response.status === 200 || response.status === 201) {
+      // const videoData = response.data.url;
+      const videoUrl = response.data.url;
+      console.log("Video URL:", videoUrl);
+
+      if (!videoUrl) {
+        console.error("ویدیو یافت نشد یا URL معتبر نیست");
+        return;
+      }
+      onPlayVideo(videoUrl);
+
+
+    } else {
+      console.error("پاسخ سرور ناموفق است:", response.status);
+    }
+  } catch (error) {
+    console.error("خطا در دریافت URL ویدیو:", error.response?.data || error.message || error);
+  }
+};
+
+
+
   
 
   return (
@@ -150,7 +356,9 @@ const Syllabus = (props) => {
                   className="flex-grow px-3 py-2 border border-[#3073c1] bg-[snow] outline-none rounded-md"
                 />
                 <button
-                  onClick={handleAddSection}
+                  onClick={() => {
+                    handleAddSection();
+                  }}                
                   className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 cursor-pointer"
                 >
                   ثبت فصل
@@ -182,7 +390,7 @@ const Syllabus = (props) => {
             <div className="w-full flex justify-between flex-row-reverse">
               <p className="text-[18px] text-[#3073c1] mr-[5px]">{item.title}</p>
               <div className="w-[15%] flex justify-between gap-5 items-center">
-                <button onClick={() => toggleIndex(index)} className="font-[thin]">
+                <button onClick={() => toggleIndex(index , item.id)} className="font-[thin]">
                   <span className="text-18px sm:text-[20px] text-[#111] text-[#3073c1] sm:text-[#111] cursor-pointer">{openIndex === index ? '▲' : '▼'}</span>
                 </button>
 
@@ -209,7 +417,7 @@ const Syllabus = (props) => {
                               />
                               <div className="flex gap-4 mt-2">
                                 <button
-                                  onClick={handleUpdateSectionTitle}
+                                  onClick={()=>handleUpdateSectionTitle(item._id)}
                                   className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded cursor-pointer"
                                 >
                                   ذخیره
@@ -253,7 +461,7 @@ const Syllabus = (props) => {
                           <div className="flex gap-4 mt-2">
                             <button
                               onClick={() => {
-                                handleConfirmDeleteSection(index);
+                                handleConfirmDeleteSection(item._id);
                               }}
                               className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded text-lg cursor-pointer"
                             >
@@ -276,7 +484,7 @@ const Syllabus = (props) => {
             </div>
 
             <ul className={`w-[95%] text-sm pr-5 ${openIndex === index ? 'max-h-[1000px] py-2' : 'max-h-0 overflow-hidden'} transition-all duration-300`}>
-              {item.subtopics?.map((sub, subIndex) => (
+              {item.videos?.map((sub, subIndex) => (
                 <li
                   key={subIndex}
                   className={`w-full py-1 pr-2 border-r-2 border-[#3073c1]
@@ -285,22 +493,17 @@ const Syllabus = (props) => {
                   `}
                 >
                   <div className="flex flex-row-reverse justify-between items-center border border-[#3073c1] px-[8px] py-[8px] rounded-[5px]">
-                    <p className="text-[16px] text-[#3073c1]">{sub.subTitle}</p>
+                    <p className="text-[16px] text-[#3073c1]">{sub.title}</p>
                     <div className="w-[15%] text-[16px] flex gap-[16px] items-center ml-[5px] text-[#3073c1]">
                       <i
                         className="fas fa-play cursor-pointer transition-all duration-300 hover:scale-115 hover:shadow-md"
                         title='اجرا'
-                        onClick={() => {
-                          if (!sub.video) return;
-                          const videoUrl =
-                            sub.video instanceof File ? URL.createObjectURL(sub.video) : sub.video;
-                          onPlayVideo(videoUrl);
-                        }}
+                        onClick={() => onPlayVideoById(sub._id)}
                       ></i>
 
-                      {sub.file && (
+                      {sub.PDFUrl && (
                         <a
-                          href={sub.file instanceof File ? URL.createObjectURL(sub.file) : sub.file}
+                          href={sub.PDFUrl}
                           download
                           target="_blank"
                           rel="noopener noreferrer"
@@ -336,6 +539,7 @@ const Syllabus = (props) => {
                             <label className="text-[17px] text-gray-700">فایل ویدیویی جدید (در صورت نیاز)</label>
                             <input
                               type="file"
+                              ref={videoInputRef}
                               accept="video/*"
                               onChange={(e) => setEditEpisodeVideo(e.target.files[0])}
                               className="w-full px-3 py-2 border rounded-md border-[#3073c1]"
@@ -343,13 +547,14 @@ const Syllabus = (props) => {
                             <label className="text-[17px] text-gray-700">جزوه جدید (در صورت نیاز)</label>
                             <input
                               type="file"
+                              ref={pdfInputRef}
                               accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.zip,.rar"
                               onChange={(e) => setEditEpisodeFile(e.target.files[0])}
                               className="w-full px-3 py-2 border rounded-md border-[#3073c1]"
                             />
                             <div className="flex gap-3">
                               <button
-                                onClick={handleEditEpisode}
+                                onClick={()=>handleEditEpisode(sub._id)}
                                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 cursor-pointer"
                               >
                                 ذخیره تغییرات
@@ -361,6 +566,7 @@ const Syllabus = (props) => {
                                 انصراف
                               </button>
                             </div>
+                              {uploading && <div>Progress: {progress}%</div>}
 
                           </div>
                         </div>
@@ -395,7 +601,7 @@ const Syllabus = (props) => {
                               </p>
                               <div className="flex flex-row-reverse gap-5">
                                 <button
-                                  onClick={() => handleConfirmDeleteEpisode(index, subIndex)}
+                                  onClick={() => handleConfirmDeleteEpisode(index, subIndex, sub._id)}
                                   className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded text-lg cursor-pointer transition-colors duration-300"
                                 >
                                   بله
@@ -429,26 +635,34 @@ const Syllabus = (props) => {
                       onChange={(e) => setNewEpisodeTitle(e.target.value)}
                       className="w-full px-3 py-2 border rounded-md outline-none border-[#3073c1] bg-[snow]"
                     />
+
                     <label className="text-[15px]">فایل ویدیویی را آپلود کنید</label>
                     <input
                       type="file"
                       accept="video/*"
+                      ref={videoInputRef}
                       onChange={(e) => setNewEpisodeVideo(e.target.files[0])}
                       className="w-full px-3 py-2 border rounded-md border-[#3073c1] cursor-pointer"
                     />
+
                     <label className="text-[15px]">فایل جزوه این قسمت را آپلود کنید (اختیاری)</label>
                     <input
                       type="file"
                       accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.zip,.rar"
+                      ref={pdfInputRef}
                       onChange={(e) => setNewEpisodeFile(e.target.files[0])}
                       className="w-full px-3 py-2 border rounded-md border-[#3073c1] cursor-pointer"
                     />
+
                     <button
-                      onClick={handleAddEpisode}
+                      onClick={()=>handleAddEpisode(syllabus[openIndex]._id)}
+                      disabled={uploading}
                       className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 cursor-pointer"
                     >
-                      افزودن قسمت
+                      {uploading ? `Uploading... ${progress}%` : "افزودن اپیزود"}
                     </button>
+                    {uploading && <div>Progress: {progress}%</div>}
+
                   </div>
                 </li>
               )}

@@ -51,13 +51,28 @@ const EditeCourse = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/course/edit/${id}`,
+        {
+          title : course.title,
+          description : course.aboutCourse,
+          aboutTeacher : course.aboutTeacherCourse,
+        },
+        { withCredentials: true }
+        );
+      if (response.status === 200) {
+        console.log("اطلاعات جدید:", course);
+        alert("اطلاعات با موفقیت ذخیره شد!");
+        navigate(`/CoursPage/${id}`);
+        
+      }
+    } catch (err) {
+      console.error("Error fetching course:", err);
+    }
 
-    console.log("اطلاعات جدید:", course);
-    alert("اطلاعات با موفقیت ذخیره شد!");
-
-    navigate(`/CoursPage/${courseId}`);
   };
 
   if (!course) return <div>در حال بارگذاری...</div>;

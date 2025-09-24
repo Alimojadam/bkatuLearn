@@ -80,7 +80,7 @@ const TeacherHomePage = () => {
   const tabs = [
     ...(isMobile ? [{ id: "profile", label: "پروفایل مدرس", mobileOnly: true, icon: "fas fa-user" }] : []),
     { id: "dashboard", label: "دوره‌های من", icon: "fas fa-graduation-cap" },
-    { id: "addCourse", label: "درخواست افزودن دوره جدید", icon: "fas fa-plus-circle" },
+    { id: "addCourse", label: "افزودن دوره جدید", icon: "fas fa-plus-circle" },
     { id: "editProfile", label: "ویرایش پروفایل", icon: "fas fa-edit" },
     { id: "requests", label: "درخواست‌های من", icon: "fas fa-inbox" },
     { id: "Logout", label: "خروج", icon: "fas fa-sign-out-alt" },

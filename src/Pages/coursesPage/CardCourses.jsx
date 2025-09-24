@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import user from '../img/userIMG.png'
 
 
 
@@ -60,7 +61,7 @@ const CardCourses=(props)=>{
                     ) : (
                         Cards.map((card) => (
                         <div dir='rtl' key={card.id} className="w-[350px] flex flex-col gap-[5px] p-1 bg-[snow] rounded-[10px]">
-                            <img src={card.image} alt={card.title} className="w-full h-40 object-cover rounded-[8px]" />
+                            <img src={card.image || user} alt={card.title || "تصویر دوره"} className="w-full h-40 object-cover rounded-[8px]" />
                             <div className="px-[8px] flex flex-col gap-[5px] p-1">
                                 <h3 className="text-[18px] text-[#222] font-bold mt-2 font-[1]">{card.title}</h3>
                                 <p className="text-[15px] font-[1]">مدرس: {card.teacherName}</p>

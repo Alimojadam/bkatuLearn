@@ -47,6 +47,8 @@ const CoursPage = () => {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/course/${id}`);
         if (response.status === 200) {
           const c = response.data; // حالا response.data یک آبجکت واحد است
+          console.log(c)
+          console.log(user.id)
           setCourse({
             id: c._id,
             teacherId : c.publisher._id,
@@ -57,6 +59,7 @@ const CoursPage = () => {
             aboutCourse: c.description || "",
             aboutTeacherCourse: c.publisher.aboutTeacher || "",
             video: c.video || "",
+            
           });
           setNewPrice(c.price || "");
         }
@@ -120,38 +123,44 @@ const CoursPage = () => {
   }
 
   const handleRegisterCourse = async () => {
-    if (!user || user.type === "Admin") {
+    if (!user || !user.id) {
       alert("ابتدا وارد حساب کاربری خود شوید");
       return;
     }
   
-    const userCourses = Array.isArray(user.corsesId) ? user.corsesId : [];
+    if (user.type === "Admin") {
+      alert("ادمین نمی‌تواند ثبت‌نام کند");
+      return;
+    }
+  
+    const userCourses = Array.isArray(user.coursesId) ? user.coursesId : [];
   
     if (!userCourses.includes(course.id)) {
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/api/user/save/${course.id}`,
-          { },
-          {withCredentials: true},
+          {},
+          { withCredentials: true }
         );
+  
         if (response.status === 200) {
           const updatedUser = {
             ...user,
-            corsesId: [...userCourses, course.id],
+            coursesId: [...userCourses, course.id],
           };
-          setUser(updatedUser); // کانتکست به‌روز بشه
+          setUser(updatedUser);
           setIsRegistered(true);
           alert("ثبت‌نام با موفقیت انجام شد!");
         }
       } catch (err) {
         console.error("خطا در ثبت‌نام:", err);
-        console.log(err.response)
         alert("مشکلی پیش آمد. دوباره تلاش کنید.");
       }
     } else {
       alert("شما قبلاً ثبت‌نام کرده‌اید.");
     }
   };
+  
   
   const handleAddSection = (title) => {
     const updatedCourse = {
@@ -172,10 +181,27 @@ const CoursPage = () => {
   };
   
   const handleDeleteEpisode = (sectionIndex, episodeIndex) => {
-    const newSyllabus = [...course.syllabus];
-    newSyllabus[sectionIndex].subtopics.splice(episodeIndex, 1);
-    setCourse({ ...course, syllabus: newSyllabus });
+    setCourse(prevCourse => {
+      const newSyllabus = [...prevCourse.syllabus];
+  
+      // بررسی اینکه videos وجود دارد و آرایه است
+      const videos = newSyllabus[sectionIndex]?.videos;
+      if (!Array.isArray(videos)) return prevCourse;
+  
+      // ساختن کپی جدید از آرایه و حذف عنصر
+      const updatedVideos = videos.filter((_, idx) => idx !== episodeIndex);
+  
+      newSyllabus[sectionIndex] = {
+        ...newSyllabus[sectionIndex],
+        videos: updatedVideos
+      };
+  
+      return { ...prevCourse, syllabus: newSyllabus };
+    });
   };
+  
+  
+  
   
   
 
@@ -187,7 +213,7 @@ const CoursPage = () => {
             // width="420"
             // height="260"
             controls
-            className="rounded-[10px] w-[80%] h-[10%] sm:w-[420px] sm:h-[220px] shadow-xl shadow-[#ccc]"
+            className="rounded-[10px] w-[80%] h-[10%] object-cover sm:w-[420px] sm:h-[220px] shadow-xl shadow-[#ccc]"
             key={videoSrc} // برای رفرش کردن کامل پلیر وقتی src تغییر می‌کند
           >
             <source src={videoSrc} type="video/mp4" />
@@ -321,32 +347,52 @@ const CoursPage = () => {
               onDeleteSection={handleDeleteSection}
               onDeleteEpisode={handleDeleteEpisode}
               onAddEpisode={(sectionIndex, newEpisode) => {
-                const updatedSyllabus = course.syllabus.map((section, idx) => {
-                  if (idx === sectionIndex) {
-                    return {
-                      ...section,
-                      subtopics: [...section.subtopics, newEpisode],
-                    };
-                  }
-                  return section;
+                setCourse(prevCourse => {
+                  const updatedSyllabus = prevCourse.syllabus.map((section, idx) => {
+                    if (idx === sectionIndex) {
+                      return {
+                        ...section,
+                        videos: [...(section.videos || []), newEpisode],
+                      };
+                    }
+                    return section;
+                  });
+              
+                  return { ...prevCourse, syllabus: updatedSyllabus };
                 });
-                setCourse({ ...course, syllabus: updatedSyllabus });
               }}
+              
+              
+              
               onEditEpisode={(sectionIndex, episodeIndex, updatedEpisode) => {
                 const updatedSyllabus = course.syllabus.map((section, sIndex) => {
                   if (sIndex === sectionIndex) {
                     return {
                       ...section,
-                      subtopics: section.subtopics.map((ep, eIndex) =>
-                        eIndex === episodeIndex ? updatedEpisode : ep
-                      ),
+                      videos: Array.isArray(section.videos)
+                        ? section.videos.map((ep, eIndex) =>
+                            eIndex === episodeIndex
+                              ? {
+                                  ...ep,
+                                  title: updatedEpisode.title || ep.title,
+                                  url: updatedEpisode.url || ep.url,
+                                  PDFUrl: updatedEpisode.PDFUrl || ep.PDFUrl,
+                                }
+                              : ep
+                          )
+                        : [], // اگر videos وجود نداشت
                     };
                   }
                   return section;
                 });
-    
-                setCourse(prev => ({ ...prev, syllabus: updatedSyllabus }));
+              
+                setCourse((prev) => ({ ...prev, syllabus: updatedSyllabus }));
               }}
+              
+              
+
+              
+              
               onUpdateSyllabus={(updatedSyllabus) => {
                 setCourse(prev => ({
                   ...prev,
@@ -376,27 +422,37 @@ const CoursPage = () => {
               if (idx === sectionIndex) {
                 return {
                   ...section,
-                  subtopics: [...section.subtopics, newEpisode],
+                  videos: [...section.videos, newEpisode], // ← videos نه subtopics
                 };
               }
               return section;
             });
             setCourse({ ...course, syllabus: updatedSyllabus });
           }}
+          
           onEditEpisode={(sectionIndex, episodeIndex, updatedEpisode) => {
             const updatedSyllabus = course.syllabus.map((section, sIndex) => {
               if (sIndex === sectionIndex) {
                 return {
                   ...section,
-                  subtopics: section.subtopics.map((ep, eIndex) =>
-                    eIndex === episodeIndex ? updatedEpisode : ep
-                  ),
+                  videos: Array.isArray(section.videos)
+                    ? section.videos.map((ep, eIndex) =>
+                        eIndex === episodeIndex
+                          ? {
+                              ...ep,
+                              title: updatedEpisode.title || ep.title,
+                              url: updatedEpisode.url || ep.url,
+                              PDFUrl: updatedEpisode.PDFUrl || ep.PDFUrl,
+                            }
+                          : ep
+                      )
+                    : [], // اگر videos وجود نداشت
                 };
               }
               return section;
             });
-
-            setCourse(prev => ({ ...prev, syllabus: updatedSyllabus }));
+          
+            setCourse((prev) => ({ ...prev, syllabus: updatedSyllabus }));
           }}
           onUpdateSyllabus={(updatedSyllabus) => {
             setCourse(prev => ({

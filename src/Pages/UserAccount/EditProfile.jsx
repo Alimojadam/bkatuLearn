@@ -55,7 +55,6 @@ const EditProfile = () => {
     }
   };
   
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
   

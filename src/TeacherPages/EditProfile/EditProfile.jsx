@@ -1,14 +1,14 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../../Pages/coursesContext";
 import { teachers } from "../../Pages/teachers/TeacherInfo";
 
 const EditProfile = () => {
   const { user, setUser } = useUser();
-
   const teacher = user;
 
-  // گرفتن aboutTeacher جدید از آرایه teachers
-  const aboutTeacherFromTeachers = teachers.find(t => t.id === teacher?.id)?.aboutTeacher || "";
+  const aboutTeacherFromTeachers =
+    teachers.find((t) => t.id === teacher?.id)?.aboutTeacher || "";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -19,8 +19,8 @@ const EditProfile = () => {
     aboutTeacher: "",
   });
 
-  const [profileImage, setProfileImage] = useState("");
-  const [previewImage, setPreviewImage] = useState("");
+  const [profileImage, setProfileImage] = useState(null); // File یا null
+  const [previewImage, setPreviewImage] = useState(""); // پیش‌نمایش
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
@@ -31,44 +31,36 @@ const EditProfile = () => {
         studentNumber: teacher.studentNumber || "",
         study: teacher.study || "",
         university: teacher.university || "",
-        // اگر teacher.aboutTeacher بود، از اون استفاده می‌کنیم؛ در غیر اینصورت مقدار جدید رو از آرایه teachers
         aboutTeacher: teacher.aboutTeacher || aboutTeacherFromTeachers || "",
       });
 
-      setProfileImage(teacher.profileImg || "");
       setPreviewImage(teacher.profileImg || "");
+      setProfileImage(null); // هیچ فایل جدیدی انتخاب نشده
     }
   }, [teacher, aboutTeacherFromTeachers]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result);
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setProfileImage(file); // فقط File جدید
+      setPreviewImage(URL.createObjectURL(file)); // پیش‌نمایش
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const name = formData.name ? formData.name.trim() : "";
-    const email = formData.email ? formData.email.trim() : "";
-    const studentNumber = formData.studentNumber ? formData.studentNumber.toString().trim() : "";
-    const study = formData.study ? formData.study.trim() : "";
-    const university = formData.university ? formData.university.trim() : "";
-    const aboutTeacher = formData.aboutTeacher ? formData.aboutTeacher.trim() : "";
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const studentNumber = formData.studentNumber.trim();
+    const study = formData.study.trim();
+    const university = formData.university.trim();
+    const aboutTeacher = formData.aboutTeacher.trim();
 
     if (!name || !email || !studentNumber || !study || !university || !aboutTeacher) {
       setSuccessMessage("همه فیلدهای الزامی باید پر شوند ❌");
@@ -76,22 +68,49 @@ const EditProfile = () => {
       return;
     }
 
-    const updatedTeacher = {
-      ...teacher,
-      name,
-      email,
-      studentNumber,
-      study,
-      university,
-      aboutTeacher: aboutTeacher,
-      profileImg: profileImage,
-    };
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", name);
+      formDataToSend.append("email", email);
+      formDataToSend.append("study", study);
+      formDataToSend.append("university", university);
+      formDataToSend.append("aboutTeacher", aboutTeacher);
 
-    setUser(updatedTeacher);
-    localStorage.setItem("user", JSON.stringify(updatedTeacher));
+      if (profileImage instanceof File) {
+        formDataToSend.append("profile", profileImage);
+      }
 
-    setSuccessMessage("اطلاعات با موفقیت ذخیره شدند ✅");
-    setTimeout(() => setSuccessMessage(""), 3000);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/user/edit`,
+        formDataToSend,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
+      );
+      if(response.status===200 || response.status===201){
+        setUser({
+          ...teacher,
+          name,
+          email,
+          studentNumber,
+          study,
+          university,
+          aboutTeacher,
+          profileImg:
+            profileImage instanceof File ? URL.createObjectURL(profileImage) : previewImage,
+        });
+  
+        setSuccessMessage("اطلاعات با موفقیت ذخیره شدند ✅");
+        setTimeout(() => setSuccessMessage(""), 3000);
+        setProfileImage(null); // پاک کردن فایل بعد از ارسال
+
+      }
+    } catch (err) {
+      console.error("Axios Error:", err.response?.data || err);
+      setSuccessMessage("خطا در ذخیره اطلاعات ❌");
+      setTimeout(() => setSuccessMessage(""), 3000);
+    }
   };
 
   if (!teacher) {
