@@ -138,7 +138,7 @@ const TeacherHomePage = () => {
                 setActiveSection(tab.id);
                 if (isMobile) setIsMenuOpen(false);
               }}
-              className={`flex flex-col gap-5 sm:flex-1 py-4 text-start pr-4 sm:pr-0 sm:text-center font-semibold transition-colors duration-200 cursor-pointer
+              className={`flex flex-col sm:justify-center sm:items-center gap-5 sm:flex-1 py-4 text-start pr-4 sm:pr-0 sm:text-center font-semibold transition-colors duration-200 cursor-pointer
                 ${activeSection === tab.id ? "bg-[#2c5282] text-white shadow-inner" : "text-[#2c5282] hover:bg-[#cbd5e0]"}
                 ${tab.mobileOnly ? "block sm:hidden" : ""}`}
             >
