@@ -1,7 +1,8 @@
 
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { textContext } from '../HomePage/BodySection/context';
+import axios from 'axios';
 // import { teachers } from './TeacherInfo';
 
 

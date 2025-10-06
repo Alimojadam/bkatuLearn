@@ -57,7 +57,7 @@ const CardCourses=(props)=>{
                         ${isAdmin || isMenuOpen ? "sm:grid-cols-2" : "sm:grid-cols-3"}
                         ${isMenuOpen ? "sm:w-[95%]" : "sm:w-[100%]"} gap-5 `}>
                     {Cards.length === 0 ? (
-                        <p className="text-center text-[#3073c1] text-[25px] w-[350px] mt-[20px]">هیچ دوره‌ای یافت نشد</p>
+                        <p dir="rtl" className="text-center text-[#3073c1] text-[25px] w-[350px] mt-[20px]">در حال بارگذاری..!</p>
                     ) : (
                         Cards.map((card) => (
                         <div dir='rtl' key={card.id} className="w-[350px] flex flex-col gap-[5px] p-1 bg-[snow] rounded-[10px]">

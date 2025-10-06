@@ -60,36 +60,42 @@ const CardsTeachers=(props)=>{
             <ul dir="rtl" className={`w-full grid grid-cols-1 justify-center items-center gap-10 sm:gap-[50px]
                 ${isAdmin ? "sm:grid-cols-2 pt-[120px] sm:pt-0 mr-5" : "sm:grid-cols-3 pt-[120px]"}
             `}>
-                {teachers.map((teacher,index)=>(
+                {
+                    teachers.length === 0 ?(
+                        <p dir="rtl" className="text-center text-[#3073c1] text-[25px] w-[350px] mt-[20px]">در حال بارگذاری..!</p>
+                    ):(
+                        teachers.map((teacher,index)=>(
 
-                <li key={index} className="flex w-[350px] h-[150px] bg-[#eef3f9] justify-between items-center relative border border-[#3073c1] rounded-r-[20px]">
-                    <div className=" flex item-center justify-center items-center h-full border-l border-[#3073c1] w-[30%]">
-                        <div className="w-[90px] h-full">
-                            <img src={teacher.image} class="w-full h-full object-cover " alt=""/>   
-                        </div>
-                    </div>
-                    <div className="w-[70%] h-full flex flex-col justify-center items-between mb-[5px] gap-[5px]">
-                        <div className="w-full flex flex-col h-[65%] justify-center items-between gap-4 px-2 ">
-                            <div className="w-full flex justify-between items-center">
-                                <h4 className="w-[80%] text-[#3073c1] text-start text-[19px] mt-[5px]">{teacher.name}</h4>
-                                {isAdmin &&(
-                                    <div className="w-[20%] flex flex-row-reverse gap-4">
-                                        <i title="حذف مدرس" onClick={()=>{handleDeleteTeacher(teacher)}} className="fas fa-trash cursor-pointer text-[18px] text-red-500 transition-all duration-300 hover:scale-110 hover:shadow-xl"></i>
-                                        <i title="ارتباط با مدرس" className="fas fa-comment cursor-pointer text-[18px] text-[#3073c1] transition-all duration-300 hover:scale-110 hover:shadow-xl"></i>
+                            <li key={index} className="flex w-[350px] h-[150px] bg-[#eef3f9] justify-between items-center relative border border-[#3073c1] rounded-r-[20px]">
+                                <div className=" flex item-center justify-center items-center h-full border-l border-[#3073c1] w-[30%]">
+                                    <div className="w-[90px] h-full">
+                                        <img src={teacher.image} class="w-full h-full object-cover " alt=""/>   
                                     </div>
-                                )}
-                            </div>
-                            <p className="text-start text-[#3073c1] text-[16px]">رشته تحصیلی : {teacher.study}</p>
-                        </div>
-                        <div className="w-full border-b border-[#3073c1]"></div>
-                        <div className="w-full h-[35%] flex justify-between items-center px-3 ">
-                            <pre dir='rtl' className="text-start text-[#3073c1] text-[15px] flex">دوره فعال : {teacher.NomberOFactiveCourses} </pre>
-                            <Link to={`/AboutTeacher/${teacher.id}`} className="text-[#3073c1] border border-[#3073c1] px-2 rounded-[5px] text-end text-[17px] pb-[2px] hover:scale-105 hover:shadow-md transition-all duration-300 transform">مشاهده</Link>
-                        </div>
-                    </div>
-                </li>
+                                </div>
+                                <div className="w-[70%] h-full flex flex-col justify-center items-between mb-[5px] gap-[5px]">
+                                    <div className="w-full flex flex-col h-[65%] justify-center items-between gap-4 px-2 ">
+                                        <div className="w-full flex justify-between items-center">
+                                            <h4 className="w-[80%] text-[#3073c1] text-start text-[19px] mt-[5px]">{teacher.name}</h4>
+                                            {isAdmin &&(
+                                                <div className="w-[20%] flex flex-row-reverse gap-4">
+                                                    <i title="حذف مدرس" onClick={()=>{handleDeleteTeacher(teacher)}} className="fas fa-trash cursor-pointer text-[18px] text-red-500 transition-all duration-300 hover:scale-110 hover:shadow-xl"></i>
+                                                    <i title="ارتباط با مدرس" className="fas fa-comment cursor-pointer text-[18px] text-[#3073c1] transition-all duration-300 hover:scale-110 hover:shadow-xl"></i>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <p className="text-start text-[#3073c1] text-[16px]">رشته تحصیلی : {teacher.study}</p>
+                                    </div>
+                                    <div className="w-full border-b border-[#3073c1]"></div>
+                                    <div className="w-full h-[35%] flex justify-between items-center px-3 ">
+                                        <pre dir='rtl' className="text-start text-[#3073c1] text-[15px] flex">دوره فعال : {teacher.NomberOFactiveCourses} </pre>
+                                        <Link to={`/AboutTeacher/${teacher.id}`} className="text-[#3073c1] border border-[#3073c1] px-2 rounded-[5px] text-end text-[17px] pb-[2px] hover:scale-105 hover:shadow-md transition-all duration-300 transform">مشاهده</Link>
+                                    </div>
+                                </div>
+                            </li>
 
-                ))}
+                        ))
+                    )
+                }
             </ul>
 
             

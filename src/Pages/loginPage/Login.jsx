@@ -83,7 +83,7 @@ const Login = () => {
         </p>
       </div>
       <div className="login bg-[#eef3f9] sm:bg-[#3073c1] w-[100%] sm:w-[40%] h-[100%] flex justify-center items-center flex-col gap-2 sm:gap-[20px]">
-        <form dir="rtl" onSubmit={SignInhandleClick} className="form flex flex-col mb-4 justify-center items-start gap-[10px]">
+        <form dir="rtl" onSubmit={SignInhandleClick} className="form flex flex-col mb-4 w-[50%] sm:w-[40%] justify-center items-start gap-[10px]">
           <label htmlFor="userName" className="text-[#3073c1] sm:text-[snow] mr-[10px]">نام کاربری</label>
           <input
             id="userName"
@@ -116,18 +116,20 @@ const Login = () => {
           </div>
 
           <div className="formBtn w-[90%] flex justify-between sm:justify-start items-center sm:gap-[5px]">
-            <button type="submit" className="cursor-pointer btnLogin pt-[4px] pb-[9px] px-[20px] text-[#3073c1] bg-[snow] border border-[#3073c1] sm:border-none">ورود</button>
+            <button type="submit" className="cursor-pointer btnLogin flex justify-center items-center w-[30%] pt-[3px] pb-[6px] px-[20px] text-[#3073c1] bg-[snow] border border-[#3073c1] sm:border-none">
+              <p className="">ورود</p>
+            </button>
 
             <button
               type="button"
               onClick={SignUphandleClick}
-              className="cursor-pointer btnSignUp pt-[5px] pb-[8px] px-[13px] sm:px-[20px] text-[#3073c1] bg-[snow] border sm:border-b border-[#3073c1] "
+              className="cursor-pointer whitespace-nowrap flex justify-center items-center btnSignUp w-[68%] pt-[5px] pb-[8px] px-[3px] sm:px-[20px] text-[#3073c1] bg-[snow] border sm:border-b border-[#3073c1] "
             >
-              ایجاد حساب جدید
+             ایجاد حساب جدید
             </button>
           </div>
         </form>
-        <a href="#" className="text-[#3073c1]  sm:text-[snow] ml-[37px] border-b border-[#3073c1] sm:border-[snow]">نمیتوانید وارد شوید؟</a>
+        <a href="#" className="text-[#3073c1]  sm:text-[snow] text-center ml-[35px] border-b border-[#3073c1] sm:border-[snow]">نمیتوانید وارد شوید؟</a>
         {error && <p className="text-[#3073c1] sm:text-[snow] border-b border-[#3073c1] sm:border-[snow] pb-1 text-x mt-3 ml-[37px]">{error}</p>}
       </div>
     </div>

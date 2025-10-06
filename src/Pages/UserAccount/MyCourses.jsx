@@ -23,7 +23,6 @@ const MyCourses=()=>{
               `${process.env.REACT_APP_API_URL}/api/user/course/saved`,
               { withCredentials: true } // اگر کوکی یا session استفاده می‌کنید
             );
-            console.log(response.data); // بررسی داده‌های دریافتی
             if (response.status === 200 && response.data) {
               setSavedCourseIds(
                 response.data.map(course => ({

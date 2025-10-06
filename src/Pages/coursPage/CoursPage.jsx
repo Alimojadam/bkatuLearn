@@ -13,13 +13,18 @@ const CoursPage = () => {
   const { id } = useParams();
   const { user, setUser } = useUser();
   
-  const [course, setCourse] = useState({});
+  const [course, setCourse] = useState(null);
   const [isEditingPrice, setIsEditingPrice] = useState(false);
   const [newPrice, setNewPrice] = useState(""); // مقدار اولیه رشته خالی
 
 
   const [check , setCheck]=useState(false);
   useEffect(() => {
+
+    if (!user || !user.id) {
+      setCheck(false);
+      return;
+    }
     const fetchData = async () => {
       try {
         const response = await axios.post(
@@ -37,7 +42,7 @@ const CoursPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id, user]);
 
 
 
@@ -118,8 +123,15 @@ const CoursPage = () => {
     setVideoSrc(src);
   };
 
+  if (!user) {
+    return <div className='w-full h-[100vh] bg-[#eef3f9] flex items-center justify-center'>
+      <p className='text-[#3073c1] text-[23px]'>!..برای مشاهده دوره لطفا وارد حساب کاربری خود شوید</p>
+    </div>;
+  }
   if (!course) {
-    return <div>دوره پیدا نشد!</div>;
+    return <div className='w-full h-[100vh] bg-[#eef3f9] flex items-center justify-center'>
+      <p className='text-[#3073c1] text-[23px]'>!..در حال بارگذاری</p>
+    </div>;
   }
 
   const handleRegisterCourse = async () => {
@@ -281,11 +293,25 @@ const CoursPage = () => {
                   )
                   :
                   (
-                    check ? (
-                      <p onClick={handleRegisterCourse} className="bg-transparent text-green-600 border border-green-600 py-[3px] px-[10px] rounded-[3px] cursor-default">ثبت‌نام شده</p>
+                    !user ? (
+                      <p className="bg-gray-400 text-white py-[3px] px-[20px] rounded-[3px] cursor-not-allowed">
+                        برای ثبت‌نام وارد شوید
+                      </p>
+                    ) : check ? (
+                      // وقتی کاربر قبلاً ثبت‌نام کرده
+                      <p className="bg-transparent text-green-600 border border-green-600 py-[3px] px-[10px] rounded-[3px] cursor-default">
+                        ثبت‌نام شده
+                      </p>
                     ) : (
-                      <p onClick={handleRegisterCourse} className="bg-[#3073c1] text-[snow] py-[3px] px-[20px] rounded-[3px] cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-md">ثبت‌نام</p>
+                      // وقتی کاربر وارد شده ولی هنوز ثبت‌نام نکرده
+                      <p
+                        onClick={handleRegisterCourse}
+                        className="bg-[#3073c1] text-[snow] py-[3px] px-[20px] rounded-[3px] cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-md"
+                      >
+                        ثبت‌نام
+                      </p>
                     )
+
                   )
                 }
               </div>

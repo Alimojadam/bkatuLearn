@@ -115,7 +115,7 @@ const SignUp=()=>{
                 </p>
             </div>
             <div className="login bg-[#eef3f9] sm:bg-[#3073c1] w-[100%] sm:w-[40%] h-[100%] flex justify-center items-center flex-col">
-                <div dir="rtl" className="form flex flex-col mb-4 justify-center items-start gap-[10px]">
+                <div dir="rtl" className="form flex flex-col mb-4 justify-center w-[60%] sm:w-[40%] items-start gap-[10px]">
                     <label htmlFor="username" className="text-[#3073c1] sm:text-[snow] mr-[10px]">نام و نام خانوادگی</label>
                     <input type="text" className="w-[90%] h-[30px] pr-[10px] border border-[#3073c1] text-[#3073c1] sm:text-[#111] sm:border-none" id="username" value={name} onChange={handleSetName}/>
 
@@ -151,11 +151,11 @@ const SignUp=()=>{
 
 
                     <div className="formBtn w-[90%] flex justify-between sm:justify-start items-center sm:gap-[5px]">
-                        <div className="btnLogin py-[6px] px-[23px] border border-[#3073c1] text-[#3073c1] bg-[snow]">
-                            <a href="/loginPage" className="" onClick={handleSignUP}>ثبتنام</a>   
+                        <div className="btnLogin w-[30%] py-[6px] px-[23px] border border-[#3073c1] flex justify-center items-center text-[#3073c1] bg-[snow]">
+                            <a href="/loginPage" className="text-center" onClick={handleSignUP}>ثبتنام</a>   
                         </div>
-                        <div className="btnSignUp py-[6px] px-[19px] sm:px-[23px] sm:border-b border border-[#3073c1] text-[#3073c1] bg-[snow]">
-                            <a href="/loginPage" onClick={handleClick} className="border-b border-[#3073c1]">ورود به حساب </a>
+                        <div className="btnSignUp w-[68%] py-[6px] px-[19px] sm:px-[23px] sm:border-b border border-[#3073c1] flex justify-center items-center text-[#3073c1] bg-[snow]">
+                            <a href="/loginPage" onClick={handleClick} className="border-b whitespace-nowrap border-[#3073c1]">ورود به حساب </a>
                         </div>
 
                     </div>
